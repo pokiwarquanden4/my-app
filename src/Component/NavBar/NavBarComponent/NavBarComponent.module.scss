@@ -1,0 +1,39 @@
+.item {
+    border: 1px solid #fff;
+    transition: background-color 150ms linear;
+}
+
+.focus {
+    cursor: pointer;
+    font-weight: bolder;
+    background-color: rgb(194, 190, 190);
+}
+
+.item:hover {
+    cursor: pointer;
+    font-weight: bolder;
+    background-color: rgb(194, 190, 190);
+}
+
+.item_wrapper {
+
+    .icon {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        transform: translate(0, -50%);
+        right: 12px;
+    }
+
+    .sub_item {
+        font-size: 12px;
+        padding: 10px;
+        padding-left: 24px;
+
+        &:hover {
+            cursor: pointer;
+            font-weight: bolder;
+            background-color: rgb(194, 190, 190);
+        }
+    }
+}

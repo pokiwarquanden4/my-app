@@ -1,0 +1,19 @@
+.tags {
+    .tag+.tag {
+        margin-left: 10px;
+    }
+
+    .tag {
+        color: rgb(168, 151, 174);
+        cursor: pointer;
+        background-color: rgb(226, 236, 244);
+        padding: 2px 7px;
+        border-radius: 10%;
+        font-size: 12px;
+        transition: background-color ease 200ms;
+
+        &:hover {
+            background-color: rgb(209, 227, 241);
+        }
+    }
+}

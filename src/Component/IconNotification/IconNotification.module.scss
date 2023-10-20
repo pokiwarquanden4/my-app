@@ -1,0 +1,20 @@
+.wrapper+.wrapper {
+    margin-left: 30px;
+}
+
+.wrapper {
+    position: relative;
+
+    .arlert {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        font-weight: bolder;
+        text-align: center;
+        color: #fff;
+        background-color: rgb(215, 56, 56);
+        top: 50%;
+        left: 50%;
+        position: absolute;
+    }
+}

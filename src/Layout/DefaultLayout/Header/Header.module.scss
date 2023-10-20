@@ -1,0 +1,15 @@
+.wrapper {
+    height: 80px;
+    background-color: #fdf3b8;
+    position: sticky;
+    top: 0;
+
+    .logo {
+        height: 35px;
+    }
+
+    .icon {
+        cursor: pointer;
+        font-size: 25px;
+    }
+}

@@ -1,0 +1,33 @@
+.wrapper {
+    .sub_header {
+        font-weight: lighter;
+    }
+
+    .contents_tag_wrapper {
+        cursor: pointer;
+        border: 1px solid rgb(219, 222, 224);
+        border-radius: 5px;
+        padding: 5px 20px;
+        transition: background-color ease-in-out 200ms;
+
+        &:hover {
+            background-color: rgb(234, 234, 234);
+        }
+    }
+
+    .content {
+        font-size: 14px;
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-wrap: break-word;
+    }
+
+    .number,
+    .askRecent {
+        font-weight: lighter;
+        font-size: 12px;
+    }
+}

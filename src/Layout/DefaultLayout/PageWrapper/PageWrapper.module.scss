@@ -1,0 +1,27 @@
+.content {
+    width: 65%;
+    border-right: 1px solid rgb(219, 222, 224);
+    overflow: overlay;
+}
+
+.container {
+    height: 100%;
+}
+
+.advertisment {
+    width: 20%
+}
+
+.ad_wrapper {
+    width: 100%;
+    background-color: #f0f0f0;
+    /* Màu nền của quảng cáo */
+    border: 1px solid #ccc;
+    /* Đường viền của quảng cáo */
+    text-align: center;
+
+    /* Canh giữa nội dung */
+    .ad {
+        width: 100%;
+    }
+}
