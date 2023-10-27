@@ -1,0 +1,50 @@
+.wrapper {
+    z-index: 9999;
+    background-color: #fff;
+    width: 100%;
+    bottom: 0;
+    transform: translate(0, calc(100% + 10px));
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 2px 12px;
+    border-radius: 4px;
+    padding: 10px 0;
+
+    .lists {
+        .list {
+            cursor: pointer;
+            padding: 10px 15px;
+            transition: all ease 200ms;
+
+            &:hover {
+                background-color: rgb(193, 205, 222);
+            }
+
+            .content {
+                .main_content {
+                    color: rgb(70, 129, 171);
+                    font-size: 17px;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 1;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    word-wrap: break-word;
+                }
+
+                .sub_content {
+                    font-size: 14px;
+                    font-weight: lighter;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    word-wrap: break-word;
+                }
+            }
+        }
+
+        .list+.list {
+            border-top: 1px solid rgb(219, 222, 224);
+        }
+    }
+}

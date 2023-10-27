@@ -25,7 +25,18 @@ const optionsList: IOptionData[] = [
         name: 'Users',
         url: routes.users,
         child: [],
-    }
+    },
+    {
+        name: 'Account',
+        url: routes.account,
+        child: [
+            {
+                name: 'Create Account',
+                url: routes.createAccount,
+                child: [],
+            }
+        ],
+    },
 ]
 
 function NavBar() {
@@ -46,12 +57,12 @@ function NavBar() {
             }
         }
         return []
-    }, [])
+    }, [location.pathname])
 
     useEffect(() => {
         const currentOptions = getCurrentOptions()
         setCurrentOption(currentOptions)
-    }, [])
+    }, [getCurrentOptions])
 
     return <div className={`${styles.container}`}>
         <div className={`${styles.items}`}>
