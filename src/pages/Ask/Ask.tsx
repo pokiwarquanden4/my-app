@@ -10,7 +10,6 @@ function Ask() {
     const [tags, setTags] = useState<string>('')
     const [contentFocus, setContentFocus] = useState<boolean>(false)
 
-    console.log(content)
     return <div className={`pb-4 ${styles.wrapper}`}>
         <div className={`h4 ${styles.header}`}>
             Review your question
@@ -68,7 +67,7 @@ function Ask() {
                 `}
             </style>
         </div>
-        <div className={`pt-4 ${styles.Tags} ${title && content ? styles.enable : styles.disable}`}>
+        <div className={`pt-4 ${styles.Tags} ${title && content && content !== '<p><br></p>' ? styles.enable : styles.disable}`}>
             <div className="border rounded-3 px-4 py-3 mb-3">
                 <label htmlFor="tagsInput" className="form-label">
                     <div className={`h5 ${styles.title_header}`}>Tags</div>
@@ -85,7 +84,7 @@ function Ask() {
                 </input>
             </div>
         </div>
-        <div className={`${styles.submit} ${title && content && tags ? styles.enable : styles.disable}`}>
+        <div className={`${styles.submit} ${title && content && content !== '<p><br></p>' && tags ? styles.enable : styles.disable}`}>
             <button type="button" className="btn btn-primary">Confirm Your Question</button>
         </div>
     </div>
