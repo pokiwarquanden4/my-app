@@ -7,6 +7,7 @@ import ModalComponent from '../../../Component/Modal/ModalComponent'
 import { useState } from 'react'
 import LoginPages from '../../../pages/LoginPages/LoginPages'
 import QuestionSearch from '../../../Component/SearchBar/QuestionSearch/QuestionSearch'
+import Message from '../../../Component/Message/Message'
 
 const searchData = [
     {
@@ -26,6 +27,7 @@ const searchData = [
 ]
 
 function Header() {
+    const [showMessage, setShowMessage] = useState<boolean>(false)
     const [loginShow, setLoginShow] = useState<boolean>(false)
     const [searchFocus, setSearchFocus] = useState<boolean>(false)
 
@@ -40,7 +42,14 @@ function Header() {
         </SearchBar>
         <div className='px-5 d-flex align-items-cente'>
             <IconNotification arlert={true} number={0}>
-                <FontAwesomeIcon className={styles.icon} icon={faBell}></FontAwesomeIcon>
+                <FontAwesomeIcon
+                    onClick={() => {
+                        setShowMessage(!showMessage)
+                    }}
+                    className={styles.icon}
+                    icon={faBell}
+                ></FontAwesomeIcon>
+                {showMessage ? <Message></Message> : undefined}
             </IconNotification>
             <IconNotification arlert={false}>
                 <FontAwesomeIcon onClick={() => { setLoginShow(true) }} className={styles.icon} icon={faUser}></FontAwesomeIcon>

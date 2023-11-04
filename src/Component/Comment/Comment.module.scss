@@ -1,0 +1,81 @@
+.wrapper {
+    .options {
+        .heart {
+            .heart_icon {
+                cursor: pointer;
+                font-size: 20px;
+            }
+
+            .heart_number {
+                font-weight: bolder;
+            }
+        }
+
+        .follow {
+            margin-top: 10px;
+
+            .follow_icon {
+                cursor: pointer;
+                font-size: 20px;
+            }
+        }
+
+        .check {
+            .check_icon {
+                margin-top: 8px;
+                font-size: 30px;
+                color: rgb(24, 134, 75);
+            }
+        }
+    }
+
+    .content {
+        border-bottom: 1px solid rgb(219, 222, 224);
+
+        .content_info {
+            .options {
+                .options_content {
+                    cursor: pointer;
+                    font-size: 13px;
+                    color: hsl(210, 8%, 42%);
+
+                    &:hover {
+                        color: rgb(86, 157, 206);
+                    }
+                }
+
+                .options_content+.options_content {
+                    margin-left: 6px;
+                }
+            }
+        }
+
+        .answers {
+            cursor: pointer;
+            font-size: 14px;
+            color: hsl(210, 8%, 42%);
+
+            &:hover {
+                color: rgb(86, 157, 206);
+            }
+        }
+
+        .content_footer {
+            .account {
+                .account_name {
+                    cursor: pointer;
+                    font-size: 13px;
+                    color: rgb(70, 129, 171);
+
+                    &:hover {
+                        color: rgb(86, 157, 206);
+                    }
+                }
+            }
+
+            .time {
+                font-size: 13px;
+            }
+        }
+    }
+}

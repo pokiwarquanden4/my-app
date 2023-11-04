@@ -3,6 +3,7 @@ import { useState } from 'react';
 import OptionsListButton from '../../Component/OptionsListButton/OptionsListButton';
 import TagsComponent from '../../Component/TagsComponent/TagsComponent';
 import Avatar from '../../Component/Avatar/Avatar';
+import { formatTimeAgo } from '../../Functions/Functions';
 
 const filterList = [
     {
@@ -33,26 +34,6 @@ const tagsList = [
         name: "JavaScripts"
     },
 ]
-
-function formatTimeAgo(timestamp: Date): string {
-    const now = new Date();
-    const timeDifference = now.getTime() - timestamp.getTime();
-    const seconds = Math.floor(timeDifference / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    if (days > 0) {
-        const formattedDate = timestamp.toLocaleString();
-        return formattedDate;
-    } else if (hours > 0) {
-        return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-    } else if (minutes > 0) {
-        return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-    } else {
-        return `${seconds} second${seconds > 1 ? 's' : ''} ago`;
-    }
-}
 
 // Sử dụng hàm để tạo chuỗi thời gian
 const timestamp = new Date('2023-10-14T12:00:00');

@@ -1,0 +1,32 @@
+.wrapper {
+    z-index: 100;
+    position: absolute;
+    right: 0;
+    width: 360px;
+
+    .header {
+        .header_content {
+            font-weight: bolder;
+        }
+    }
+
+    .status {
+
+        .status_read,
+        .status_unRead {
+            transition: all ease 200ms;
+            cursor: pointer;
+            background-color: rgb(235, 245, 255);
+            border-radius: 10px;
+            padding: 3px 10px;
+
+            &:hover {
+                background-color: rgb(194, 219, 245);
+            }
+        }
+
+        .focus {
+            background-color: rgb(160, 204, 249);
+        }
+    }
+}

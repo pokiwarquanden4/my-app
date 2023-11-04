@@ -2,22 +2,14 @@ import styles from './Ask.module.scss'
 import { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-
-var toolbarOptions = [
-    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-    ['code-block', 'image'],
-
-    [{ 'header': [] }],               // custom button values
-
-    [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-    [{ 'font': [] }],
-];
+import { toolbarOptions } from '../../Functions/Functions';
 
 function Ask() {
     const [content, setContent] = useState<string>('');
     const [title, setTitle] = useState<string>('')
     const [tags, setTags] = useState<string>('')
     const [contentFocus, setContentFocus] = useState<boolean>(false)
+
     console.log(content)
     return <div className={`pb-4 ${styles.wrapper}`}>
         <div className={`h4 ${styles.header}`}>

@@ -26,7 +26,7 @@ function Tags() {
         </div>
         <div className={`row pt-3 gy-3 ${styles.contents}`}>
             <div className={`col-6 col-lg-4 ${styles.contents_tag}`}>
-                <div className={`${styles.contents_tag_wrapper}`}>
+                <div className={`${styles.contents_tag_wrapper} pt-2`}>
                     <TagsComponent data={[{ name: "Java" }]}></TagsComponent>
                     <div className={`pt-2 ${styles.content}`}>
                         For questions about programming in ECMAScript (JavaScript/JS) and its different dialects/implementations (except for ActionScript). Note that JavaScript is NOT Java. Include all tags that are relevant…
@@ -38,7 +38,7 @@ function Tags() {
                 </div>
             </div>
             <div className={`col-6 col-lg-4 ${styles.contents_tag}`}>
-                <div className={`${styles.contents_tag_wrapper}`}>
+                <div className={`${styles.contents_tag_wrapper} pt-2`}>
                     <TagsComponent data={[{ name: "Java" }]}></TagsComponent>
                     <div className={`pt-2 ${styles.content}`}>
                         For questions about programming in ECMAScript (JavaScript/JS) and its different dialects/implementations (except for ActionScript). Note that JavaScript is NOT Java. Include all tags that are relevant…
@@ -50,7 +50,7 @@ function Tags() {
                 </div>
             </div>
             <div className={`col-6 col-lg-4 ${styles.contents_tag}`}>
-                <div className={`${styles.contents_tag_wrapper}`}>
+                <div className={`${styles.contents_tag_wrapper} pt-2`}>
                     <TagsComponent data={[{ name: "Java" }]}></TagsComponent>
                     <div className={`pt-2 ${styles.content}`}>
                         For questions about programming in ECMAScript (JavaScript/JS) and its different dialects/implementations (except for ActionScript). Note that JavaScript is NOT Java. Include all tags that are relevant…
@@ -62,7 +62,7 @@ function Tags() {
                 </div>
             </div>
             <div className={`col-6 col-lg-4 ${styles.contents_tag}`}>
-                <div className={`${styles.contents_tag_wrapper}`}>
+                <div className={`${styles.contents_tag_wrapper} pt-2`}>
                     <TagsComponent data={[{ name: "Java" }]}></TagsComponent>
                     <div className={`pt-2 ${styles.content}`}>
                         For questions about programming in ECMAScript (JavaScript/JS) and its different dialects/implementations (except for ActionScript). Note that JavaScript is NOT Java. Include all tags that are relevant…
@@ -74,7 +74,7 @@ function Tags() {
                 </div>
             </div>
             <div className={`col-6 col-lg-4 ${styles.contents_tag}`}>
-                <div className={`${styles.contents_tag_wrapper}`}>
+                <div className={`${styles.contents_tag_wrapper} pt-2`}>
                     <TagsComponent data={[{ name: "Java" }]}></TagsComponent>
                     <div className={`pt-2 ${styles.content}`}>
                         For questions about programming in ECMAScript (JavaScript/JS) and its different dialects/implementations (except for ActionScript). Note that JavaScript is NOT Java. Include all tags that are relevant…

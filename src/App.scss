@@ -7,3 +7,14 @@ body {
 a {
     text-decoration: none;
 }
+
+.input-group .form-control {
+    z-index: inherit !important;
+}
+
+* {
+    transition: all ease 200ms;
+}
+
+//Variable
+$Sub-font-color: rgb(167, 173, 180)

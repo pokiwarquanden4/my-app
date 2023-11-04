@@ -1,0 +1,39 @@
+//Variable
+$Sub-font-color: rgb(167, 173, 180);
+
+.wrapper {
+    .info {
+        .avatar {
+            overflow: hidden;
+            width: 128px;
+            height: 128px;
+
+            .img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        .user_info {
+            .name {}
+
+            .detail {
+                color: $Sub-font-color;
+                font-size: 15px;
+
+                .last_online {
+                    .last_online_icon {}
+
+                    .last_online_content {}
+                }
+
+                .heart_number {
+                    .heart_number_icon {}
+
+                    .heart_number_content {}
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,30 @@
+.wrapper {
+    cursor: pointer;
+    border-radius: 6px;
+    position: relative;
+
+    &:hover {
+        background-color: rgb(240, 236, 236);
+    }
+
+    .content {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-wrap: break-word;
+    }
+
+    .tagUnread {
+        position: absolute;
+        height: 80%;
+        background-color: rgb(7, 102, 253);
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        right: 0;
+        top: 50%;
+        transform: translate(-10px, -50%);
+    }
+}
