@@ -1,10 +1,5 @@
 import { useCallback, useState } from 'react'
 import styles from './CreateAccount.module.scss'
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Row from 'react-bootstrap/Row';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock, faUser, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import ModalComponent from '../../Component/Modal/ModalComponent';
@@ -96,120 +91,71 @@ function CreateAccount(props: ICreateAccount) {
     return (
         <div className='pb-4'>
             <div className='h3 pb-3 text-center'>Create Account</div>
-            <Form noValidate onSubmit={handleSubmit}>
-                <Row className="mb-3">
-                    <Form.Group as={Col} controlId="validationCustomUsername">
-                        <Form.Label>Username</Form.Label>
-                        <InputGroup hasValidation>
-                            <InputGroup.Text id="inputGroupPrepend">
-                                <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
-                            </InputGroup.Text>
-                            <Form.Control
-                                type="text"
-                                placeholder="Username"
-                                aria-describedby="inputGroupPrepend"
-                                required
-                                isInvalid={!!errors.name}
-                                onChange={(e) => {
-                                    setField('name', e.target.value)
-                                }}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.name}
-                            </Form.Control.Feedback>
-                        </InputGroup>
-                    </Form.Group>
-                </Row>
-                <Row className="mb-3">
-                    <Form.Group as={Col} controlId="validationCustomUsername">
-                        <Form.Label>Email</Form.Label>
-                        <InputGroup hasValidation>
-                            <InputGroup.Text id="inputGroupPrepend">
-                                <FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon>
-                            </InputGroup.Text>
-                            <Form.Control
-                                type="text"
-                                placeholder="Email"
-                                aria-describedby="inputGroupPrepend"
-                                required
-                                isInvalid={!!errors.email}
-                                onChange={(e) => {
-                                    setField('email', e.target.value)
-                                }}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.email}
-                            </Form.Control.Feedback>
-                        </InputGroup>
-                    </Form.Group>
-                </Row>
-                <Row className="mb-3">
-                    <Form.Group as={Col} controlId="validationCustomUsername">
-                        <Form.Label>Account</Form.Label>
-                        <InputGroup hasValidation>
-                            <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
-                            <Form.Control
-                                type="text"
-                                placeholder="Account"
-                                aria-describedby="inputGroupPrepend"
-                                required
-                                isInvalid={!!errors.account}
-                                onChange={(e) => {
-                                    setField('account', e.target.value)
-                                }}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.account}
-                            </Form.Control.Feedback>
-                        </InputGroup>
-                    </Form.Group>
-                </Row>
-                <Row className="mb-3">
-                    <Form.Group as={Col} controlId="validationCustomUsername">
-                        <Form.Label>Password</Form.Label>
-                        <InputGroup hasValidation>
-                            <InputGroup.Text id="passwordLabel">
-                                <FontAwesomeIcon icon={faLock}></FontAwesomeIcon>
-                            </InputGroup.Text>
-                            <Form.Control
-                                type="password"
-                                placeholder="Enter Your Passowrd"
-                                aria-describedby="passwordLabel"
-                                required
-                                isInvalid={!!errors.password}
-                                onChange={(e) => {
-                                    setField('password', e.target.value)
-                                }}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.password}
-                            </Form.Control.Feedback>
-                        </InputGroup>
-                    </Form.Group>
-                </Row>
-                <Row className="mb-3">
-                    <Form.Group as={Col} controlId="validationCustomUsername">
-                        <Form.Label>Avatar</Form.Label>
-                        <InputGroup hasValidation>
-                            <Form.Control
-                                type="file"
-                                accept='.png .jpg'
-                                placeholder="Avatar"
-                                aria-describedby="inputGroupPrepend"
-                                required
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Please choose a avatar.
-                            </Form.Control.Feedback>
-                        </InputGroup>
-                    </Form.Group>
-                </Row>
-                <div className={`d-flex justify-content-center align-items-center pt-3`}>
-                    <div className={`d-flex justify-content-end`}>
-                        <Button variant="primary" type='submit'>Create Account</Button>
-                    </div>
+            <form className="">
+                <div className="">
+                    <label htmlFor="UserName" className="form-label">Username</label>
+                    <input
+                        type="text"
+                        placeholder='Username'
+                        className="form-control"
+                        id="UserName"
+                        required
+                        onChange={(e) => {
+                            setField('name', e.target.value)
+                        }}
+                    ></input>
+                    <div className={`${styles.invalid} pt-1`} style={{ color: 'red', fontSize: '14px' }}>{errors.name}</div>
                 </div>
-            </Form>
+                <div className="pt-3">
+                    <label htmlFor="Email" className="form-label">Email</label>
+                    <input
+                        type="text"
+                        placeholder='Email'
+                        className="form-control"
+                        id="Email"
+                        required
+                        onChange={(e) => {
+                            setField('email', e.target.value)
+                        }}
+                    ></input>
+                    <div className={`${styles.invalid} pt-1`} style={{ color: 'red', fontSize: '14px' }}>{errors.email}</div>
+                </div>
+                <div className="pt-3">
+                    <label htmlFor="Account" className="form-label">Account</label>
+                    <input
+                        type="text"
+                        placeholder='Account'
+                        className="form-control"
+                        id="Account"
+                        required
+                        onChange={(e) => {
+                            setField('account', e.target.value)
+                        }}
+                    ></input>
+                    <div className={`${styles.invalid} pt-1`} style={{ color: 'red', fontSize: '14px' }}>{errors.account}</div>
+                </div>
+                <div className="pt-3">
+                    <label htmlFor="Password" className="form-label">Password</label>
+                    <input
+                        type="text"
+                        placeholder='Password'
+                        className="form-control"
+                        id="Password"
+                        required
+                        onChange={(e) => {
+                            setField('password', e.target.value)
+                        }}
+                    ></input>
+                    <div className={`${styles.invalid} pt-1`} style={{ color: 'red', fontSize: '14px' }}>{errors.password}</div>
+                </div>
+                <div className="pt-3">
+                    <label htmlFor="Password" className="form-label">Avatar</label>
+                    <input type="file" accept='.png .jpg' className="form-control" id="inputGroupFile02"></input>
+                </div>
+                <div className="pt-4">
+                    <button className="btn btn-primary" type="submit" onClick={handleSubmit}>Submit form</button>
+                </div>
+            </form>
             <ModalComponent
                 header='Vertify code'
                 confirm='Confirm'
