@@ -2,8 +2,17 @@ import styles from './Account.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClock, faHeart } from '@fortawesome/free-regular-svg-icons'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
+import { useAppDispatch } from '../../App/hook'
+import { useEffect } from 'react'
+import { getUser } from './AccountAPI'
 
 function Account() {
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        dispatch(getUser({}))
+    }, [dispatch])
+
     return <div className={styles.wrapper}>
         <div className={`${styles.header} d-flex justify-content-between`}>
             <div className={`d-flex align-items-center ${styles.info}`}>

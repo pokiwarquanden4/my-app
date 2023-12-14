@@ -4,8 +4,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock, faUser, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import ModalComponent from '../../Component/Modal/ModalComponent';
 import VertifiCode from './VertifiCode/VertifiCode';
+import { useAppDispatch } from '../../App/hook';
+import { createAccount } from './CreateAccountAPI';
+import LoginPages from '../LoginPages/LoginPages';
 
-interface ICreateAccount {
+export interface ICreateAccount {
+    name: string,
+    email: string,
+    account: string,
+    password: string,
+    img?: any
+}
+
+export interface ICreateAccountErrors {
     name?: string,
     email?: string,
     account?: string,
@@ -13,10 +24,18 @@ interface ICreateAccount {
     img?: any
 }
 
-function CreateAccount(props: ICreateAccount) {
+const defaultVal: ICreateAccount = {
+    name: "",
+    email: "",
+    account: "",
+    password: ""
+}
+
+function CreateAccount() {
+    const dispatch = useAppDispatch()
     const [validForm, setValidForm] = useState<boolean>(false)
-    const [form, setForm] = useState<ICreateAccount>({})
-    const [errors, setErrors] = useState<ICreateAccount>({})
+    const [form, setForm] = useState<ICreateAccount>(defaultVal)
+    const [errors, setErrors] = useState<ICreateAccountErrors>({})
 
     const validPassword = useCallback((input: string): boolean => {
         const regex = /^.{11,}$/;
@@ -44,7 +63,7 @@ function CreateAccount(props: ICreateAccount) {
     }, [errors, form])
 
     const findFormErrors = useCallback(() => {
-        const newErrors: ICreateAccount = {}
+        const newErrors: ICreateAccountErrors = {}
         //User name error
         if (!form.name) {
             newErrors.name = "Please choose a username."
@@ -85,8 +104,15 @@ function CreateAccount(props: ICreateAccount) {
         if (Object.keys(newErrors).length > 0) {
             // We got errors!
             setErrors(newErrors)
+        } else {
+            const res = dispatch(createAccount(form))
+            res.then((results) => {
+                console.log(results)
+            }).catch((error) => {
+                console.log(error)
+            })
         }
-    }, [findFormErrors])
+    }, [dispatch, findFormErrors, form])
 
     return (
         <div className='pb-4'>
@@ -156,13 +182,21 @@ function CreateAccount(props: ICreateAccount) {
                     <button className="btn btn-primary" type="submit" onClick={handleSubmit}>Submit form</button>
                 </div>
             </form>
-            <ModalComponent
+            {/* <ModalComponent
                 header='Vertify code'
                 confirm='Confirm'
                 visible={validForm}
                 setLoginShow={setValidForm}
+            > */}
+            {/* <VertifiCode></VertifiCode> */}
+            {/* </ModalComponent> */}
+            <ModalComponent
+                header='Login Form'
+                confirm='Login'
+                visible={validForm}
+                setLoginShow={setValidForm}
             >
-                <VertifiCode></VertifiCode>
+                <LoginPages setLoginShow={setValidForm}></LoginPages>
             </ModalComponent>
         </div>
     );

@@ -4,10 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell, faUser, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import IconNotification from '../../../Component/IconNotification/IconNotification'
 import ModalComponent from '../../../Component/Modal/ModalComponent'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import LoginPages from '../../../pages/LoginPages/LoginPages'
 import QuestionSearch from '../../../Component/SearchBar/QuestionSearch/QuestionSearch'
 import Message from '../../../Component/Message/Message'
+import { useNavigate } from 'react-router-dom';
 
 const searchData = [
     {
@@ -27,9 +28,42 @@ const searchData = [
 ]
 
 function Header() {
+    const navigate = useNavigate();
+    const [login, setLogin] = useState<boolean>(false)
     const [showMessage, setShowMessage] = useState<boolean>(false)
     const [loginShow, setLoginShow] = useState<boolean>(false)
     const [searchFocus, setSearchFocus] = useState<boolean>(false)
+
+    useEffect(() => {
+        const checkLoginStatus = () => {
+            if (localStorage.getItem("token") || localStorage.getItem("refresh_token")) {
+                setLogin(true);
+            } else {
+                setLogin(false);
+            }
+        };
+
+        // Initial check when the component mounts
+        checkLoginStatus();
+
+        // Subsequent checks when localStorage changes
+        window.addEventListener("storage", checkLoginStatus);
+
+        // Cleanup the event listener when the component unmounts
+        return () => {
+            window.removeEventListener("storage", checkLoginStatus);
+        };
+    }, []);
+
+
+
+    const logout = useCallback(() => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('refresh_token')
+        window.dispatchEvent(new Event("storage"));
+        navigate('/')
+    }, [navigate])
+
 
     return <div className={`container-fluid d-flex justify-content-around align-items-center ${styles.wrapper}`}>
         <img
@@ -62,9 +96,17 @@ function Header() {
                     <LoginPages setLoginShow={setLoginShow}></LoginPages>
                 </ModalComponent>
             </IconNotification>
-            <IconNotification arlert={false}>
-                <FontAwesomeIcon className={styles.icon} icon={faRightFromBracket}></FontAwesomeIcon>
-            </IconNotification>
+            {login
+                ?
+                <IconNotification arlert={false}>
+                    <FontAwesomeIcon
+                        onClick={logout}
+                        className={styles.icon}
+                        icon={faRightFromBracket}
+                    ></FontAwesomeIcon>
+                </IconNotification>
+                :
+                undefined}
         </div>
     </div>
 }

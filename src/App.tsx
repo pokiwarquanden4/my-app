@@ -3,11 +3,16 @@ import publicRoutes from './pages/pages/pages';
 import './App.scss'
 import HeaderLayout from './Layout/HeaderLayout/HeaderLayout';
 import PageWrapper from './Layout/DefaultLayout/PageWrapper/PageWrapper';
+import { ReactNotifications } from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css'
+import { Loading } from './Component/Loading/Loading';
 
 function App() {
   return (
     <Router>
       <div className="App h-100">
+        <ReactNotifications></ReactNotifications>
+        <Loading></Loading>
         <HeaderLayout>
           <PageWrapper>
             <Routes>

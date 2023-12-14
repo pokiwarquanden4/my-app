@@ -6,18 +6,33 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../pages/pages';
+import { login } from './LoginAPI';
+import { useAppDispatch } from '../../App/hook';
+import { showAlert } from '../../Component/Alert/Alert';
 
 interface ILoginPages {
     setLoginShow: Dispatch<SetStateAction<boolean>>
 }
 
-interface ILogin {
+export interface ILogin {
+    account: string,
+    password: string
+}
+
+interface ILoginErrors {
+    account?: string,
     password?: string
 }
 
+const defaultVal = {
+    account: "",
+    password: ""
+}
+
 function LoginPages(props: ILoginPages) {
-    const [form, setForm] = useState<ILogin>({})
-    const [errors, setErrors] = useState<ILogin>({})
+    const dispatch = useAppDispatch()
+    const [form, setForm] = useState<ILogin>(defaultVal)
+    const [errors, setErrors] = useState<ILoginErrors>({})
     const navigate = useNavigate()
 
     const validPassword = useCallback((input: string): boolean => {
@@ -33,12 +48,13 @@ function LoginPages(props: ILoginPages) {
         // Check and see if errors exist, and remove them from the error object:
         if (!!(errors.password)) setErrors({
             ...errors,
-            password: ""
+            account: field === "account" && !!(errors.account) ? "" : errors.account,
+            password: field === "password" && !!(errors.password) ? "" : errors.password
         })
     }, [errors, form])
 
     const findFormErrors = useCallback(() => {
-        const newErrors: ILogin = {}
+        const newErrors: ILoginErrors = {}
         // password error
         if (!form.password) {
             newErrors.password = "Please Enter Passord"
@@ -48,8 +64,13 @@ function LoginPages(props: ILoginPages) {
             }
         }
 
+        //Account error
+        if (!form.account) {
+            newErrors.account = "Please enter a account."
+        }
+
         return newErrors
-    }, [form.password, validPassword])
+    }, [form.account, form.password, validPassword])
 
     const handleSubmit = useCallback((e: any) => {
         e.preventDefault()
@@ -58,8 +79,16 @@ function LoginPages(props: ILoginPages) {
         if (Object.keys(newErrors).length > 0) {
             // We got errors!
             setErrors(newErrors)
+        } else {
+            const res = dispatch(login(form))
+            res.then((results) => {
+                showAlert("Login Success", 'success')
+                props.setLoginShow(false)
+            }).catch((error) => {
+                console.log(error)
+            })
         }
-    }, [findFormErrors])
+    }, [dispatch, findFormErrors, form, props])
 
     return (
         <Form noValidate onSubmit={handleSubmit}>
@@ -72,10 +101,14 @@ function LoginPages(props: ILoginPages) {
                             type="text"
                             placeholder="Username"
                             aria-describedby="inputGroupPrepend"
+                            isInvalid={!!errors.account}
                             required
+                            onChange={(e) => {
+                                setField('account', e.target.value)
+                            }}
                         />
                         <Form.Control.Feedback type="invalid">
-                            Please Enter Your Account Name
+                            {errors.account}
                         </Form.Control.Feedback>
                     </InputGroup>
                 </Form.Group>
@@ -96,7 +129,7 @@ function LoginPages(props: ILoginPages) {
                             }}
                         />
                         <Form.Control.Feedback type="invalid">
-                            Password need at least 10 letter
+                            {errors.password}
                         </Form.Control.Feedback>
                     </InputGroup>
                 </Form.Group>
