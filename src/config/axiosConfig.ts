@@ -19,7 +19,7 @@ export const handleAxiosResponse = async (response: any) => {
     return response
 }
 
-export const sendRequest = async (url: string, { thunkApi, payload, method }: { thunkApi: any, payload?: any, method: string }) => {
+export const sendRequest = async (url: string, { thunkApi, payload, method }: { thunkApi: any, payload?: any, method: string }, loading: boolean = true) => {
     const request = axios({
         method,
         url,
@@ -54,6 +54,6 @@ export const sendRequest = async (url: string, { thunkApi, payload, method }: { 
         }
     })
 
-    return trackPromise(request)
+    return loading ? trackPromise(request) : request
 
 };

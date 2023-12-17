@@ -4,7 +4,7 @@ import styles from './MessageContent.module.scss'
 function MessageContent() {
     return <div className={`${styles.wrapper} d-flex align-items-center px-1 py-2`}>
         <div className={styles.avatar}>
-            <Avatar size='50' name='avatar' src='https://brocanvas.com/wp-content/uploads/2022/01/hinh-anh-doremon-nam-nghi.jpg'></Avatar>
+            <Avatar size='50' src='https://brocanvas.com/wp-content/uploads/2022/01/hinh-anh-doremon-nam-nghi.jpg'></Avatar>
         </div>
         <div className={`${styles.content} ps-3`}>
             <div className={styles.details}>

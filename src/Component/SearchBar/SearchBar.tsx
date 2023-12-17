@@ -1,9 +1,9 @@
 import styles from './SearchBar.module.scss'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { Dispatch, ReactNode, SetStateAction } from 'react'
 
 interface ISearchBar {
+    searchVal: string
+    setSearchVal: Dispatch<SetStateAction<string>>
     children?: ReactNode
     setFocus?: Dispatch<SetStateAction<boolean>>
 }
@@ -19,12 +19,15 @@ function SearchBar(props: ISearchBar) {
                     onBlur={() => {
                         props.setFocus && props.setFocus(false)
                     }}
+                    value={props.searchVal}
                     className="form-control"
                     placeholder="Search Here..."
                     aria-label="Search Here..."
-                    aria-describedby="basic-addon1">
-
-                </input>
+                    aria-describedby="basic-addon1"
+                    onChange={(e) => {
+                        props.setSearchVal(e.target.value)
+                    }}
+                ></input>
             </div>
         </div>
         {props.children ? <div className={`position-relative ${styles.content}`}>{props.children}</div> : undefined}

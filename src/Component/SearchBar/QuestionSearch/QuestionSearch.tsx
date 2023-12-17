@@ -1,12 +1,11 @@
 import Avatar from '../../Avatar/Avatar'
 import styles from './QuestionSearch.module.scss'
 
-interface IQuestionContent {
-    size: string
-    name: string
+export interface IQuestionContent {
     src: string
-    main_content: string
-    sub_content: string
+    id: string
+    title: string
+    subTitle: string
 }
 
 interface IQuestionSearch {
@@ -18,10 +17,10 @@ function QuestionSearch(props: IQuestionSearch) {
         <div className={`${styles.lists}`}>
             {props.data.map((item, index) => {
                 return <div key={index} className={`d-flex align-items-center ${styles.list}`}>
-                    <Avatar size={item.size} name={item.name} src={item.src}></Avatar>
+                    <Avatar size={'40'} src={item.src}></Avatar>
                     <div className={`ps-3 ${styles.content}`}>
-                        <div className={styles.main_content}>{item.main_content}</div>
-                        <div className={styles.sub_content}>{item.sub_content}.</div>
+                        <div className={styles.main_content}>{item.title}</div>
+                        <div className={styles.sub_content}>{item.subTitle}.</div>
                     </div>
                 </div>
             })}

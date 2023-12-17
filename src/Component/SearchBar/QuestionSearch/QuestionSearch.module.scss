@@ -27,7 +27,7 @@
                     -webkit-box-orient: vertical;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    word-wrap: break-word;
+                    word-break: break-all;
                 }
 
                 .sub_content {
@@ -38,7 +38,7 @@
                     -webkit-box-orient: vertical;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    word-wrap: break-word;
+                    word-break: break-all;
                 }
             }
         }

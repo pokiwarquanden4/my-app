@@ -19,6 +19,7 @@ function Ask() {
     const dispatch = useAppDispatch()
     const [content, setContent] = useState<string>('');
     const [title, setTitle] = useState<string>('')
+    const [subTitle, setSubTitle] = useState<string>('')
     const [tags, setTags] = useState<Tag[]>([])
     const [contentFocus, setContentFocus] = useState<boolean>(false)
     const tagsSlice = useAppSelector(store => store.data.tags)
@@ -46,10 +47,11 @@ function Ask() {
     const onSubmit = useCallback(async () => {
         dispatch(createPosts({
             title: title,
+            subTitle: subTitle,
             content: content,
             tags: tags.map((tag) => tag.text)
         }))
-    }, [content, dispatch, tags, title])
+    }, [content, dispatch, subTitle, tags, title])
 
     return <div className={`pb-4 ${styles.wrapper}`}>
         <div className={`h4 ${styles.header}`}>
@@ -73,7 +75,25 @@ function Ask() {
                 </input>
             </div>
         </div>
-        <div className={`border rounded-3 ${styles.description} ${title ? styles.enable : styles.disable} ${contentFocus ? styles.focus : undefined}`}>
+        <div className={`${styles.subtitle} ${title ? styles.enable : styles.disable}`}>
+            <div className="border rounded-3 px-4 py-3 mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                    <div className={`h5 ${styles.title_header}`}>Sub Title</div>
+                    <div className={`form-text ${styles.title_comment}`}>Quick overview your problem</div>
+                </label>
+                <input
+                    type="email"
+                    placeholder='Write about your problems here'
+                    className={`form-control ${styles.title_input}`}
+                    id="exampleInputEmail1"
+                    aria-describedby="emailHelp"
+                    value={subTitle}
+                    onChange={(e) => { setSubTitle(e.target.value) }}
+                >
+                </input>
+            </div>
+        </div>
+        <div className={`border rounded-3 ${styles.description} ${title && subTitle ? styles.enable : styles.disable} ${contentFocus ? styles.focus : undefined}`}>
             <ReactQuill
                 theme="snow"
                 value={content}
@@ -108,7 +128,7 @@ function Ask() {
                 `}
             </style>
         </div>
-        <div className={`pt-4 ${styles.Tags} ${title && content && content !== '<p><br></p>' ? styles.enable : styles.disable}`}>
+        <div className={`pt-4 ${styles.Tags} ${title && subTitle && content && content !== '<p><br></p>' ? styles.enable : styles.disable}`}>
             <div className="border rounded-3 px-4 py-3 mb-3 position-relative">
                 <label htmlFor="tagsInput" className="form-label">
                     <div className={`h5 ${styles.title_header}`}>Tags</div>
@@ -126,7 +146,7 @@ function Ask() {
                 />
             </div>
         </div>
-        <div className={`${styles.submit} ${title && content && content !== '<p><br></p>' && tags ? styles.enable : styles.disable}`}>
+        <div className={`${styles.submit} ${title && subTitle && content && content !== '<p><br></p>' && tags ? styles.enable : styles.disable}`}>
             <button type="button" className="btn btn-primary" onClick={onSubmit}>Confirm Your Question</button>
         </div>
     </div>

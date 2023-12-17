@@ -18,10 +18,11 @@ export const getTags = createAsyncThunk<any, {}>(
 )
 
 export interface IPosts {
+    _id: number
     rate: number;
     answer: number;
     title: string;
-    content: string;
+    subTitle: string,
     tags: string[];
     userId: string;
     verified: number,
@@ -49,11 +50,10 @@ export const getPosts = createAsyncThunk<IPostsResponse, IGetPosts>(
 
 interface ICreatePost {
     title: string,
+    subTitle: string
     content: string,
     tags: string[]
 }
-
-
 
 export const createPosts = createAsyncThunk<any, ICreatePost>(
     "/create/posts",

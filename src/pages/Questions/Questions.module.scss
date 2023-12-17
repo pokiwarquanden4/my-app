@@ -11,6 +11,7 @@
 
     .content_lists {
         .content_list {
+            min-height: 120px;
             border-bottom: 1px solid rgb(219, 222, 224);
         }
 
@@ -44,7 +45,7 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
-            word-wrap: break-word;
+            word-break: break-all
         }
 
 

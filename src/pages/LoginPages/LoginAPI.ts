@@ -10,6 +10,7 @@ export const login = createAsyncThunk<any, ILogin>(
             payload: payload,
             method: "POST"
         })
+        console.log(res)
         return res
     }
 )

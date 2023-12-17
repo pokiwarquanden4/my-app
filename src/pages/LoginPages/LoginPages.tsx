@@ -81,6 +81,7 @@ function LoginPages(props: ILoginPages) {
             setErrors(newErrors)
         } else {
             const res = await dispatch(login(form))
+
             switch (res.payload.status) {
                 case 200:
                     showAlert(`Welcome ${res.meta.arg.account}`, 'success')
