@@ -72,7 +72,7 @@ function LoginPages(props: ILoginPages) {
         return newErrors
     }, [form.account, form.password, validPassword])
 
-    const handleSubmit = useCallback((e: any) => {
+    const handleSubmit = useCallback(async (e: any) => {
         e.preventDefault()
         const newErrors = findFormErrors()
         // Conditional logic:
@@ -80,13 +80,18 @@ function LoginPages(props: ILoginPages) {
             // We got errors!
             setErrors(newErrors)
         } else {
-            const res = dispatch(login(form))
-            res.then((results) => {
-                showAlert("Login Success", 'success')
-                props.setLoginShow(false)
-            }).catch((error) => {
-                console.log(error)
-            })
+            const res = await dispatch(login(form))
+            switch (res.payload.status) {
+                case 200:
+                    showAlert(`Welcome ${res.meta.arg.account}`, 'success')
+                    props.setLoginShow(false)
+                    break
+                case 401:
+                    showAlert("Please check your account and password", 'info')
+                    break
+                default:
+                    break
+            }
         }
     }, [dispatch, findFormErrors, form, props])
 

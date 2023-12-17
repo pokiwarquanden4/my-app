@@ -1,11 +1,13 @@
 import styles from './Questions.module.scss'
-import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import OptionsListButton from '../../Component/OptionsListButton/OptionsListButton';
 import TagsComponent from '../../Component/TagsComponent/TagsComponent';
 import Avatar from '../../Component/Avatar/Avatar';
 import { formatTimeAgo } from '../../Functions/Functions';
 import Paging from '../../Component/Paging/Paging';
 import SearchBar from '../../Component/SearchBar/SearchBar';
+import { useAppDispatch } from '../../App/hook';
+import { IPosts, IPostsResponse, getPosts } from './QuestionsAPI';
 
 const filterList = [
     {
@@ -380,7 +382,13 @@ const data = [
 ]
 
 function Questions() {
+    const dispatch = useAppDispatch()
+    const [focus, setFocus] = useState<number>(0)
+    const [data, setData] = useState<IPosts[]>([])
+    const [currentPage, setCurrentPage] = useState<number>(1)
     const [pageData, sePageData] = useState<JSX.Element[]>([])
+    const [dataLength, setDataLength] = useState<number>(0)
+
     useLayoutEffect(() => {
         const newPageData = data.map((item, index) => {
             return <div
@@ -390,28 +398,45 @@ function Questions() {
                 <div className={`pe-3 d-flex flex-column justify-content-between ${styles.content_list_info}`}>
                     <div className={`${styles.rate}`}>{item.rate} rates</div>
                     <div className={`${styles.answere}`}>{item.answer} answeres</div>
-                    <div className={`${styles.vertified}`}>{item.vertified} vertified</div>
+                    <div className={`${styles.vertified}`}>{item.verified} vertified</div>
                 </div>
                 <div className={`ps-4 ${styles.content_list_data}`}>
                     <div className={`${styles.content_wrapper}  flex-fill`}>
-                        <div className={styles.header}>{item.content.header}</div>
-                        <div className={`${styles.sumary} mb-3`}>{item.content.sumary}</div>
-                        <TagsComponent data={item.tagsList}></TagsComponent>
+                        <div className={styles.header}>{item.title}</div>
+                        <div className={`${styles.sumary} mb-3`}>{item.content}</div>
+                        <TagsComponent data={item.tags}></TagsComponent>
                     </div>
                     <div className={`pt-2 d-flex justify-content-end ${styles.content_footer}`}>
                         <div className={`d-flex align-items-center ${styles.account}`}>
-                            <Avatar size='30' name='pokiwarquanden' src={item.account.avatar}></Avatar>
-                            <div className={styles.account_name}>{item.account.name}</div>
+                            <Avatar size='30' name='pokiwarquanden' src={''}></Avatar>
+                            <div className={styles.account_name}>{item.userId}</div>
                         </div>
                         <div className={`ms-1 d-flex align-items-center ${styles.time}`}>
-                            {formatTimeAgo(item.uploadTime)}
+                            {formatTimeAgo(new Date(item.updatedAt))}
                         </div>
                     </div>
                 </div>
             </div>
         })
         sePageData(newPageData)
-    }, [])
+    }, [data])
+
+    useEffect(() => {
+        if (!((focus || focus === 0) && currentPage)) return
+        const func = async () => {
+            const res = await dispatch(getPosts({
+                number: currentPage,
+                type: filterList[focus].name
+            }))
+
+            const payload = res.payload as IPostsResponse
+
+            setData(payload.data.posts)
+            setDataLength(payload.data.totalCount)
+        }
+
+        func()
+    }, [currentPage, dispatch, focus])
 
     return <div className={`${styles.content}`}>
         <div className={`d-flex justify-content-between align-items-center ${styles.content_header}`}>
@@ -424,11 +449,21 @@ function Questions() {
         <div className={`d-flex pb-3 align-items-center justify-content-between pt-3 ${styles.content_filter}`}>
             <div className={`${styles.questions_number}`}>23,938,061 questions</div>
             <div className={`${styles.questions_filter_items}`}>
-                <OptionsListButton data={filterList}></OptionsListButton>
+                <OptionsListButton
+                    focus={focus}
+                    setFocus={setFocus}
+                    data={filterList}
+                ></OptionsListButton>
             </div>
         </div>
         <div className={`${styles.content_lists}`}>
-            <Paging data={pageData} limit={10}></Paging>
+            <Paging
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                data={pageData}
+                numberPerPage={10}
+                dataLength={dataLength}
+            ></Paging>
         </div>
     </div>
 }

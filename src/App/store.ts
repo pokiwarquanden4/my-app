@@ -1,8 +1,11 @@
 import { Action, ThunkAction, configureStore } from "@reduxjs/toolkit";
+import UserSlice from "../Reducers/UserSlice";
+import DataSlice from "../Reducers/DataSlice";
 
 export const store = configureStore({
     reducer: {
-
+        user: UserSlice,
+        data: DataSlice
     },
     // middleware: (getDefaultMiddleware) => {
     //     getDefaultMiddleware({

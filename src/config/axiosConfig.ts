@@ -20,13 +20,11 @@ export const handleAxiosResponse = async (response: any) => {
 }
 
 export const sendRequest = async (url: string, { thunkApi, payload, method }: { thunkApi: any, payload?: any, method: string }) => {
-    trackPromise(
-        axios({
-            method,
-            url,
-            data: payload,
-        })
-    ).then((results) => {
+    const request = axios({
+        method,
+        url,
+        data: payload,
+    }).then((results) => {
         return {
             status: results.status,
             data: results.data
@@ -37,10 +35,14 @@ export const sendRequest = async (url: string, { thunkApi, payload, method }: { 
             if (axiosError.response) {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
-                if (thunkApi) return thunkApi.rejectWithValue({
+                console.log({
                     status: axiosError.response.status,
                     data: axiosError.response.data
                 })
+                if (thunkApi) return {
+                    status: axiosError.response.status,
+                    data: axiosError.response.data
+                }
             } else if (axiosError.request) {
                 // The request was made but no response was received
                 console.log('No response received from the server');
@@ -51,5 +53,7 @@ export const sendRequest = async (url: string, { thunkApi, payload, method }: { 
             if (thunkApi) return thunkApi.rejectWithValue(error)
         }
     })
+
+    return trackPromise(request)
 
 };

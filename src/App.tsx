@@ -6,8 +6,17 @@ import PageWrapper from './Layout/DefaultLayout/PageWrapper/PageWrapper';
 import { ReactNotifications } from 'react-notifications-component';
 import 'react-notifications-component/dist/theme.css'
 import { Loading } from './Component/Loading/Loading';
+import { useAppDispatch } from './App/hook';
+import { useEffect } from 'react';
+import { getTags } from './pages/Questions/QuestionsAPI';
 
 function App() {
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(getTags({}))
+  }, [dispatch])
+
   return (
     <Router>
       <div className="App h-100">

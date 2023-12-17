@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Avatar from '../../Component/Avatar/Avatar'
 import OptionsListButton from '../../Component/OptionsListButton/OptionsListButton'
 import SearchBar from '../../Component/SearchBar/SearchBar'
@@ -16,11 +17,19 @@ const filterLists = [
 ]
 
 function Users() {
+    const [focus, setFocus] = useState<number>(0)
+
     return <div className={`${styles.wrapper}`}>
         <div className={`h3 pb-3 ${styles.header}`}>Users</div>
         <div className={`d-flex ${styles.filter}`}>
             <SearchBar></SearchBar>
-            <div className='ps-5'><OptionsListButton data={filterLists}></OptionsListButton></div>
+            <div className='ps-5'>
+                <OptionsListButton
+                    focus={focus}
+                    setFocus={setFocus}
+                    data={filterLists}
+                ></OptionsListButton>
+            </div>
         </div>
         <div className={`pt-5 ${styles.contents}`}>
             <div className={`row pt-3 gy-4 ${styles.content}`}>

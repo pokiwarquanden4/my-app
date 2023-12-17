@@ -7,6 +7,7 @@ import Tags from "../Tags/Tags";
 import Users from "../Users/Users";
 
 export const routes = {
+  home: '/',
   questions: '/questions',
   questionDetail: '/questions/:questionId',
   tags: '/tags',

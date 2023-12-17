@@ -67,7 +67,7 @@ function ContentQuestion(props: IContentQuestion) {
         `}
         </style>
         <div className={`mb-4 ${styles.content_tags}`}>
-            <TagsComponent data={[{ name: "java" }, { name: "reactjs" }, { name: "python" }]}></TagsComponent>
+            <TagsComponent data={["java"]}></TagsComponent>
         </div>
         <div className={`${styles.content_info} d-flex justify-content-between align-items-center mb-3`}>
             <div className={`${styles.options} d-flex`}>
@@ -184,7 +184,7 @@ function ContentQuestion(props: IContentQuestion) {
                 {props.answerData.map((answer, index) => {
                     return <div key={index} className={`ps-4 d-flex align-items-center ${styles.answer} py-2`}>
                         <div className={`${styles.answer_content} pe-2`}>{answer.content}</div>
-                        <TagsComponent data={[{ name: answer.userName }]}></TagsComponent>
+                        <TagsComponent data={[answer.userName]}></TagsComponent>
                     </div>
                 })}
             </div>

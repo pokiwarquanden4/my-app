@@ -1,13 +1,13 @@
-.focus {
-    color: var(--bs-btn-hover-color);
-    background-color: var(--bs-btn-hover-bg);
-    border-color: var(--bs-btn-hover-border-color);
-}
-
 .questions_filter_item {
     border-radius: 0;
 }
 
 .questions_filter_item+.questions_filter_item {
     margin-left: 1px;
+}
+
+.focus {
+    color: var(--bs-btn-hover-color);
+    background-color: var(--bs-btn-hover-bg);
+    border-color: var(--bs-btn-hover-border-color);
 }

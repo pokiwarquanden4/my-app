@@ -9,6 +9,7 @@ import LoginPages from '../../../pages/LoginPages/LoginPages'
 import QuestionSearch from '../../../Component/SearchBar/QuestionSearch/QuestionSearch'
 import Message from '../../../Component/Message/Message'
 import { useNavigate } from 'react-router-dom';
+import { routes } from '../../../pages/pages/pages'
 
 const searchData = [
     {
@@ -61,7 +62,7 @@ function Header() {
         localStorage.removeItem('token')
         localStorage.removeItem('refresh_token')
         window.dispatchEvent(new Event("storage"));
-        navigate('/')
+        navigate(routes.home)
     }, [navigate])
 
 
