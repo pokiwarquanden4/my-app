@@ -27,8 +27,6 @@ function Message() {
         </div>
         <div className={`${styles.content} pt-3`}>
             <MessageContent></MessageContent>
-            <MessageContent></MessageContent>
-            <MessageContent></MessageContent>
         </div>
     </div>
 }

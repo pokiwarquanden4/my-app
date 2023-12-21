@@ -4,6 +4,7 @@ import styles from './ContentQuestion.module.scss'
 import { formatTimeAgo, toolBarSmallOptions, toolbarOptions } from '../../Functions/Functions';
 import Avatar from '../Avatar/Avatar';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 // Sử dụng hàm để tạo chuỗi thời gian
 const timestamp = new Date('2023-10-14T12:00:00');
@@ -22,6 +23,8 @@ interface IContentQuestion {
 }
 
 function ContentQuestion(props: IContentQuestion) {
+    const params = useParams()
+
     const [content, setContent] = useState<string>('<pre class="ql-syntax" spellcheck="false">sdfsdfdsfsfd</pre>');
     const [commentContent, setCommentContent] = useState<string>();
     const [comment, setComment] = useState<boolean>(false)

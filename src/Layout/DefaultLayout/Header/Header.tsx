@@ -39,6 +39,7 @@ function Header() {
     const [searchFocus, setSearchFocus] = useState<boolean>(false)
     const [searchVal, setSearchVal] = useState<string>('')
     const [searchData, setSearchData] = useState<IQuestionContent[]>([])
+    const [postId, setPostId] = useState<string | undefined>()
 
     useEffect(() => {
         const checkLoginStatus = () => {
@@ -92,6 +93,12 @@ function Header() {
         }
     }, [dispatch, searchVal])
 
+    useEffect(() => {
+        if (!searchFocus && postId) {
+            navigate(routes.questionDetail.replace(':questionId', postId));
+        }
+    }, [navigate, postId, searchFocus])
+
     return <div className={`container-fluid d-flex justify-content-around align-items-center ${styles.wrapper}`}>
         <img
             src="https://cdn.shopify.com/s/files/1/0438/9070/4538/files/logo.png?v=1614325954"
@@ -102,7 +109,14 @@ function Header() {
             searchVal={searchVal}
             setSearchVal={setSearchVal}
             setFocus={setSearchFocus}>
-            {searchData.length ? <QuestionSearch data={searchFocus ? searchData : undefined}></QuestionSearch> : undefined}
+            {searchData.length
+                ? <QuestionSearch
+                    hoverId={postId}
+                    setHoverId={setPostId}
+                    data={searchFocus ? searchData : undefined}
+                ></QuestionSearch>
+                :
+                undefined}
         </SearchBar>
         <div className='px-5 d-flex align-items-cente'>
             <IconNotification arlert={true} number={0}>

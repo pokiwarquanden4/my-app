@@ -37,7 +37,11 @@ function Comment() {
                 <FontAwesomeIcon className={styles.check_icon} icon={faCheck}></FontAwesomeIcon>
             </div>
         </div>
-        <ContentQuestion isSubQuestions={true} answerData={fakeCommentData} classValue='ms-2 pb-3 flex-fill'></ContentQuestion>
+        <ContentQuestion
+            isSubQuestions={true}
+            answerData={fakeCommentData}
+            classValue='ms-2 pb-3 flex-fill'
+        ></ContentQuestion>
     </div >
 }
 

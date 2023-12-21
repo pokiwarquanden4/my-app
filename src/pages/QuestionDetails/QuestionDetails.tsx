@@ -1,7 +1,10 @@
 import styles from './QuestionDetails.module.scss'
 import Comment from '../../Component/Comment/Comment';
 import ContentQuestion from '../../Component/ContentQuestion/ContentQuestion';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useAppDispatch } from '../../App/hook';
+import { getPostById } from './QuestionDetailsAPI';
 
 const sortData = [
     {
@@ -19,7 +22,22 @@ const sortData = [
 ]
 
 function QuestionDetails() {
+    const dispatch = useAppDispatch()
+    const params = useParams()
+    const postId = useMemo(() => {
+        return params.questionId
+    }, [params.questionId])
     const [sortBy, setSortBy] = useState<string>('1')
+
+    useEffect(() => {
+        const func = async () => {
+            if (!postId) return
+            const res = await dispatch(getPostById(postId))
+            console.log(res)
+        }
+
+        func()
+    }, [dispatch, postId])
 
     return <div className={`${styles.wrapper} mb-5`}>
         <div className={`${styles.header} h4`}>How can I split keys that equal to the same value in a hash (ruby)</div>
