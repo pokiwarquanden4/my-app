@@ -192,9 +192,8 @@ function CreateAccount() {
             {/* </ModalComponent> */}
             <ModalComponent
                 header='Login Form'
-                confirm='Login'
                 visible={validForm}
-                setLoginShow={setValidForm}
+                setShow={setValidForm}
             >
                 <LoginPages setLoginShow={setValidForm}></LoginPages>
             </ModalComponent>

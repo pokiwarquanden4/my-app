@@ -1,8 +1,13 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
+import { jwtDecode } from "jwt-decode";
 import { trackPromise } from "react-promise-tracker";
+import Cookies from "universal-cookie";
+
+
+const cookies = new Cookies();
 
 export const handleAxiosRequest = async (config: InternalAxiosRequestConfig) => {
-    let token = localStorage.getItem("token") || localStorage.getItem("refresh_token")
+    const token = cookies.get('token') || cookies.get('refresh_token')
     if (token) {
         config.headers.set("Authorization", "Bearer " + token)
     }
@@ -11,10 +16,15 @@ export const handleAxiosRequest = async (config: InternalAxiosRequestConfig) => 
 
 export const handleAxiosResponse = async (response: any) => {
     //if contain jwt then save it in local storage
-    if (response.data.accessToken && response.data.refreshToken && response.status === 200) {
-        localStorage.setItem('token', response.data.accessToken)
-        localStorage.setItem('refresh_token', response.data.refreshToken)
-        window.dispatchEvent(new Event("storage"));
+    if (response.data.accessToken && response.status === 200) {
+        cookies.set('token', response.data.accessToken, {
+            expires: new Date(Number(jwtDecode(response.data.accessToken).exp) * 1000),
+        });
+    }
+    if (response.data.refreshToken && response.status === 200) {
+        cookies.set('refresh_token', response.data.refreshToken, {
+            expires: new Date(Number(jwtDecode(response.data.refreshToken).exp) * 1000),
+        });
     }
     return response
 }

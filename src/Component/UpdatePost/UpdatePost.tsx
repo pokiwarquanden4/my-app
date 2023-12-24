@@ -1,12 +1,12 @@
-import styles from './Ask.module.scss'
-import { useCallback, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { toolbarOptions } from '../../Functions/Functions';
-import { useAppDispatch, useAppSelector } from '../../App/hook';
-import { createPosts } from '../Questions/QuestionsAPI';
 import { WithContext as ReactTags, Tag } from 'react-tag-input';
-import { showAlert } from '../../Component/Alert/Alert';
+import { useAppDispatch, useAppSelector } from '../../App/hook';
+import { toolbarOptions } from '../../Functions/Functions';
+import styles from './UpdatePost.module.scss'
+import { showAlert } from '../Alert/Alert';
+import { IPost } from '../../pages/QuestionDetails/QuestionDetailsAPI';
 
 const KeyCodes = {
     comma: 188,
@@ -15,15 +15,28 @@ const KeyCodes = {
 
 const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
-function Ask() {
-    const dispatch = useAppDispatch()
-    const [content, setContent] = useState<string>('');
-    const [title, setTitle] = useState<string>('')
-    const [subTitle, setSubTitle] = useState<string>('')
-    const [tags, setTags] = useState<Tag[]>([])
-    const [contentFocus, setContentFocus] = useState<boolean>(false)
-    const tagsSlice = useAppSelector(store => store.data.tags)
+interface IUpdatePost {
+    setShowUpdatePost: Dispatch<SetStateAction<boolean>>
+    onUpdatePost: (title?: string, subTitle?: string, content?: string, tags?: string[], show?: Dispatch<SetStateAction<boolean>>) => void
+    questionDetails: IPost
+}
 
+function UpdatePost(props: IUpdatePost) {
+    const tagsSlice = useAppSelector(store => store.data.tags)
+    const [content, setContent] = useState<string>(props.questionDetails.content);
+    const [title, setTitle] = useState<string>(props.questionDetails.title)
+    const [subTitle, setSubTitle] = useState<string>(props.questionDetails.subTitle)
+    const [tags, setTags] = useState<Tag[]>(
+        (tagsSlice || [])
+            .filter((tag) => props.questionDetails.tags.includes(tag))
+            .map((tag, index) => {
+                return {
+                    id: String(index),
+                    text: tag
+                };
+            })
+    )
+    const [contentFocus, setContentFocus] = useState<boolean>(false)
     const suggestions: Tag[] = (tagsSlice || []).map((tag, index) => {
         return {
             id: String(index),
@@ -36,7 +49,6 @@ function Ask() {
     }, []);
 
     const handleAddition = useCallback((tag: Tag) => {
-        console.log(tag)
         if (tagsSlice.includes(tag.text)) {
             setTags((prevTags) => [...prevTags, tag])
         } else {
@@ -44,25 +56,11 @@ function Ask() {
         };
     }, [tagsSlice]);
 
-
-    const onSubmit = useCallback(async () => {
-        dispatch(createPosts({
-            title: title,
-            subTitle: subTitle,
-            content: content,
-            tags: tags.map((tag) => tag.text)
-        }))
-    }, [content, dispatch, subTitle, tags, title])
-
-    return <div className={`pb-4 ${styles.wrapper}`}>
-        <div className={`h4 ${styles.header}`}>
-            Review your question
-        </div>
+    return <div className={`pb-4 px-2 ${styles.wrapper}`}>
         <div className={`pt-4 ${styles.title}`}>
             <div className="border rounded-3 px-4 py-3 mb-3">
                 <label htmlFor="exampleInputEmail1" className="form-label">
                     <div className={`h5 ${styles.title_header}`}>Title</div>
-                    <div className={`form-text ${styles.title_comment}`}>Be specific and imagine you’re asking a question to another person.</div>
                 </label>
                 <input
                     type="email"
@@ -76,11 +74,10 @@ function Ask() {
                 </input>
             </div>
         </div>
-        <div className={`${styles.subtitle} ${title ? styles.enable : styles.disable}`}>
+        <div className={`${styles.subtitle}`}>
             <div className="border rounded-3 px-4 py-3 mb-3">
                 <label htmlFor="exampleInputEmail1" className="form-label">
                     <div className={`h5 ${styles.title_header}`}>Sub Title</div>
-                    <div className={`form-text ${styles.title_comment}`}>Quick overview your problem</div>
                 </label>
                 <input
                     type="email"
@@ -94,7 +91,7 @@ function Ask() {
                 </input>
             </div>
         </div>
-        <div className={`border rounded-3 ${styles.description} ${title && subTitle ? styles.enable : styles.disable} ${contentFocus ? styles.focus : undefined}`}>
+        <div className={`border rounded-3 ${styles.description} ${contentFocus ? styles.focus : undefined}`}>
             <ReactQuill
                 theme="snow"
                 value={content}
@@ -129,11 +126,10 @@ function Ask() {
                 `}
             </style>
         </div>
-        <div className={`pt-4 ${styles.Tags} ${title && subTitle && content && content !== '<p><br></p>' ? styles.enable : styles.disable}`}>
+        <div className={`pt-4 ${styles.Tags}`}>
             <div className="border rounded-3 px-4 py-3 mb-3 position-relative">
                 <label htmlFor="tagsInput" className="form-label">
                     <div className={`h5 ${styles.title_header}`}>Tags</div>
-                    <div className={`form-text ${styles.title_comment}`}>Add up to 5 tags to describe what your question is about. Start typing to see suggestions.</div>
                 </label>
                 <ReactTags
                     autofocus={false}
@@ -147,10 +143,16 @@ function Ask() {
                 />
             </div>
         </div>
-        <div className={`${styles.submit} ${title && subTitle && content && content !== '<p><br></p>' && tags ? styles.enable : styles.disable}`}>
-            <button type="button" className="btn btn-primary" onClick={onSubmit}>Confirm Your Question</button>
+        <div className={`${styles.submit} `}>
+            <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => {
+                    props.onUpdatePost(title, subTitle, content, tags.map((tag) => tag.text), props.setShowUpdatePost)
+                }}
+            >Confirm</button>
         </div>
     </div>
 }
 
-export default Ask
+export default UpdatePost

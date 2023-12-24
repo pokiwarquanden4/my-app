@@ -1,22 +1,30 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import { formatTimeAgo, toolBarSmallOptions, toolbarOptions } from '../../Functions/Functions';
 import { IPost } from '../../pages/QuestionDetails/QuestionDetailsAPI';
 import Avatar from '../Avatar/Avatar';
 import TagsComponent from '../TagsComponent/TagsComponent';
 import styles from './ContentQuestion.module.scss';
+import ModalComponent from '../Modal/ModalComponent';
+import UpdatePost from '../UpdatePost/UpdatePost';
 
 
 interface IContentQuestion {
+    onUpdatePost: (title?: string, subTitle?: string, content?: string, tags?: string[], show?: Dispatch<SetStateAction<boolean>>) => void
     onCreateResponse: (content: string) => void
     questionDetails: IPost
     classValue?: string
 }
 
 function ContentQuestion(props: IContentQuestion) {
-    const [content, setContent] = useState<string>(props.questionDetails.content);
+    const [content, setContent] = useState<string>('');
     const [commentContent, setCommentContent] = useState<string>();
     const [commentVisible, setCommentVisible] = useState<boolean>(false)
+    const [showUpdatePost, setShowUpdatePost] = useState<boolean>(false)
+
+    useEffect(() => {
+        setContent(props.questionDetails.content)
+    }, [props.questionDetails.content])
 
     return <div className={`${styles.content} ${props.classValue}`}>
         <ReactQuill
@@ -52,18 +60,19 @@ function ContentQuestion(props: IContentQuestion) {
             .ql-container.ql-snow { 
                 border: none !important;
             }
-            .ql-editor{
-                padding: 0;
-            }
         `}
         </style>
         <div className={`mb-4 ${styles.content_tags}`}>
-            <TagsComponent data={["java"]}></TagsComponent>
+            <TagsComponent data={props.questionDetails.tags}></TagsComponent>
         </div>
         <div className={`${styles.content_info} d-flex justify-content-between align-items-center mb-3`}>
             <div className={`${styles.options} d-flex`}>
-                <div className={styles.options_content}>Share</div>
-                <div className={styles.options_content}>Edit</div>
+                <div
+                    className={styles.options_content}
+                    onClick={() => {
+                        setShowUpdatePost(!showUpdatePost)
+                    }}
+                >Edit</div>
                 <div className={styles.options_content}>Follow</div>
             </div>
             <div className={`pt-2 d-flex justify-content-end ${styles.content_footer}`}>
@@ -117,9 +126,6 @@ function ContentQuestion(props: IContentQuestion) {
                         .ql-container {
                             height: 300px;
                         }
-                        .ql-toolbar + .ql-container .ql-editor {
-                            padding: 20px;
-                        } 
                         `}
                     </style>
                 </div>
@@ -137,6 +143,17 @@ function ContentQuestion(props: IContentQuestion) {
             :
             undefined
         }
+        <ModalComponent
+            header='Update Form'
+            visible={showUpdatePost}
+            setShow={setShowUpdatePost}
+        >
+            <UpdatePost
+                setShowUpdatePost={setShowUpdatePost}
+                onUpdatePost={props.onUpdatePost}
+                questionDetails={props.questionDetails}
+            ></UpdatePost>
+        </ModalComponent>
     </div>
 }
 

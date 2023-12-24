@@ -1,13 +1,11 @@
 import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
 import { Dispatch, ReactNode, SetStateAction, useCallback, useEffect, useState } from 'react';
 
 interface IModalComponent {
     header: string
     children: ReactNode
-    confirm: string
     visible: boolean
-    setLoginShow: Dispatch<SetStateAction<boolean>>
+    setShow: Dispatch<SetStateAction<boolean>>
 }
 
 function ModalComponent(props: IModalComponent) {
@@ -18,7 +16,7 @@ function ModalComponent(props: IModalComponent) {
     }, [props.visible])
 
     const handleClose = useCallback(() => {
-        props.setLoginShow(false)
+        props.setShow(false)
     }, [props])
 
     return <>

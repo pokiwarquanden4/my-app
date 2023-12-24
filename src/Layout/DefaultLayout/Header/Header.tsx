@@ -1,16 +1,17 @@
-import SearchBar from '../../../Component/SearchBar/SearchBar'
-import styles from './Header.module.scss'
+import { faBell, faRightFromBracket, faUser } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBell, faUser, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
-import IconNotification from '../../../Component/IconNotification/IconNotification'
-import ModalComponent from '../../../Component/Modal/ModalComponent'
 import { useCallback, useEffect, useState } from 'react'
-import LoginPages from '../../../pages/LoginPages/LoginPages'
-import QuestionSearch, { IQuestionContent } from '../../../Component/SearchBar/QuestionSearch/QuestionSearch'
-import Message from '../../../Component/Message/Message'
-import { useNavigate } from 'react-router-dom';
-import { routes } from '../../../pages/pages/pages'
+import { useNavigate } from 'react-router-dom'
+import Cookies from 'universal-cookie'
 import { useAppDispatch } from '../../../App/hook'
+import IconNotification from '../../../Component/IconNotification/IconNotification'
+import Message from '../../../Component/Message/Message'
+import ModalComponent from '../../../Component/Modal/ModalComponent'
+import QuestionSearch, { IQuestionContent } from '../../../Component/SearchBar/QuestionSearch/QuestionSearch'
+import SearchBar from '../../../Component/SearchBar/SearchBar'
+import LoginPages from '../../../pages/LoginPages/LoginPages'
+import { routes } from '../../../pages/pages/pages'
+import styles from './Header.module.scss'
 import { postsSearch } from './HeaderAPI'
 
 // const searchData = [
@@ -42,30 +43,21 @@ function Header() {
     const [postId, setPostId] = useState<string | undefined>()
 
     useEffect(() => {
-        const checkLoginStatus = () => {
-            if (localStorage.getItem("token") || localStorage.getItem("refresh_token")) {
+        const cookies = new Cookies()
+        cookies.addChangeListener(() => {
+            const token = cookies.get('token') || cookies.get('refresh_token')
+            if (token) {
                 setLogin(true);
             } else {
                 setLogin(false);
             }
-        };
-
-        // Initial check when the component mounts
-        checkLoginStatus();
-
-        // Subsequent checks when localStorage changes
-        window.addEventListener("storage", checkLoginStatus);
-
-        // Cleanup the event listener when the component unmounts
-        return () => {
-            window.removeEventListener("storage", checkLoginStatus);
-        };
+        })
     }, []);
 
     const logout = useCallback(() => {
-        localStorage.removeItem('token')
-        localStorage.removeItem('refresh_token')
-        window.dispatchEvent(new Event("storage"));
+        const cookies = new Cookies()
+        cookies.remove('token')
+        cookies.remove('refresh_token')
         navigate(routes.home)
     }, [navigate])
 
@@ -96,6 +88,7 @@ function Header() {
     useEffect(() => {
         if (!searchFocus && postId) {
             navigate(routes.questionDetail.replace(':questionId', postId));
+            setPostId(undefined)
         }
     }, [navigate, postId, searchFocus])
 
@@ -133,9 +126,8 @@ function Header() {
                 <FontAwesomeIcon onClick={() => { setLoginShow(true) }} className={styles.icon} icon={faUser}></FontAwesomeIcon>
                 <ModalComponent
                     header='Login Form'
-                    confirm='Login'
                     visible={loginShow}
-                    setLoginShow={setLoginShow}
+                    setShow={setLoginShow}
                 >
                     <LoginPages setLoginShow={setLoginShow}></LoginPages>
                 </ModalComponent>
