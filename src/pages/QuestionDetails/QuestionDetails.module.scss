@@ -1,7 +1,7 @@
 .wrapper {
     .header {}
 
-    .sub_header {
+    .header_detail {
         border-bottom: 1px solid rgb(219, 222, 224);
 
         .time_asked,
@@ -10,5 +10,10 @@
             font-size: 13px;
             color: rgb(143, 146, 152);
         }
+    }
+
+    .subHeader {
+        font-size: 17px;
+        color: rgb(143, 146, 152);
     }
 }

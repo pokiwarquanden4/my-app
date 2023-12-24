@@ -9,12 +9,19 @@ import { Loading } from './Component/Loading/Loading';
 import { useAppDispatch } from './App/hook';
 import { useEffect } from 'react';
 import { getTags } from './pages/Questions/QuestionsAPI';
+import { getUserAllDetails } from './pages/LoginPages/LoginAPI';
 
 function App() {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(getTags({}))
+    const func = async () => {
+      const token = localStorage.getItem("token") || localStorage.getItem("refresh_token")
+
+      await dispatch(getTags({}))
+      token && await dispatch(getUserAllDetails({}))
+    }
+    func()
   }, [dispatch])
 
   return (
