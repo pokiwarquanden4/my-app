@@ -87,7 +87,7 @@ function LoginPages(props: ILoginPages) {
                     showAlert(`Welcome ${res.meta.arg.account}`, 'success')
                     props.setLoginShow(false)
                     break
-                case 404:
+                case 401:
                     showAlert("Please check your account and password", 'info')
                     break
                 default:
