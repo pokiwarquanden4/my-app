@@ -122,3 +122,31 @@ export const unFollowResponse = createAsyncThunk<any, IFollowResponse>(
         return res
     }
 )
+
+interface IRateReponse {
+    responseId: string
+}
+
+export const rateResponse = createAsyncThunk<any, IRateReponse>(
+    "/rate/response",
+    async (payload, thunkApi) => {
+        const res = await sendRequest(`posts/rate/response`, {
+            thunkApi,
+            payload: payload,
+            method: "POST"
+        })
+        return res
+    }
+)
+
+export const unRateResponse = createAsyncThunk<any, IRateReponse>(
+    "/rate/unResponse",
+    async (payload, thunkApi) => {
+        const res = await sendRequest(`posts/rate/unResponse`, {
+            thunkApi,
+            payload: payload,
+            method: "POST"
+        })
+        return res
+    }
+)

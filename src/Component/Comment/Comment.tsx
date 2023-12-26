@@ -2,12 +2,13 @@ import { faFlag as faFlagNormal, faHeart as faHeartNormal } from '@fortawesome/f
 import { faCheck, faFlag as faFlagFill, faHeart as faHeartFill } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react'
-import { useAppDispatch } from '../../App/hook'
+import { useAppDispatch, useAppSelector } from '../../App/hook'
 import { IComment, IResponse, createComment, getCommentInResponse } from '../../pages/QuestionDetails/QuestionDetailsAPI'
 import ResponseContentQuestion from '../ContentQuestion/ResponseContentQuestion'
 import styles from './Comment.module.scss'
 
 interface ICommentProps {
+    onRateReponse: (responseId: string, follow: boolean) => void
     onFollowReponse: (responseId: string, follow: boolean) => void
     onUpdateResponse: (responseId: string, content: string, show: Dispatch<SetStateAction<boolean>>) => void
     postId: string | undefined
@@ -17,11 +18,11 @@ interface ICommentProps {
 
 function Comment(props: ICommentProps) {
     const dispatch = useAppDispatch()
-    const [heart, setHeart] = useState<boolean>(false)
     const [follow, setFollow] = useState<boolean>(false)
     const [comment, setComment] = useState<Record<string, IComment[]>>({})
     const [showComment, setShowComment] = useState<boolean>(false)
     const [shortResponse, setShortResponse] = useState<IResponse[]>([])
+    const userDetails = useAppSelector(store => store.user.data)
 
     const onGetComment = useCallback(async (responseId: string) => {
         if (responseId && !comment[responseId]) {
@@ -83,8 +84,25 @@ function Comment(props: ICommentProps) {
             return <div className='pt-4 d-flex' key={index}>
                 <div className={`${styles.options} text-center p-2`}>
                     <div className={styles.heart}>
-                        {heart ? <FontAwesomeIcon className={styles.heart_icon} icon={faHeartFill}></FontAwesomeIcon> : <FontAwesomeIcon className={styles.heart_icon} icon={faHeartNormal}></FontAwesomeIcon>}
-                        <div className={styles.heart_number}>{response.rate}</div>
+                        {response.rate.includes(userDetails.account)
+                            ?
+                            <FontAwesomeIcon
+                                onClick={() => {
+                                    props.onRateReponse(response._id, false)
+                                }}
+                                className={styles.heart_icon}
+                                icon={faHeartFill}
+                            ></FontAwesomeIcon>
+                            :
+                            <FontAwesomeIcon
+                                onClick={() => {
+                                    props.onRateReponse(response._id, true)
+                                }}
+                                className={styles.heart_icon}
+                                icon={faHeartNormal}
+                            ></FontAwesomeIcon>
+                        }
+                        <div className={styles.heart_number}>{response.rate.length}</div>
                     </div>
                     <div className={styles.follow}>
                         {follow ? <FontAwesomeIcon className={styles.follow_icon} icon={faFlagFill}></FontAwesomeIcon> : <FontAwesomeIcon className={styles.follow_icon} icon={faFlagNormal}></FontAwesomeIcon>}

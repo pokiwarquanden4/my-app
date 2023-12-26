@@ -1,12 +1,12 @@
 import { Dispatch, Fragment, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch } from '../../App/hook';
+import { useAppDispatch, useAppSelector } from '../../App/hook';
 import Comment from '../../Component/Comment/Comment';
 import ContentQuestion from '../../Component/ContentQuestion/ContentQuestion';
 import styles from './QuestionDetails.module.scss';
 import { IPost, IResponse, createResponse, getPostById, getReponseInPost, updatePost, updateReponse } from './QuestionDetailsAPI';
 import { formatTimeAgo } from '../../Functions/Functions';
-import { followPost, followResponse, unFollowPost, unFollowResponse } from '../Questions/QuestionsAPI';
+import { followPost, followResponse, rateResponse, unFollowPost, unFollowResponse, unRateResponse } from '../Questions/QuestionsAPI';
 
 const sortData = [
     {
@@ -36,6 +36,7 @@ function QuestionDetails() {
     const [sortBy, setSortBy] = useState<string>('1')
     const [questionDetails, setQuestionDetails] = useState<IPost>()
     const [responses, setReponses] = useState<IResponse[]>([])
+    const userDetails = useAppSelector(store => store.user.data)
 
     const onUpdateResponse = useCallback(async (responseId: string, content: string, show: Dispatch<SetStateAction<boolean>>) => {
         const res = await dispatch(updateReponse({
@@ -143,6 +144,48 @@ function QuestionDetails() {
 
     }, [dispatch, questionDetails])
 
+    const onRateReponse = useCallback(async (responseId: string, follow: boolean) => {
+        if (!questionDetails?._id || !responseId) return
+        if (follow) {
+            const res = await dispatch(rateResponse({
+                responseId: responseId
+            }))
+
+            if (res.payload.status !== 200) return
+            setReponses((preVal) => {
+                return preVal.map((item) => {
+                    if (item._id === responseId) {
+                        if (!item.rate.includes(userDetails.account)) {
+                            return {
+                                ...item,
+                                rate: [...item.rate, userDetails.account]
+                            }
+                        }
+                    }
+                    return item
+                })
+            })
+        } else {
+            const res = await dispatch(unRateResponse({
+                responseId: responseId
+            }))
+
+            if (res.payload.status !== 200) return
+            setReponses((preVal) => {
+                return preVal.map((item) => {
+                    if (item._id === responseId) {
+                        if (item.rate.includes(userDetails.account)) {
+                            item.rate.splice(item.rate.indexOf(userDetails.account), 1)
+                            return item
+                        }
+                    }
+                    return item
+                })
+            })
+        }
+
+    }, [dispatch, questionDetails?._id, userDetails.account])
+
     return <div className={`${styles.wrapper} mb-5`}>
         {questionDetails
             ?
@@ -175,6 +218,7 @@ function QuestionDetails() {
                         </div>
                     </div>
                     <Comment
+                        onRateReponse={onRateReponse}
                         onFollowReponse={onFollowReponse}
                         onUpdateResponse={onUpdateResponse}
                         sortBy={sortBy} postId={postId}
