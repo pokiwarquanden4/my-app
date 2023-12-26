@@ -18,9 +18,12 @@ function App() {
 
   useEffect(() => {
     const func = async () => {
+      let allPromises = []
       const token = cookies.get('token') || cookies.get('refresh_token')
-      tagsSlice.length || await dispatch(getTags({}))
-      token && await dispatch(getUserAllDetails({}))
+      tagsSlice.length || allPromises.push(dispatch(getTags({})))
+      token && allPromises.push(dispatch(getUserAllDetails({})))
+
+      await Promise.all(allPromises)
     }
     const cookies = new Cookies()
     func()

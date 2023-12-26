@@ -36,7 +36,6 @@ function Ask() {
     }, []);
 
     const handleAddition = useCallback((tag: Tag) => {
-        console.log(tag)
         if (tagsSlice.includes(tag.text)) {
             setTags((prevTags) => [...prevTags, tag])
         } else {

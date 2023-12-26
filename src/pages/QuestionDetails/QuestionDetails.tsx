@@ -5,6 +5,8 @@ import Comment from '../../Component/Comment/Comment';
 import ContentQuestion from '../../Component/ContentQuestion/ContentQuestion';
 import styles from './QuestionDetails.module.scss';
 import { IPost, IResponse, createResponse, getPostById, getReponseInPost, updatePost, updateReponse } from './QuestionDetailsAPI';
+import { formatTimeAgo } from '../../Functions/Functions';
+import { followPost, followResponse, unFollowPost, unFollowResponse } from '../Questions/QuestionsAPI';
 
 const sortData = [
     {
@@ -113,6 +115,34 @@ function QuestionDetails() {
         }
     }, [dispatch, postId])
 
+    const onFollowPost = useCallback(async (follow: boolean) => {
+        if (!questionDetails?._id) return
+        if (follow) {
+            await dispatch(followPost({
+                postId: questionDetails._id
+            }))
+        } else {
+            await dispatch(unFollowPost({
+                postId: questionDetails._id
+            }))
+        }
+
+    }, [dispatch, questionDetails])
+
+    const onFollowReponse = useCallback(async (responseId: string, follow: boolean) => {
+        if (!questionDetails?._id || !responseId) return
+        if (follow) {
+            await dispatch(followResponse({
+                responseId: responseId
+            }))
+        } else {
+            await dispatch(unFollowResponse({
+                responseId: responseId
+            }))
+        }
+
+    }, [dispatch, questionDetails])
+
     return <div className={`${styles.wrapper} mb-5`}>
         {questionDetails
             ?
@@ -120,10 +150,11 @@ function QuestionDetails() {
                 <div className={`${styles.header} h4`}>{questionDetails.title}</div>
                 <div className={`${styles.subHeader} mb-2`}>{questionDetails.subTitle}</div>
                 <div className={`d-flex ${styles.header_detail} pb-2`}>
-                    <div className={`${styles.time_asked}`}>Asked today</div>
-                    <div className={`ps-3 ${styles.time_modified}`}>Modified today</div>
+                    <div className={`${styles.time_asked}`}>Asked: {formatTimeAgo(new Date(questionDetails.createdAt))}</div>
+                    <div className={`ps-4 ${styles.time_modified}`}>Modified: {formatTimeAgo(new Date(questionDetails.updatedAt))}</div>
                 </div>
                 <ContentQuestion
+                    onFollowPost={onFollowPost}
                     onCreateResponse={onCreateResponse}
                     questionDetails={questionDetails}
                     onUpdatePost={onUpdatePost}
@@ -143,7 +174,12 @@ function QuestionDetails() {
                             </div>
                         </div>
                     </div>
-                    <Comment onUpdateResponse={onUpdateResponse} sortBy={sortBy} postId={postId} responses={responses}></Comment>
+                    <Comment
+                        onFollowReponse={onFollowReponse}
+                        onUpdateResponse={onUpdateResponse}
+                        sortBy={sortBy} postId={postId}
+                        responses={responses}
+                    ></Comment>
                 </div>
             </Fragment>
             :

@@ -1,4 +1,4 @@
-import { Dispatch, useCallback, useState, SetStateAction } from 'react';
+import { Dispatch, useCallback, useState, SetStateAction, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -9,7 +9,8 @@ import { routes } from '../pages/pages';
 import { login } from './LoginAPI';
 import { useAppDispatch } from '../../App/hook';
 import { showAlert } from '../../Component/Alert/Alert';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 interface ILoginPages {
     setLoginShow: Dispatch<SetStateAction<boolean>>
 }
@@ -34,6 +35,7 @@ function LoginPages(props: ILoginPages) {
     const [form, setForm] = useState<ILogin>(defaultVal)
     const [errors, setErrors] = useState<ILoginErrors>({})
     const navigate = useNavigate()
+    const [passwordHide, setPasswordHide] = useState<boolean>(false)
 
     const validPassword = useCallback((input: string): boolean => {
         const regex = /^.{11,}$/;
@@ -113,6 +115,7 @@ function LoginPages(props: ILoginPages) {
                                 setField('account', e.target.value)
                             }}
                         />
+
                         <Form.Control.Feedback type="invalid">
                             {errors.account}
                         </Form.Control.Feedback>
@@ -120,7 +123,7 @@ function LoginPages(props: ILoginPages) {
                 </Form.Group>
             </Row>
             <Row className="mb-3">
-                <Form.Group as={Col} controlId="validationCustomUsername">
+                <Form.Group as={Col} controlId="formPlaintextPassword">
                     <Form.Label>Password</Form.Label>
                     <InputGroup hasValidation>
                         <InputGroup.Text id="passwordLabel">@</InputGroup.Text>
@@ -134,6 +137,15 @@ function LoginPages(props: ILoginPages) {
                                 setField('password', e.target.value)
                             }}
                         />
+                        <InputGroup>
+                            <InputGroup.Text id="inputGroupPrepend" onClick={() => { setPasswordHide(!passwordHide) }}>
+                                {passwordHide ?
+                                    <FontAwesomeIcon icon={faEye}></FontAwesomeIcon>
+                                    :
+                                    <FontAwesomeIcon icon={faEyeSlash}></FontAwesomeIcon>
+                                }
+                            </InputGroup.Text>
+                        </InputGroup>
                         <Form.Control.Feedback type="invalid">
                             {errors.password}
                         </Form.Control.Feedback>

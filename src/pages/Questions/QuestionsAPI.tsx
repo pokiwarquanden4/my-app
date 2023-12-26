@@ -66,3 +66,59 @@ export const createPosts = createAsyncThunk<any, ICreatePost>(
         return res
     }
 )
+
+interface IFollowPost {
+    postId: string
+}
+
+export const followPost = createAsyncThunk<any, IFollowPost>(
+    "/follow/post",
+    async (payload, thunkApi) => {
+        const res = await sendRequest(`posts/follow/post`, {
+            thunkApi,
+            payload: payload,
+            method: "POST"
+        })
+        return res
+    }
+)
+
+export const unFollowPost = createAsyncThunk<any, IFollowPost>(
+    "/follow/unPost",
+    async (payload, thunkApi) => {
+        const res = await sendRequest(`posts/follow/unPost`, {
+            thunkApi,
+            payload: payload,
+            method: "POST"
+        })
+        return res
+    }
+)
+
+interface IFollowResponse {
+    responseId: string
+}
+
+export const followResponse = createAsyncThunk<any, IFollowResponse>(
+    "/follow/response",
+    async (payload, thunkApi) => {
+        const res = await sendRequest(`posts/follow/response`, {
+            thunkApi,
+            payload: payload,
+            method: "POST"
+        })
+        return res
+    }
+)
+
+export const unFollowResponse = createAsyncThunk<any, IFollowResponse>(
+    "/follow/unResponse",
+    async (payload, thunkApi) => {
+        const res = await sendRequest(`posts/follow/unResponse`, {
+            thunkApi,
+            payload: payload,
+            method: "POST"
+        })
+        return res
+    }
+)

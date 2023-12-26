@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export interface IOptionData {
+    icon: JSX.Element
     name: string;
     url: string;
     child: IOptionData[];
@@ -26,6 +27,7 @@ function NavBarComponent(props: INaveBarComponent) {
             }}
                 key={props.index}
                 className={`px-3 py-3 ${styles.item} ${props.currentOption.length === 1 && props.currentOption[0] === props.index ? styles.focus : undefined}`}>
+                {props.data.icon}
                 {props.data.name}
             </div>
         </div>
@@ -41,7 +43,8 @@ function NavBarComponent(props: INaveBarComponent) {
                             props.setCurrentOption([props.index, index])
                         }}
                     >
-                        - {value.name}
+                        {value.icon}
+                        {value.name}
                     </div>
                 })}
             </div>

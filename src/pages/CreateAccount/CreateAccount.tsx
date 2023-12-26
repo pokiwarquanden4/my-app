@@ -1,12 +1,11 @@
-import { useCallback, useState } from 'react'
-import styles from './CreateAccount.module.scss'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLock, faUser, faEnvelope } from '@fortawesome/free-solid-svg-icons'
-import ModalComponent from '../../Component/Modal/ModalComponent';
-import VertifiCode from './VertifiCode/VertifiCode';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAppDispatch } from '../../App/hook';
-import { createAccount } from './CreateAccountAPI';
+import ModalComponent from '../../Component/Modal/ModalComponent';
 import LoginPages from '../LoginPages/LoginPages';
+import styles from './CreateAccount.module.scss';
+import { createAccount } from './CreateAccountAPI';
 
 export interface ICreateAccount {
     name: string,
@@ -33,9 +32,11 @@ const defaultVal: ICreateAccount = {
 
 function CreateAccount() {
     const dispatch = useAppDispatch()
+    const passwordRef = useRef<HTMLInputElement>(null)
     const [validForm, setValidForm] = useState<boolean>(false)
     const [form, setForm] = useState<ICreateAccount>(defaultVal)
     const [errors, setErrors] = useState<ICreateAccountErrors>({})
+    const [passwordHide, setPasswordHide] = useState<boolean>(false)
 
     const validPassword = useCallback((input: string): boolean => {
         const regex = /^.{11,}$/;
@@ -114,6 +115,15 @@ function CreateAccount() {
         }
     }, [dispatch, findFormErrors, form])
 
+    useEffect(() => {
+        if (!passwordRef.current) return
+        if (passwordHide) {
+            passwordRef.current.type = 'text';
+        } else {
+            passwordRef.current.type = 'password';
+        }
+    }, [passwordHide]);
+
     return (
         <div className='pb-4'>
             <div className='h3 pb-3 text-center'>Create Account</div>
@@ -162,16 +172,28 @@ function CreateAccount() {
                 </div>
                 <div className="pt-3">
                     <label htmlFor="Password" className="form-label">Password</label>
-                    <input
-                        type="text"
-                        placeholder='Password'
-                        className="form-control"
-                        id="Password"
-                        required
-                        onChange={(e) => {
-                            setField('password', e.target.value)
-                        }}
-                    ></input>
+                    <div className='d-flex align-items-center'>
+                        <input
+                            ref={passwordRef}
+                            type="password"
+                            placeholder='Password'
+                            className="form-control"
+                            id="Password"
+                            required
+                            onChange={(e) => {
+                                setField('password', e.target.value)
+                            }}
+                        ></input>
+                        <div className='ms-2' onClick={() => { setPasswordHide(!passwordHide) }} style={{ cursor: 'pointer' }}>
+                            {
+                                passwordHide
+                                    ?
+                                    <FontAwesomeIcon icon={faEye}></FontAwesomeIcon>
+                                    :
+                                    <FontAwesomeIcon icon={faEyeSlash}></FontAwesomeIcon>
+                            }
+                        </div>
+                    </div>
                     <div className={`${styles.invalid} pt-1`} style={{ color: 'red', fontSize: '14px' }}>{errors.password}</div>
                 </div>
                 <div className="pt-3">

@@ -44,13 +44,17 @@ function Header() {
 
     useEffect(() => {
         const cookies = new Cookies()
-        cookies.addChangeListener(() => {
+        const func = () => {
             const token = cookies.get('token') || cookies.get('refresh_token')
             if (token) {
                 setLogin(true);
             } else {
                 setLogin(false);
             }
+        }
+        func()
+        cookies.addChangeListener(() => {
+            func()
         })
     }, []);
 

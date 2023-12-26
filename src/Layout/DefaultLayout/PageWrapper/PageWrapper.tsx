@@ -8,7 +8,7 @@ type IPageWrapper = {
 
 function PageWrapper(props: IPageWrapper) {
     return (
-        <div className={`container mt-4 d-flex ${styles.container}`}>
+        <div className={`mt-4 d-flex ${styles.container}`}>
             <NavBar></NavBar>
             <div className={`px-4 ${styles.content}`}>{props.children}</div>
             <div className={`ps-3 ${styles.advertisment}`}>

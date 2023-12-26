@@ -9,7 +9,7 @@ export interface IPost {
     content: string;
     close: boolean;
     tags: string[];
-    rate: number;
+    rate: string[];
     slove: boolean;
     reportNum: string[];
     enable: boolean;
@@ -24,7 +24,7 @@ export interface IResponse {
     userId: string;
     content: string;
     vertified: boolean
-    rate: number
+    rate: string[]
     comment: string[]
     createdAt: string;
     updatedAt: string;
@@ -144,4 +144,5 @@ export const updateReponse = createAsyncThunk<any, IUpdateResponse>(
         return res
     }
 )
+
 

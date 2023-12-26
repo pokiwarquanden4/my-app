@@ -7,8 +7,10 @@ import styles from './ContentQuestion.module.scss';
 import TagsComponent from '../TagsComponent/TagsComponent';
 import ModalComponent from '../Modal/ModalComponent';
 import UpdateResponse from '../UpdateResponse/UpdateResponse';
+import { useAppSelector } from '../../App/hook';
 
 interface IContentQuestion {
+    onFollowReponse: (responseId: string, follow: boolean) => void
     onUpdateResponse: (responseId: string, content: string, show: Dispatch<SetStateAction<boolean>>) => void
     showComment: boolean
     comment: IComment[] | undefined
@@ -23,6 +25,7 @@ function ResponseContentQuestion(props: IContentQuestion) {
     const [commentContent, setCommentContent] = useState<string>();
     const [smallComment, setSmallComment] = useState<boolean>(false)
     const [showUpdateResponse, setShowUpdateResponse] = useState<boolean>(false)
+    const userDetails = useAppSelector(store => store.user.data)
 
     useEffect(() => {
         setContent(props.responseData.content)
@@ -66,13 +69,32 @@ function ResponseContentQuestion(props: IContentQuestion) {
         </style>
         <div className={`${styles.content_info} d-flex justify-content-between align-items-center mb-3`}>
             <div className={`${styles.options} d-flex`}>
-                <div
-                    className={styles.options_content}
-                    onClick={() => {
-                        setShowUpdateResponse(true)
-                    }}
-                >Edit</div>
-                <div className={styles.options_content}>Follow</div>
+                {
+                    props.responseData.userId === userDetails.account
+                        ?
+                        <div
+                            className={styles.options_content}
+                            onClick={() => {
+                                setShowUpdateResponse(true)
+                            }}
+                        >Edit</div>
+                        :
+                        !userDetails.followAnswer.includes(props.responseData._id)
+                            ?
+                            <div
+                                onClick={() => {
+                                    props.onFollowReponse(props.responseData._id, true)
+                                }}
+                                className={styles.options_content}
+                            >Follow</div>
+                            :
+                            <div
+                                onClick={() => {
+                                    props.onFollowReponse(props.responseData._id, false)
+                                }}
+                                className={styles.options_content}
+                            >UnFollow</div>
+                }
                 {props.responseData.comment.length
                     ?
                     <div

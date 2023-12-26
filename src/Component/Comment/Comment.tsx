@@ -8,6 +8,7 @@ import ResponseContentQuestion from '../ContentQuestion/ResponseContentQuestion'
 import styles from './Comment.module.scss'
 
 interface ICommentProps {
+    onFollowReponse: (responseId: string, follow: boolean) => void
     onUpdateResponse: (responseId: string, content: string, show: Dispatch<SetStateAction<boolean>>) => void
     postId: string | undefined
     sortBy: string
@@ -59,7 +60,7 @@ function Comment(props: ICommentProps) {
         let short = []
         switch (props.sortBy) {
             case '1':
-                short = props.responses.sort((res1, res2) => res2.rate - res1.rate)
+                short = props.responses.sort((res1, res2) => res2.rate.length - res1.rate.length)
                 setShortResponse(short)
                 break
             case '2':
@@ -98,6 +99,7 @@ function Comment(props: ICommentProps) {
                     }
                 </div>
                 <ResponseContentQuestion
+                    onFollowReponse={props.onFollowReponse}
                     onUpdateResponse={props.onUpdateResponse}
                     showComment={showComment}
                     comment={comment[response._id]}

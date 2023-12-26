@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getUser, getUserAllDetails, login } from "../pages/LoginPages/LoginAPI";
+import { followPost, followResponse, unFollowPost, unFollowResponse } from "../pages/Questions/QuestionsAPI";
 
 interface INotify {
     postId: string
@@ -54,6 +55,28 @@ const UserSlice = createSlice({
         })
         builder.addCase(getUserAllDetails.fulfilled, (state, action: any) => {
             state.data = action.payload.data
+        })
+        builder.addCase(followPost.fulfilled, (state, action: any) => {
+            if (action.payload.status !== 200) return
+            if (!state.data.followPost.includes(action.payload.data.postId)) {
+                state.data.followPost.push(action.payload.data.postId)
+            }
+        })
+        builder.addCase(unFollowPost.fulfilled, (state, action: any) => {
+            if (action.payload.status !== 200) return
+            const index = state.data.followPost.indexOf(action.payload.data.postId)
+            state.data.followPost.splice(index, 1)
+        })
+        builder.addCase(followResponse.fulfilled, (state, action: any) => {
+            if (action.payload.status !== 200) return
+            if (!state.data.followAnswer.includes(action.payload.data.responseId)) {
+                state.data.followAnswer.push(action.payload.data.responseId)
+            }
+        })
+        builder.addCase(unFollowResponse.fulfilled, (state, action: any) => {
+            if (action.payload.status !== 200) return
+            const index = state.data.followPost.indexOf(action.payload.data.responseId)
+            state.data.followAnswer.splice(index, 1)
         })
     }
 })
