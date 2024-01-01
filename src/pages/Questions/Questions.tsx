@@ -140,9 +140,6 @@ function Questions() {
                     setFocus={setFocus}
                     data={filterList}
                 ></OptionsListButton>
-                <ReactTagsComponent
-
-                ></ReactTagsComponent>
             </div>
         </div>
         <div className={`${styles.content_lists}`}>
