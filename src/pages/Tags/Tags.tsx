@@ -1,18 +1,19 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import OptionsListButton from '../../Component/OptionsListButton/OptionsListButton'
 import SearchBar from '../../Component/SearchBar/SearchBar'
 import TagsComponent from '../../Component/TagsComponent/TagsComponent'
 import styles from './Tags.module.scss'
+import { useAppSelector } from '../../App/hook'
+import { ITags } from '../../Reducers/DataSlice'
 
 const filterLists = [
     {
-        name: "Poppular"
-    },
-    {
+        number: 0,
         name: "A-Z"
     },
     {
-        name: "New"
+        number: 1,
+        name: "Popular"
     },
 ]
 
@@ -20,6 +21,22 @@ const filterLists = [
 function Tags() {
     const [focus, setFocus] = useState<number>(0)
     const [searchVal, setSearchVal] = useState<string>('')
+    const tagsDetails = useAppSelector(store => store.data.tagsDetails)
+    const [tagsShort, setTagsShort] = useState<ITags[]>([])
+
+    useEffect(() => {
+        let sortedTagsList
+        switch (focus) {
+            case 0:
+                sortedTagsList = [...tagsDetails].sort((a, b) => a.value.toLowerCase().localeCompare(b.value.toLowerCase())).filter(item => item.value.toLowerCase().includes(searchVal.toLowerCase()));
+                setTagsShort(sortedTagsList)
+                break
+            case 1:
+                sortedTagsList = [...tagsDetails].sort((a, b) => b.popular - a.popular).filter(item => item.value.toLowerCase().includes(searchVal.toLowerCase()));
+                setTagsShort(sortedTagsList)
+                break
+        }
+    }, [focus, searchVal, tagsDetails])
 
     return <div className={`${styles.wrapper}`}>
         <div className={`h3 pb-2 ${styles.header}`}>Tags</div>
@@ -29,69 +46,23 @@ function Tags() {
                 searchVal={searchVal}
                 setSearchVal={setSearchVal}
             ></SearchBar>
-            <div className='ps-5'><OptionsListButton focus={focus} setFocus={setFocus} data={filterLists}></OptionsListButton></div>
+            <div className='ps-5'>
+                <OptionsListButton
+                    focus={focus}
+                    setFocus={setFocus}
+                    data={filterLists}
+                ></OptionsListButton>
+            </div>
         </div>
         <div className={`row pt-3 gy-3 ${styles.contents}`}>
-            <div className={`col-6 col-lg-4 ${styles.contents_tag}`}>
-                <div className={`${styles.contents_tag_wrapper} pt-2`}>
-                    <TagsComponent data={["Java"]}></TagsComponent>
-                    <div className={`pt-2 ${styles.content}`}>
-                        For questions about programming in ECMAScript (JavaScript/JS) and its different dialects/implementations (except for ActionScript). Note that JavaScript is NOT Java. Include all tags that are relevant…
-                    </div>
-                    <div className={`pt-2 d-flex ${styles.content_info}`}>
-                        <div className={`${styles.number}`}>2515434 questions</div>
-                        <div className={`${styles.askRecent}`}>176 asked today, 200 this week</div>
+            {tagsShort.map((tag, index) => {
+                return <div key={index} className={`col-6 col-lg-4 ${styles.contents_tag}`}>
+                    <div className={`${styles.contents_tag_wrapper} pt-2`}>
+                        <TagsComponent data={[tag.value]}></TagsComponent>
+                        <div className={`pt-2 ${styles.content} mb-2`}>{tag.description}</div>
                     </div>
                 </div>
-            </div>
-            <div className={`col-6 col-lg-4 ${styles.contents_tag}`}>
-                <div className={`${styles.contents_tag_wrapper} pt-2`}>
-                    <TagsComponent data={["Java"]}></TagsComponent>
-                    <div className={`pt-2 ${styles.content}`}>
-                        For questions about programming in ECMAScript (JavaScript/JS) and its different dialects/implementations (except for ActionScript). Note that JavaScript is NOT Java. Include all tags that are relevant…
-                    </div>
-                    <div className={`pt-2 d-flex ${styles.content_info}`}>
-                        <div className={`${styles.number}`}>2515434 questions</div>
-                        <div className={`${styles.askRecent}`}>176 asked today, 200 this week</div>
-                    </div>
-                </div>
-            </div>
-            <div className={`col-6 col-lg-4 ${styles.contents_tag}`}>
-                <div className={`${styles.contents_tag_wrapper} pt-2`}>
-                    <TagsComponent data={["Java"]}></TagsComponent>
-                    <div className={`pt-2 ${styles.content}`}>
-                        For questions about programming in ECMAScript (JavaScript/JS) and its different dialects/implementations (except for ActionScript). Note that JavaScript is NOT Java. Include all tags that are relevant…
-                    </div>
-                    <div className={`pt-2 d-flex ${styles.content_info}`}>
-                        <div className={`${styles.number}`}>2515434 questions</div>
-                        <div className={`${styles.askRecent}`}>176 asked today, 200 this week</div>
-                    </div>
-                </div>
-            </div>
-            <div className={`col-6 col-lg-4 ${styles.contents_tag}`}>
-                <div className={`${styles.contents_tag_wrapper} pt-2`}>
-                    <TagsComponent data={["Java"]}></TagsComponent>
-                    <div className={`pt-2 ${styles.content}`}>
-                        For questions about programming in ECMAScript (JavaScript/JS) and its different dialects/implementations (except for ActionScript). Note that JavaScript is NOT Java. Include all tags that are relevant…
-                    </div>
-                    <div className={`pt-2 d-flex ${styles.content_info}`}>
-                        <div className={`${styles.number}`}>2515434 questions</div>
-                        <div className={`${styles.askRecent}`}>176 asked today, 200 this week</div>
-                    </div>
-                </div>
-            </div>
-            <div className={`col-6 col-lg-4 ${styles.contents_tag}`}>
-                <div className={`${styles.contents_tag_wrapper} pt-2`}>
-                    <TagsComponent data={["Java"]}></TagsComponent>
-                    <div className={`pt-2 ${styles.content}`}>
-                        For questions about programming in ECMAScript (JavaScript/JS) and its different dialects/implementations (except for ActionScript). Note that JavaScript is NOT Java. Include all tags that are relevant…
-                    </div>
-                    <div className={`pt-2 d-flex ${styles.content_info}`}>
-                        <div className={`${styles.number}`}>2515434 questions</div>
-                        <div className={`${styles.askRecent}`}>176 asked today, 200 this week</div>
-                    </div>
-                </div>
-            </div>
+            })}
         </div>
     </div>
 }

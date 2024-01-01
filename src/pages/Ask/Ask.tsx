@@ -1,12 +1,12 @@
-import styles from './Ask.module.scss'
 import { useCallback, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { Tag } from 'react-tag-input';
+import { useAppDispatch } from '../../App/hook';
+import ReactTagsComponent from '../../Component/ReactTags/ReactTagsComponent';
 import { toolbarOptions } from '../../Functions/Functions';
-import { useAppDispatch, useAppSelector } from '../../App/hook';
 import { createPosts } from '../Questions/QuestionsAPI';
-import { WithContext as ReactTags, Tag } from 'react-tag-input';
-import { showAlert } from '../../Component/Alert/Alert';
+import styles from './Ask.module.scss';
 
 const KeyCodes = {
     comma: 188,
@@ -22,27 +22,6 @@ function Ask() {
     const [subTitle, setSubTitle] = useState<string>('')
     const [tags, setTags] = useState<Tag[]>([])
     const [contentFocus, setContentFocus] = useState<boolean>(false)
-    const tagsSlice = useAppSelector(store => store.data.tags)
-
-    const suggestions: Tag[] = (tagsSlice || []).map((tag, index) => {
-        return {
-            id: String(index),
-            text: tag
-        };
-    });
-
-    const handleDelete = useCallback((i: number) => {
-        setTags((prevTags) => prevTags.filter((tag, index) => index !== i));
-    }, []);
-
-    const handleAddition = useCallback((tag: Tag) => {
-        if (tagsSlice.includes(tag.text)) {
-            setTags((prevTags) => [...prevTags, tag])
-        } else {
-            showAlert("Tag do not exsit", 'warning')
-        };
-    }, [tagsSlice]);
-
 
     const onSubmit = useCallback(async () => {
         dispatch(createPosts({
@@ -134,16 +113,10 @@ function Ask() {
                     <div className={`h5 ${styles.title_header}`}>Tags</div>
                     <div className={`form-text ${styles.title_comment}`}>Add up to 5 tags to describe what your question is about. Start typing to see suggestions.</div>
                 </label>
-                <ReactTags
-                    autofocus={false}
+                <ReactTagsComponent
                     tags={tags}
-                    suggestions={suggestions}
-                    delimiters={delimiters}
-                    handleDelete={handleDelete}
-                    handleAddition={handleAddition}
-                    inputFieldPosition="bottom"
-                    autocomplete
-                />
+                    setTags={setTags}
+                ></ReactTagsComponent>
             </div>
         </div>
         <div className={`${styles.submit} ${title && subTitle && content && content !== '<p><br></p>' && tags ? styles.enable : styles.disable}`}>

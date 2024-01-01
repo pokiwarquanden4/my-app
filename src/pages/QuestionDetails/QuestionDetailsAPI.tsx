@@ -16,6 +16,7 @@ export interface IPost {
     responses: string[];
     createdAt: string;
     updatedAt: string;
+    avatarURL: string
 }
 
 export interface IResponse {

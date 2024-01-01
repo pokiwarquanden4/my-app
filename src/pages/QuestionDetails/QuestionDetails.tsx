@@ -66,7 +66,9 @@ function QuestionDetails() {
             const res = await dispatch(getPostById(postId))
 
             if (res) {
-                setReponses(res.payload.data.post.responses as IResponse[])
+                setReponses(
+                    res.payload.data.post.responses as IResponse[]
+                )
                 setQuestionDetails(res.payload.data.post as IPost)
             }
         }

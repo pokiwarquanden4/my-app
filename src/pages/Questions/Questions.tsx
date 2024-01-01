@@ -11,6 +11,7 @@ import { IPosts, IPostsResponse, getPosts } from './QuestionsAPI';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../pages/pages';
 import { loginShow } from '../../Reducers/UserSlice';
+import ReactTagsComponent from '../../Component/ReactTags/ReactTagsComponent';
 
 const filterList = [
     {
@@ -39,6 +40,7 @@ function Questions() {
     const [pageData, setPageData] = useState<JSX.Element[]>([])
     const [dataLength, setDataLength] = useState<number>(0)
     const [searchVal, setSearchVal] = useState<string>('')
+    const [tags, setTags] = useState<Tag[]>([])
     const searchValDelayRef = useRef<string>('')
     const userName = useAppSelector(store => store.user.data.account)
 
@@ -133,12 +135,15 @@ function Questions() {
         </div>
         <div className={`d-flex pb-3 align-items-center justify-content-between pt-3 ${styles.content_filter}`}>
             <div className={`${styles.questions_number}`}>{dataLength} questions</div>
-            <div className={`${styles.questions_filter_items}`}>
+            <div className={`${styles.questions_filter_items} d-flex flex-wrap`}>
                 <OptionsListButton
                     focus={focus}
                     setFocus={setFocus}
                     data={filterList}
                 ></OptionsListButton>
+                <ReactTagsComponent
+
+                ></ReactTagsComponent>
             </div>
         </div>
         <div className={`${styles.content_lists}`}>
