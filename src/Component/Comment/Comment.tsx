@@ -18,7 +18,6 @@ interface ICommentProps {
 
 function Comment(props: ICommentProps) {
     const dispatch = useAppDispatch()
-    const [follow, setFollow] = useState<boolean>(false)
     const [comment, setComment] = useState<Record<string, IComment[]>>({})
     const [showComment, setShowComment] = useState<boolean>(false)
     const [shortResponse, setShortResponse] = useState<IResponse[]>([])
@@ -27,6 +26,7 @@ function Comment(props: ICommentProps) {
     const onGetComment = useCallback(async (responseId: string) => {
         if (responseId && !comment[responseId]) {
             const res = await dispatch(getCommentInResponse(responseId))
+            if (res.payload.status !== 200) return
             setComment((preVal) => {
                 return {
                     ...preVal,
@@ -46,6 +46,7 @@ function Comment(props: ICommentProps) {
             content: content,
             postId: props.postId as string
         }))
+        if (res.payload.status !== 200) return
         setComment((preVal) => {
             return {
                 ...preVal,
@@ -103,9 +104,6 @@ function Comment(props: ICommentProps) {
                             ></FontAwesomeIcon>
                         }
                         <div className={styles.heart_number}>{response.rate.length}</div>
-                    </div>
-                    <div className={styles.follow}>
-                        {follow ? <FontAwesomeIcon className={styles.follow_icon} icon={faFlagFill}></FontAwesomeIcon> : <FontAwesomeIcon className={styles.follow_icon} icon={faFlagNormal}></FontAwesomeIcon>}
                     </div>
                     {response.vertified
                         ?

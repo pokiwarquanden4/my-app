@@ -12,7 +12,7 @@ export interface ICreateAccount {
     email: string,
     account: string,
     password: string,
-    img?: any
+    img?: File
 }
 
 export interface ICreateAccountErrors {
@@ -20,7 +20,7 @@ export interface ICreateAccountErrors {
     email?: string,
     account?: string,
     password?: string,
-    img?: any
+    img?: File
 }
 
 const defaultVal: ICreateAccount = {
@@ -48,7 +48,7 @@ function CreateAccount() {
         return emailRegex.test(email);
     }, [])
 
-    const setField = useCallback((field: string, value: string) => {
+    const setField = useCallback((field: string, value: string | File) => {
         setForm({
             ...form,
             [field]: value
@@ -106,7 +106,14 @@ function CreateAccount() {
             // We got errors!
             setErrors(newErrors)
         } else {
-            const res = dispatch(createAccount(form))
+            const formData = new FormData();
+            formData.append('name', form.name);
+            formData.append('email', form.email);
+            formData.append('account', form.account);
+            formData.append('password', form.password);
+            form.img && formData.append('img', form.img);
+
+            const res = dispatch(createAccount(formData))
             res.then((results) => {
                 console.log(results)
             }).catch((error) => {
@@ -197,8 +204,16 @@ function CreateAccount() {
                     <div className={`${styles.invalid} pt-1`} style={{ color: 'red', fontSize: '14px' }}>{errors.password}</div>
                 </div>
                 <div className="pt-3">
-                    <label htmlFor="Password" className="form-label">Avatar</label>
-                    <input type="file" accept='.png .jpg' className="form-control" id="inputGroupFile02"></input>
+                    <label htmlFor="File" className="form-label">Avatar</label>
+                    <input
+                        type="file"
+                        id="avatar"
+                        className="form-control"
+                        accept="image/png, image/jpeg"
+                        onChange={(e) => {
+                            e.target.files && setField('img', e.target.files[0])
+                        }}
+                    />
                 </div>
                 <div className="pt-4">
                     <button className="btn btn-primary" type="submit" onClick={handleSubmit}>Submit form</button>

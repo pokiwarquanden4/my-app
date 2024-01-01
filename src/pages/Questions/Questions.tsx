@@ -1,13 +1,16 @@
 import styles from './Questions.module.scss'
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import OptionsListButton from '../../Component/OptionsListButton/OptionsListButton';
 import TagsComponent from '../../Component/TagsComponent/TagsComponent';
 import Avatar from '../../Component/Avatar/Avatar';
 import { formatTimeAgo } from '../../Functions/Functions';
 import Paging from '../../Component/Paging/Paging';
 import SearchBar from '../../Component/SearchBar/SearchBar';
-import { useAppDispatch } from '../../App/hook';
+import { useAppDispatch, useAppSelector } from '../../App/hook';
 import { IPosts, IPostsResponse, getPosts } from './QuestionsAPI';
+import { useNavigate } from 'react-router-dom';
+import { routes } from '../pages/pages';
+import { loginShow } from '../../Reducers/UserSlice';
 
 const filterList = [
     {
@@ -28,13 +31,16 @@ const filterList = [
 ]
 
 function Questions() {
+    const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const [focus, setFocus] = useState<number>(0)
     const [data, setData] = useState<IPosts[]>([])
     const [currentPage, setCurrentPage] = useState<number>(1)
-    const [pageData, sePageData] = useState<JSX.Element[]>([])
+    const [pageData, setPageData] = useState<JSX.Element[]>([])
     const [dataLength, setDataLength] = useState<number>(0)
     const [searchVal, setSearchVal] = useState<string>('')
+    const searchValDelayRef = useRef<string>('')
+    const userName = useAppSelector(store => store.user.data.account)
 
     useLayoutEffect(() => {
         const newPageData = data.map((item, index) => {
@@ -49,14 +55,19 @@ function Questions() {
                 </div>
                 <div className={`ps-4 flex-fill ${styles.content_list_data}`}>
                     <div className={`${styles.content_wrapper}  flex-fill`}>
-                        <div className={styles.header}>{item.title}</div>
+                        <div
+                            onClick={() => {
+                                navigate(routes.questionDetail.replace(':questionId', item._id));
+                            }}
+                            className={styles.header}
+                        >{item.title}</div>
                         <div className={`${styles.sumary} mb-3`}>{item.subTitle}</div>
                     </div>
                     <div className='d-flex justify-content-between align-items-center'>
                         <TagsComponent data={item.tags}></TagsComponent>
                         <div className={`pt-2 d-flex justify-content-end ${styles.content_footer}`}>
                             <div className={`d-flex align-items-center ${styles.account}`}>
-                                <Avatar size='30' src={''}></Avatar>
+                                <Avatar name='Quang' size='30' src={''}></Avatar>
                                 <div className={styles.account_name}>{item.userId}</div>
                             </div>
                             <div className={`ms-1 d-flex align-items-center ${styles.time}`}>
@@ -68,29 +79,51 @@ function Questions() {
                 </div>
             </div>
         })
-        sePageData(newPageData)
-    }, [data])
+        setPageData(newPageData)
+    }, [data, navigate])
 
     useEffect(() => {
         if (!((focus || focus === 0) && currentPage)) return
         const func = async () => {
             const res = await dispatch(getPosts({
                 number: currentPage,
-                type: filterList[focus].name
+                type: filterList[focus].name,
+                searchVal: searchVal
             }))
             const payload = res.payload as IPostsResponse
 
             setData(payload.data.posts || [])
             setDataLength(payload.data.totalCount || 0)
+
+            searchValDelayRef.current = searchVal
         }
 
-        func()
-    }, [currentPage, dispatch, focus])
+        if (searchValDelayRef.current === searchVal) {
+            func()
+        } else {
+            const timeout = setTimeout(func, 500)
+
+            return () => {
+                clearTimeout(timeout)
+            }
+        }
+    }, [currentPage, dispatch, focus, searchVal])
 
     return <div className={`${styles.content}`}>
         <div className={`d-flex justify-content-between align-items-center ${styles.content_header}`}>
             <div className={`h4 mb-0 ${styles.content_header_content}`}>All Questions</div>
-            <input className="btn btn-primary" type="button" value="Ask Questions"></input>
+            <input
+                onClick={() => {
+                    if (userName) {
+                        navigate(routes.ask)
+                    } else {
+                        dispatch(loginShow(true))
+                    }
+                }}
+                className="btn btn-primary"
+                type="button"
+                value="Ask Questions"
+            ></input>
         </div>
         <div className={`${styles.searchBar} pt-5`}>
             <SearchBar
@@ -99,7 +132,7 @@ function Questions() {
             ></SearchBar>
         </div>
         <div className={`d-flex pb-3 align-items-center justify-content-between pt-3 ${styles.content_filter}`}>
-            <div className={`${styles.questions_number}`}>23,938,061 questions</div>
+            <div className={`${styles.questions_number}`}>{dataLength} questions</div>
             <div className={`${styles.questions_filter_items}`}>
                 <OptionsListButton
                     focus={focus}

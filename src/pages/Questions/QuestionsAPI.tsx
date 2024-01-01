@@ -4,6 +4,7 @@ import { sendRequest } from "../../config/axiosConfig"
 interface IGetPosts {
     number: number,
     type: string
+    searchVal: string
 }
 
 export const getTags = createAsyncThunk<any, {}>(
@@ -18,7 +19,7 @@ export const getTags = createAsyncThunk<any, {}>(
 )
 
 export interface IPosts {
-    _id: number
+    _id: string
     rate: number;
     answer: number;
     title: string;
@@ -40,7 +41,7 @@ export interface IPostsResponse {
 export const getPosts = createAsyncThunk<IPostsResponse, IGetPosts>(
     "/get/posts",
     async (payload, thunkApi) => {
-        const res: IPostsResponse = await sendRequest(`posts/posts?number=${payload.number}&type=${payload.type}`, {
+        const res: IPostsResponse = await sendRequest(`posts/posts?number=${payload.number}&type=${payload.type}&searchVal=${payload.searchVal}`, {
             thunkApi,
             method: "GET"
         })

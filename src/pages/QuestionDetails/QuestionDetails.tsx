@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../App/hook';
 import Comment from '../../Component/Comment/Comment';
 import ContentQuestion from '../../Component/ContentQuestion/ContentQuestion';
 import styles from './QuestionDetails.module.scss';
-import { IPost, IResponse, createResponse, getPostById, getReponseInPost, updatePost, updateReponse } from './QuestionDetailsAPI';
+import { IPost, IResponse, createResponse, getPostById, updatePost, updateReponse } from './QuestionDetailsAPI';
 import { formatTimeAgo } from '../../Functions/Functions';
 import { followPost, followResponse, rateResponse, unFollowPost, unFollowResponse, unRateResponse } from '../Questions/QuestionsAPI';
 
@@ -64,11 +64,9 @@ function QuestionDetails() {
         const func = async () => {
             if (!postId) return
             const res = await dispatch(getPostById(postId))
-            const response = await dispatch(getReponseInPost(postId))
-            if (response) {
-                setReponses(response.payload.data.responses)
-            }
+
             if (res) {
+                setReponses(res.payload.data.post.responses as IResponse[])
                 setQuestionDetails(res.payload.data.post as IPost)
             }
         }

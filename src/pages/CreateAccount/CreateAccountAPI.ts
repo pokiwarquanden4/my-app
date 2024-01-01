@@ -1,8 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { sendRequest } from "../../config/axiosConfig";
-import { ICreateAccount } from "./CreateAccount";
 
-export const createAccount = createAsyncThunk<any, ICreateAccount>(
+export const createAccount = createAsyncThunk<any, FormData>(
     "/create/account",
     async (payload, thunkApi) => {
         const res = await sendRequest(`users/create/account`, {

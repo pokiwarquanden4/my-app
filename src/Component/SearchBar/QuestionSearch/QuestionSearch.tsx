@@ -28,7 +28,7 @@ function QuestionSearch(props: IQuestionSearch) {
                     }}
                     key={index}
                     className={`d-flex align-items-center ${styles.list}`}>
-                    <Avatar size={'40'} src={item.src}></Avatar>
+                    <Avatar name='Quang' size={'40'} src={item.src}></Avatar>
                     <div className={`ps-3 ${styles.content}`}>
                         <div className={styles.main_content}>{item.title}</div>
                         <div className={styles.sub_content}>{item.subTitle}.</div>

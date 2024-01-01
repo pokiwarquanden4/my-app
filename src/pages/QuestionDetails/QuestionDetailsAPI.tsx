@@ -51,17 +51,6 @@ export const getPostById = createAsyncThunk<any, string>(
     }
 )
 
-export const getReponseInPost = createAsyncThunk<any, string>(
-    "/posts/post/response",
-    async (payload, thunkApi) => {
-        const res: any = await sendRequest(`posts/responses?id=${payload}`, {
-            thunkApi,
-            method: "GET"
-        })
-        return res
-    }
-)
-
 export const getCommentInResponse = createAsyncThunk<any, string>(
     "/posts/post/comment",
     async (payload, thunkApi) => {

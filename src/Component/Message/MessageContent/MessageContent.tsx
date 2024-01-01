@@ -1,20 +1,40 @@
+import { useAppDispatch } from '../../../App/hook'
+import { INotify } from '../../../Reducers/UserSlice'
 import Avatar from '../../Avatar/Avatar'
 import styles from './MessageContent.module.scss'
+import { checkNotify } from './NotifyAPI'
 
-function MessageContent() {
-    return <div className={`${styles.wrapper} d-flex align-items-center px-1 py-2`}>
+interface IMessageContent {
+    data: INotify
+}
+
+function MessageContent(props: IMessageContent) {
+    const dispatch = useAppDispatch()
+
+    return <div
+        className={`${styles.wrapper} d-flex align-items-center px-1 py-2`}
+        onClick={() => {
+            if (!props.data.checked) {
+                dispatch(checkNotify({
+                    id: props.data._id
+                }))
+            }
+        }}
+    >
         <div className={styles.avatar}>
-            <Avatar size='50' src='https://brocanvas.com/wp-content/uploads/2022/01/hinh-anh-doremon-nam-nghi.jpg'></Avatar>
+            <Avatar size='50' name={props.data.details.sender} src={props.data.details.avatar}></Avatar>
         </div>
-        <div className={`${styles.content} ps-3`}>
+        <div className={`${styles.content} ps-3 pe-4`}>
             <div className={styles.details}>
-                <strong className={`${styles.user} pe-1`}>Nguyễn Hải Phong</strong>
-                shared
-                <strong className={`${styles.post} ps-1`}>Lốp Minh Phong</strong>
-                's post: "Đến thôi chần chừ j nữa
+                <strong className={`${styles.user} pe-1`}>{props.data.details.sender}</strong>
+                {props.data.details.postName ? 'response' : 'comment'}
+                <strong className={`${styles.post} ps-1`}>{props.data.details.postName}</strong>
             </div>
         </div>
-        <div className={styles.tagUnread}></div>
+        {!props.data.checked ? <div
+
+            className={styles.tagUnread}
+        ></div> : undefined}
     </div>
 }
 

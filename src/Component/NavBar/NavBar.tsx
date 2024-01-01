@@ -12,12 +12,12 @@ const optionsList: IOptionData[] = [
         url: routes.questions,
         icon: <FontAwesomeIcon className='pe-2' icon={faClipboardList}></FontAwesomeIcon>,
         child: [
-            {
-                name: 'Ask Questions',
-                icon: <FontAwesomeIcon className='pe-2' icon={faCircleQuestion}></FontAwesomeIcon>,
-                url: routes.ask,
-                child: [],
-            }
+            // {
+            //     name: 'Ask Questions',
+            //     icon: <FontAwesomeIcon className='pe-2' icon={faCircleQuestion}></FontAwesomeIcon>,
+            //     url: routes.ask,
+            //     child: [],
+            // }
         ],
     },
     {
@@ -36,13 +36,14 @@ const optionsList: IOptionData[] = [
         icon: <FontAwesomeIcon className='pe-2' icon={faCircleQuestion}></FontAwesomeIcon>,
         name: 'Account',
         url: routes.account,
+        loginRequire: true,
         child: [
-            {
-                icon: <FontAwesomeIcon className='pe-2' icon={faCircleQuestion}></FontAwesomeIcon>,
-                name: 'Create Account',
-                url: routes.createAccount,
-                child: [],
-            }
+            // {
+            //     icon: <FontAwesomeIcon className='pe-2' icon={faCircleQuestion}></FontAwesomeIcon>,
+            //     name: 'Create Account',
+            //     url: routes.createAccount,
+            //     child: [],
+            // }
         ],
     },
 ]

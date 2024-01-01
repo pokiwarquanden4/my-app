@@ -1,11 +1,18 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getUser, getUserAllDetails, login } from "../pages/LoginPages/LoginAPI";
+import { createSlice } from "@reduxjs/toolkit";
+import { getUserAllDetails, login } from "../pages/LoginPages/LoginAPI";
 import { followPost, followResponse, unFollowPost, unFollowResponse } from "../pages/Questions/QuestionsAPI";
+import { checkNotify, getNotify } from "../Component/Message/MessageContent/NotifyAPI";
 
-interface INotify {
+export interface INotify {
+    _id: string
     postId: string
-    responseId: string
-    commentId: string
+    responseId?: string
+    commentId?: string
+    details: {
+        sender: string
+        avatar?: string
+        postName?: string
+    },
     checked: boolean
 }
 
@@ -18,13 +25,17 @@ interface IUserLogin {
     roleName: string;
     heartNumber: number;
     userPost: string[];
+    userResponse: string[]
     followPost: string[];
     followAnswer: string[];
-    notification: INotify[];
 }
 
 interface IUserLoginData {
     data: IUserLogin
+    notify: INotify[] | undefined
+    loginShow: {
+        show: boolean
+    }
 }
 
 const initialState: IUserLoginData = {
@@ -37,19 +48,63 @@ const initialState: IUserLoginData = {
         roleName: "",
         heartNumber: 0,
         userPost: [],
+        userResponse: [],
         followPost: [],
         followAnswer: [],
-        notification: [],
-    }
+    },
+    loginShow: {
+        show: false
+    },
+    notify: undefined
 }
 
 const UserSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-
+        addNotify: (state, action) => {
+            state.notify = [...state.notify || [], action.payload]
+        },
+        logoutSlice: (state, action) => {
+            state.data = {
+                message: "",
+                account: "",
+                avatarURL: "",
+                name: "",
+                email: "",
+                roleName: "",
+                heartNumber: 0,
+                userPost: [],
+                userResponse: [],
+                followPost: [],
+                followAnswer: [],
+            }
+            state.notify = undefined
+        },
+        loginShow: (state, action) => {
+            state.loginShow = {
+                show: action.payload
+            }
+        },
     },
     extraReducers: (builder) => {
+        builder.addCase(checkNotify.fulfilled, (state, action: any) => {
+            const id = action.meta.arg.id
+            const newData = (state.notify || []).map((item) => {
+                if (item._id === id) {
+                    return {
+                        ...item,
+                        checked: true
+                    }
+                }
+                return item
+            })
+
+            state.notify = newData
+        })
+        builder.addCase(getNotify.fulfilled, (state, action: any) => {
+            state.notify = action.payload.data.notifications
+        })
         builder.addCase(login.fulfilled, (state, action: any) => {
             state.data = action.payload.data
         })
@@ -81,4 +136,5 @@ const UserSlice = createSlice({
     }
 })
 
+export const { addNotify, loginShow, logoutSlice } = UserSlice.actions
 export default UserSlice.reducer

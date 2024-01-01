@@ -1,12 +1,15 @@
 import styles from './NavBarComponent.module.scss'
 import { Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../../App/hook';
+import { loginShow } from '../../../Reducers/UserSlice';
 
 export interface IOptionData {
     icon: JSX.Element
     name: string;
     url: string;
     child: IOptionData[];
+    loginRequire?: boolean
 }
 
 interface INaveBarComponent {
@@ -17,11 +20,18 @@ interface INaveBarComponent {
 }
 
 function NavBarComponent(props: INaveBarComponent) {
+    const dispatch = useAppDispatch()
     const navigate = useNavigate()
+    const userName = useAppSelector(store => store.user.data.account)
 
     return <div className={`${styles.item_wrapper}`}>
         <div className='position-relative'>
             <div onClick={() => {
+                if (props.data.loginRequire && !userName) {
+                    dispatch(loginShow(true))
+                    return
+                }
+                console.log(props.data.loginRequire, userName)
                 props.data.url && navigate(props.data.url)
                 props.setCurrentOption([props.index])
             }}
