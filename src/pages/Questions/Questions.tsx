@@ -40,7 +40,6 @@ function Questions() {
     const [pageData, setPageData] = useState<JSX.Element[]>([])
     const [dataLength, setDataLength] = useState<number>(0)
     const [searchVal, setSearchVal] = useState<string>('')
-    const [tags, setTags] = useState<Tag[]>([])
     const searchValDelayRef = useRef<string>('')
     const userName = useAppSelector(store => store.user.data.account)
 
