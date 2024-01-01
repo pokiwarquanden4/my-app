@@ -12,16 +12,16 @@ import { useAppSelector } from '../../App/hook';
 interface IContentQuestion {
     onFollowReponse: (responseId: string, follow: boolean) => void
     onUpdateResponse: (responseId: string, content: string, show: Dispatch<SetStateAction<boolean>>) => void
-    showComment: boolean
     comment: IComment[] | undefined
-    onGetComment: (responseId: string) => void
-    onCreateComment: (responseId: string, content: string) => void
+    onGetComment: (responseId: string, setShowComment: Dispatch<SetStateAction<boolean>>) => void
+    onCreateComment: (responseId: string, content: string, setShowComment: Dispatch<SetStateAction<boolean>>) => void
     responseData: IResponse
     classValue?: string
 }
 
 function ResponseContentQuestion(props: IContentQuestion) {
     const [content, setContent] = useState<string>('');
+    const [showComment, setShowComment] = useState<boolean>(false)
     const [commentContent, setCommentContent] = useState<string>();
     const [smallComment, setSmallComment] = useState<boolean>(false)
     const [showUpdateResponse, setShowUpdateResponse] = useState<boolean>(false)
@@ -79,7 +79,7 @@ function ResponseContentQuestion(props: IContentQuestion) {
                             }}
                         >Edit</div>
                         :
-                        !userDetails.followAnswer.includes(props.responseData._id)
+                        !userDetails.followResponse.includes(props.responseData._id)
                             ?
                             <div
                                 onClick={() => {
@@ -98,9 +98,9 @@ function ResponseContentQuestion(props: IContentQuestion) {
                 {props.responseData.comment.length
                     ?
                     <div
-                        className={`${styles.options_content} ${props.showComment ? styles.options_content_focus : undefined}`}
+                        className={`${styles.options_content} ${showComment ? styles.options_content_focus : undefined}`}
                         onClick={() => {
-                            props.onGetComment(props.responseData._id)
+                            props.onGetComment(props.responseData._id, setShowComment)
                         }}
                     >Comments</div>
                     :
@@ -121,8 +121,7 @@ function ResponseContentQuestion(props: IContentQuestion) {
             className={`${styles.addComment} ${smallComment ? styles.addComment_focus : undefined}`}
             onClick={() => {
                 setSmallComment(!smallComment)
-            }
-            }
+            }}
         >
             Add a comment
         </span>
@@ -166,7 +165,7 @@ function ResponseContentQuestion(props: IContentQuestion) {
                         type="button"
                         className="btn btn-primary"
                         onClick={() => {
-                            props.onCreateComment(props.responseData._id, commentContent as string)
+                            props.onCreateComment(props.responseData._id, commentContent as string, setShowComment)
                         }}>
                         Submit
                     </button>
@@ -176,7 +175,7 @@ function ResponseContentQuestion(props: IContentQuestion) {
             undefined
         }
 
-        {props.comment && props.showComment ?
+        {props.comment && showComment ?
             <div className={`${styles.answers} mt-3`}>
                 {props.comment.map((answer, index) => {
                     return <div key={index} className={`ps-4 d-flex align-items-center ${styles.answer} py-2`}>

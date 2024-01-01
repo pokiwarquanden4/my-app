@@ -27,7 +27,7 @@ interface IUserLogin {
     userPost: string[];
     userResponse: string[]
     followPost: string[];
-    followAnswer: string[];
+    followResponse: string[];
 }
 
 interface IUserLoginData {
@@ -50,7 +50,7 @@ const initialState: IUserLoginData = {
         userPost: [],
         userResponse: [],
         followPost: [],
-        followAnswer: [],
+        followResponse: [],
     },
     loginShow: {
         show: false
@@ -63,8 +63,12 @@ const UserSlice = createSlice({
     initialState,
     reducers: {
         addNotify: (state, action) => {
-            state.notify = [...state.notify || [], action.payload]
+            if (!state.notify || !Array.isArray(state.notify)) {
+                state.notify = [];
+            }
+            state.notify = [...state.notify, action.payload];
         },
+
         logoutSlice: (state, action) => {
             state.data = {
                 message: "",
@@ -77,7 +81,7 @@ const UserSlice = createSlice({
                 userPost: [],
                 userResponse: [],
                 followPost: [],
-                followAnswer: [],
+                followResponse: [],
             }
             state.notify = undefined
         },
@@ -124,14 +128,14 @@ const UserSlice = createSlice({
         })
         builder.addCase(followResponse.fulfilled, (state, action: any) => {
             if (action.payload.status !== 200) return
-            if (!state.data.followAnswer.includes(action.payload.data.responseId)) {
-                state.data.followAnswer.push(action.payload.data.responseId)
+            if (!state.data.followResponse.includes(action.payload.data.responseId)) {
+                state.data.followResponse.push(action.payload.data.responseId)
             }
         })
         builder.addCase(unFollowResponse.fulfilled, (state, action: any) => {
             if (action.payload.status !== 200) return
             const index = state.data.followPost.indexOf(action.payload.data.responseId)
-            state.data.followAnswer.splice(index, 1)
+            state.data.followResponse.splice(index, 1)
         })
     }
 })

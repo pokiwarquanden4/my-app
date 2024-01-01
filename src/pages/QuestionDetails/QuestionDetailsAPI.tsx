@@ -16,7 +16,6 @@ export interface IPost {
     responses: string[];
     createdAt: string;
     updatedAt: string;
-    __v: number;
 }
 
 export interface IResponse {
@@ -28,7 +27,6 @@ export interface IResponse {
     comment: string[]
     createdAt: string;
     updatedAt: string;
-    __v: number;
 }
 
 export interface IComment {
@@ -37,7 +35,6 @@ export interface IComment {
     content: string;
     createdAt: string;
     updatedAt: string;
-    __v: number;
 }
 
 export const getPostById = createAsyncThunk<any, string>(

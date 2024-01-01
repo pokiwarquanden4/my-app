@@ -44,12 +44,11 @@ function Header() {
             }
         }
         func()
-        cookies.addChangeListener(() => {
-            func()
-        })
+        cookies.addChangeListener(func)
     }, []);
 
     const logout = useCallback(() => {
+        console.log('in')
         const cookies = new Cookies()
         cookies.remove('token')
         cookies.remove('refresh_token')
@@ -123,7 +122,13 @@ function Header() {
                     className={styles.icon}
                     icon={faBell}
                 ></FontAwesomeIcon>
-                {showMessage ? <Message></Message> : undefined}
+                {showMessage
+                    ?
+                    <Message
+                        setShowMessage={setShowMessage}
+                    ></Message>
+                    :
+                    undefined}
             </IconNotification>
             <IconNotification arlert={false}>
                 <FontAwesomeIcon

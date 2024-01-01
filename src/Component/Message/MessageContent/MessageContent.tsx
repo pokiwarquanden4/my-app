@@ -1,15 +1,20 @@
+import { useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '../../../App/hook'
 import { INotify } from '../../../Reducers/UserSlice'
 import Avatar from '../../Avatar/Avatar'
 import styles from './MessageContent.module.scss'
 import { checkNotify } from './NotifyAPI'
+import { routes } from '../../../pages/pages/pages'
+import { Dispatch, SetStateAction } from 'react'
 
 interface IMessageContent {
+    setShowMessage: Dispatch<SetStateAction<boolean>>
     data: INotify
 }
 
 function MessageContent(props: IMessageContent) {
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
 
     return <div
         className={`${styles.wrapper} d-flex align-items-center px-1 py-2`}
@@ -19,6 +24,8 @@ function MessageContent(props: IMessageContent) {
                     id: props.data._id
                 }))
             }
+            navigate(routes.questionDetail.replace(':questionId', props.data.postId));
+            props.setShowMessage(false)
         }}
     >
         <div className={styles.avatar}>

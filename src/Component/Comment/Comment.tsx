@@ -6,24 +6,26 @@ import { useAppDispatch, useAppSelector } from '../../App/hook'
 import { IComment, IResponse, createComment, getCommentInResponse } from '../../pages/QuestionDetails/QuestionDetailsAPI'
 import ResponseContentQuestion from '../ContentQuestion/ResponseContentQuestion'
 import styles from './Comment.module.scss'
+import { vertifyResponse } from '../../pages/Questions/QuestionsAPI'
 
 interface ICommentProps {
+    questionOwner: string
     onRateReponse: (responseId: string, follow: boolean) => void
     onFollowReponse: (responseId: string, follow: boolean) => void
     onUpdateResponse: (responseId: string, content: string, show: Dispatch<SetStateAction<boolean>>) => void
     postId: string | undefined
     sortBy: string
     responses: IResponse[]
+    setReponses: Dispatch<SetStateAction<IResponse[]>>
 }
 
 function Comment(props: ICommentProps) {
     const dispatch = useAppDispatch()
     const [comment, setComment] = useState<Record<string, IComment[]>>({})
-    const [showComment, setShowComment] = useState<boolean>(false)
     const [shortResponse, setShortResponse] = useState<IResponse[]>([])
     const userDetails = useAppSelector(store => store.user.data)
 
-    const onGetComment = useCallback(async (responseId: string) => {
+    const onGetComment = useCallback(async (responseId: string, setShowComment: Dispatch<SetStateAction<boolean>>) => {
         if (responseId && !comment[responseId]) {
             const res = await dispatch(getCommentInResponse(responseId))
             if (res.payload.status !== 200) return
@@ -35,12 +37,14 @@ function Comment(props: ICommentProps) {
             })
         }
 
-        setShowComment(!showComment)
-    }, [comment, dispatch, showComment])
+        setShowComment((preVal) => {
+            return !preVal
+        })
+    }, [comment, dispatch])
 
-    const onCreateComment = useCallback(async (responseId: string, content: string) => {
+    const onCreateComment = useCallback(async (responseId: string, content: string, setShowComment: Dispatch<SetStateAction<boolean>>) => {
         if (!content || !responseId) return
-        if (!comment[responseId]) onGetComment(responseId)
+        if (!comment[responseId]) onGetComment(responseId, setShowComment)
         const res = await dispatch(createComment({
             responseId: responseId,
             content: content,
@@ -80,6 +84,32 @@ function Comment(props: ICommentProps) {
         }
     }, [props.responses, props.sortBy])
 
+    const onVertify = useCallback(async (response: IResponse) => {
+        if (props.questionOwner === userDetails.account) {
+            const res = await dispatch(vertifyResponse({
+                responseId: response._id,
+                trueOrFalse: !response.vertified
+            }))
+
+            if (res.payload.status === 200) {
+                const responseId = res.meta.arg.responseId
+                const vertified = res.meta.arg.trueOrFalse
+
+                props.setReponses((preVal) => {
+                    return preVal.map((item) => {
+                        if (item._id === responseId) {
+                            return {
+                                ...item,
+                                vertified: vertified
+                            }
+                        }
+                        return item
+                    })
+                })
+            }
+        }
+    }, [dispatch, props, userDetails.account])
+
     return <div className={` ${styles.wrapper}`}>
         {shortResponse.map((response, index) => {
             return <div className='pt-4 d-flex' key={index}>
@@ -105,10 +135,16 @@ function Comment(props: ICommentProps) {
                         }
                         <div className={styles.heart_number}>{response.rate.length}</div>
                     </div>
-                    {response.vertified
+                    {response.vertified || props.questionOwner === userDetails.account
                         ?
                         <div className={styles.check}>
-                            <FontAwesomeIcon className={styles.check_icon} icon={faCheck}></FontAwesomeIcon>
+                            <FontAwesomeIcon
+                                className={`${response.vertified ? styles.check_icon : styles.check_icon_vertified}`}
+                                icon={faCheck}
+                                onClick={() => {
+                                    onVertify(response)
+                                }}
+                            ></FontAwesomeIcon>
                         </div>
                         :
                         undefined
@@ -117,7 +153,6 @@ function Comment(props: ICommentProps) {
                 <ResponseContentQuestion
                     onFollowReponse={props.onFollowReponse}
                     onUpdateResponse={props.onUpdateResponse}
-                    showComment={showComment}
                     comment={comment[response._id]}
                     onGetComment={onGetComment}
                     onCreateComment={onCreateComment}

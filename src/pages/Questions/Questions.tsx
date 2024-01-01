@@ -51,7 +51,7 @@ function Questions() {
                 <div className={`pe-3 d-flex flex-column justify-content-between ${styles.content_list_info}`}>
                     <div className={`${styles.rate}`}>{item.rate} rates</div>
                     <div className={`${styles.answere}`}>{item.answer} answeres</div>
-                    <div className={`${styles.vertified}`}>{item.verified} vertified</div>
+                    <div className={`${styles.vertified}`}>{item.responses.filter(item => item.vertified === true).length} vertified</div>
                 </div>
                 <div className={`ps-4 flex-fill ${styles.content_list_data}`}>
                     <div className={`${styles.content_wrapper}  flex-fill`}>

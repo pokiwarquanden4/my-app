@@ -57,6 +57,10 @@ function App() {
     socket.on('Notify', (data) => {
       dispatch(addNotify(data))
     })
+
+    return () => {
+      socket.off('Notify')
+    }
   }, [dispatch, socket])
 
   return (

@@ -23,8 +23,16 @@
         .check {
             .check_icon {
                 margin-top: 8px;
-                font-size: 30px;
+                font-size: 25px;
                 color: rgb(24, 134, 75);
+                cursor: pointer;
+            }
+
+            .check_icon_vertified {
+                margin-top: 8px;
+                font-size: 25px;
+                color: lightgray;
+                cursor: pointer;
             }
         }
     }

@@ -1,10 +1,14 @@
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import styles from './Message.module.scss'
 import MessageContent from './MessageContent/MessageContent'
 import { useAppSelector } from '../../App/hook'
 
-function Message() {
-    const [all, setAll] = useState<boolean>(false)
+interface IMessage {
+    setShowMessage: Dispatch<SetStateAction<boolean>>
+}
+
+function Message(props: IMessage) {
+    const [all, setAll] = useState<boolean>(true)
     const notifyData = useAppSelector(store => store.user.notify)
 
     return <div className={`shadow p-3 mb-5 bg-body rounded ${styles.wrapper}`}>
@@ -34,6 +38,7 @@ function Message() {
                         .filter(item => all || !item.checked)
                         .map((item, index) => {
                             return <MessageContent
+                                setShowMessage={props.setShowMessage}
                                 key={index}
                                 data={item}
                             ></MessageContent>

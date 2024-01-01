@@ -10,7 +10,7 @@ import { followPost, followResponse, rateResponse, unFollowPost, unFollowRespons
 
 const sortData = [
     {
-        content: 'Highest score ( default )',
+        content: 'Highest score ( highest rate )',
         id: 1
     },
     {
@@ -216,11 +216,13 @@ function QuestionDetails() {
                         </div>
                     </div>
                     <Comment
+                        questionOwner={questionDetails.userId}
                         onRateReponse={onRateReponse}
                         onFollowReponse={onFollowReponse}
                         onUpdateResponse={onUpdateResponse}
                         sortBy={sortBy} postId={postId}
                         responses={responses}
+                        setReponses={setReponses}
                     ></Comment>
                 </div>
             </Fragment>

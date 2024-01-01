@@ -26,7 +26,7 @@ export interface IPosts {
     subTitle: string,
     tags: string[];
     userId: string;
-    verified: number,
+    responses: { vertified: boolean }[],
     updatedAt: Date;
 }
 
@@ -147,6 +147,23 @@ export const unRateResponse = createAsyncThunk<any, IRateReponse>(
             thunkApi,
             payload: payload,
             method: "POST"
+        })
+        return res
+    }
+)
+
+interface IVertifyResponse {
+    responseId: string
+    trueOrFalse: boolean
+}
+
+export const vertifyResponse = createAsyncThunk<any, IVertifyResponse>(
+    "/response/vertify",
+    async (payload, thunkApi) => {
+        const res = await sendRequest(`posts/vertify`, {
+            thunkApi,
+            payload: payload,
+            method: "PUT"
         })
         return res
     }
