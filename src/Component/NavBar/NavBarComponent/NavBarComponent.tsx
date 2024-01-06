@@ -31,7 +31,6 @@ function NavBarComponent(props: INaveBarComponent) {
                     dispatch(loginShow(true))
                     return
                 }
-                console.log(props.data.loginRequire, userName)
                 props.data.url && navigate(props.data.url)
                 props.setCurrentOption([props.index])
             }}

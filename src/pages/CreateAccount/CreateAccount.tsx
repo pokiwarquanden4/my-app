@@ -6,6 +6,8 @@ import ModalComponent from '../../Component/Modal/ModalComponent';
 import LoginPages from '../LoginPages/LoginPages';
 import styles from './CreateAccount.module.scss';
 import { createAccount } from './CreateAccountAPI';
+import { Tag } from 'react-tag-input';
+import ReactTagsComponent from '../../Component/ReactTags/ReactTagsComponent';
 
 export interface ICreateAccount {
     name: string,
@@ -13,6 +15,7 @@ export interface ICreateAccount {
     account: string,
     password: string,
     img?: File
+    tags?: string[]
 }
 
 export interface ICreateAccountErrors {
@@ -21,6 +24,7 @@ export interface ICreateAccountErrors {
     account?: string,
     password?: string,
     img?: File
+    tags?: string[]
 }
 
 const defaultVal: ICreateAccount = {
@@ -32,6 +36,7 @@ const defaultVal: ICreateAccount = {
 
 function CreateAccount() {
     const dispatch = useAppDispatch()
+    const [tags, setTags] = useState<Tag[]>([])
     const passwordRef = useRef<HTMLInputElement>(null)
     const [validForm, setValidForm] = useState<boolean>(false)
     const [form, setForm] = useState<ICreateAccount>(defaultVal)
@@ -48,7 +53,7 @@ function CreateAccount() {
         return emailRegex.test(email);
     }, [])
 
-    const setField = useCallback((field: string, value: string | File) => {
+    const setField = useCallback((field: string, value: string | File | string[]) => {
         setForm({
             ...form,
             [field]: value
@@ -111,14 +116,14 @@ function CreateAccount() {
             formData.append('email', form.email);
             formData.append('account', form.account);
             formData.append('password', form.password);
+            if (form.tags) {
+                form.tags.forEach((tag) => {
+                    formData.append('techTags[]', tag);
+                })
+            }
             form.img && formData.append('img', form.img);
 
-            const res = dispatch(createAccount(formData))
-            res.then((results) => {
-                console.log(results)
-            }).catch((error) => {
-                console.log(error)
-            })
+            dispatch(createAccount(formData))
         }
     }, [dispatch, findFormErrors, form])
 
@@ -130,6 +135,10 @@ function CreateAccount() {
             passwordRef.current.type = 'password';
         }
     }, [passwordHide]);
+
+    useEffect(() => {
+        setField('tags', tags.map((tag) => tag.text))
+    }, [setField, tags])
 
     return (
         <div className='pb-4'>
@@ -214,6 +223,13 @@ function CreateAccount() {
                             e.target.files && setField('img', e.target.files[0])
                         }}
                     />
+                </div>
+                <div className="pt-3">
+                    <label htmlFor="Tags" className="form-label">Technology</label>
+                    <ReactTagsComponent
+                        tags={tags}
+                        setTags={setTags}
+                    ></ReactTagsComponent>
                 </div>
                 <div className="pt-4">
                     <button className="btn btn-primary" type="submit" onClick={handleSubmit}>Submit form</button>

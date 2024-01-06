@@ -36,4 +36,27 @@ $Sub-font-color: rgb(167, 173, 180);
             }
         }
     }
+
+    .content {
+        .stats_data {
+            font-size: 15px;
+        }
+
+        .stats_value {
+            font-weight: bolder;
+        }
+
+        .number {
+            min-width: 30px;
+        }
+
+        .item {
+            cursor: pointer;
+            transition: all ease 200ms;
+
+            &:hover {
+                background-color: rgb(239, 236, 236);
+            }
+        }
+    }
 }

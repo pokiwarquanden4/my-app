@@ -23,6 +23,7 @@ interface IUserLogin {
     name: string;
     email: string;
     roleName: string;
+    techTags: string[],
     heartNumber: number;
     userPost: string[];
     userResponse: string[]
@@ -47,6 +48,7 @@ const initialState: IUserLoginData = {
         email: "",
         roleName: "",
         heartNumber: 0,
+        techTags: [],
         userPost: [],
         userResponse: [],
         followPost: [],
@@ -78,6 +80,7 @@ const UserSlice = createSlice({
                 email: "",
                 roleName: "",
                 heartNumber: 0,
+                techTags: [],
                 userPost: [],
                 userResponse: [],
                 followPost: [],

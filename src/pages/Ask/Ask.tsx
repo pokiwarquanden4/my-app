@@ -8,13 +8,6 @@ import { toolbarOptions } from '../../Functions/Functions';
 import { createPosts } from '../Questions/QuestionsAPI';
 import styles from './Ask.module.scss';
 
-const KeyCodes = {
-    comma: 188,
-    enter: 13
-};
-
-const delimiters = [KeyCodes.comma, KeyCodes.enter];
-
 function Ask() {
     const dispatch = useAppDispatch()
     const [content, setContent] = useState<string>('');

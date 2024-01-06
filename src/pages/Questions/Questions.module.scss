@@ -52,18 +52,6 @@
     }
 
     .content_footer {
-        .account {
-            .account_name {
-                cursor: pointer;
-                font-size: 13px;
-                color: rgb(70, 129, 171);
-
-                &:hover {
-                    color: rgb(86, 157, 206);
-                }
-            }
-        }
-
         .time {
             font-size: 13px;
         }

@@ -20,6 +20,7 @@ export interface IPost {
 }
 
 export interface IResponse {
+    post: string,
     _id: string
     userId: string;
     content: string;

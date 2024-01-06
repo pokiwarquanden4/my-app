@@ -11,7 +11,7 @@ import { IPosts, IPostsResponse, getPosts } from './QuestionsAPI';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../pages/pages';
 import { loginShow } from '../../Reducers/UserSlice';
-import ReactTagsComponent from '../../Component/ReactTags/ReactTagsComponent';
+import UserNameLink from '../../Component/UserNameLink/UserNameLink';
 
 const filterList = [
     {
@@ -69,7 +69,7 @@ function Questions() {
                         <div className={`pt-2 d-flex justify-content-end ${styles.content_footer}`}>
                             <div className={`d-flex align-items-center ${styles.account}`}>
                                 <Avatar name='Quang' size='30' src={''}></Avatar>
-                                <div className={styles.account_name}>{item.userId}</div>
+                                <UserNameLink name={item.userId} styleVal='' fontSize='13px'></UserNameLink>
                             </div>
                             <div className={`ms-1 d-flex align-items-center ${styles.time}`}>
                                 {formatTimeAgo(new Date(item.updatedAt))}

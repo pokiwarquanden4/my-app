@@ -5,52 +5,47 @@ import { useLocation } from 'react-router-dom'
 import { routes } from '../../pages/pages/pages'
 import styles from './NavBar.module.scss'
 import NavBarComponent, { IOptionData } from './NavBarComponent/NavBarComponent'
-
-const optionsList: IOptionData[] = [
-    {
-        name: 'Questions',
-        url: routes.questions,
-        icon: <FontAwesomeIcon className='pe-2' icon={faClipboardList}></FontAwesomeIcon>,
-        child: [
-            // {
-            //     name: 'Ask Questions',
-            //     icon: <FontAwesomeIcon className='pe-2' icon={faCircleQuestion}></FontAwesomeIcon>,
-            //     url: routes.ask,
-            //     child: [],
-            // }
-        ],
-    },
-    {
-        icon: <FontAwesomeIcon className='pe-2' icon={faTags}></FontAwesomeIcon>,
-        name: 'Tags',
-        url: routes.tags,
-        child: [],
-    },
-    {
-        icon: <FontAwesomeIcon className='pe-2' icon={faUser}></FontAwesomeIcon>,
-        name: 'Users',
-        url: routes.users,
-        child: [],
-    },
-    {
-        icon: <FontAwesomeIcon className='pe-2' icon={faCircleQuestion}></FontAwesomeIcon>,
-        name: 'Account',
-        url: routes.account,
-        loginRequire: true,
-        child: [
-            // {
-            //     icon: <FontAwesomeIcon className='pe-2' icon={faCircleQuestion}></FontAwesomeIcon>,
-            //     name: 'Create Account',
-            //     url: routes.createAccount,
-            //     child: [],
-            // }
-        ],
-    },
-]
+import { useAppSelector } from '../../App/hook'
 
 function NavBar() {
     const location = useLocation()
     const [currentOption, setCurrentOption] = useState<number[]>([])
+    const currentName = useAppSelector(store => store.user.data.account)
+
+    const optionsList: IOptionData[] = [
+        {
+            name: 'Questions',
+            url: routes.questions,
+            icon: <FontAwesomeIcon className='pe-2' icon={faClipboardList}></FontAwesomeIcon>,
+            child: [],
+        },
+        {
+            icon: <FontAwesomeIcon className='pe-2' icon={faTags}></FontAwesomeIcon>,
+            name: 'Tags',
+            url: routes.tags,
+            child: [],
+        },
+        {
+            icon: <FontAwesomeIcon className='pe-2' icon={faUser}></FontAwesomeIcon>,
+            name: 'Users',
+            url: routes.users,
+            child: [],
+        },
+        {
+            icon: <FontAwesomeIcon className='pe-2' icon={faCircleQuestion}></FontAwesomeIcon>,
+            name: 'Account',
+            url: routes.account.replace(':account', currentName),
+            loginRequire: true,
+            child: [
+                // {
+                //     icon: <FontAwesomeIcon className='pe-2' icon={faCircleQuestion}></FontAwesomeIcon>,
+                //     name: 'Create Account',
+                //     url: routes.createAccount,
+                //     child: [],
+                // }
+            ],
+        },
+    ]
 
     const getCurrentOptions = useCallback((): number[] => {
         const path = location.pathname

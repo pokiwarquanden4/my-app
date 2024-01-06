@@ -15,18 +15,6 @@ export const login = createAsyncThunk<any, ILogin>(
     }
 )
 
-export const getUser = createAsyncThunk<any, {}>(
-    "/get-user",
-    async (payload, thunkApi) => {
-        const res = await sendRequest(`users/getUser`, {
-            thunkApi,
-            method: "GET"
-        })
-
-        return res
-    }
-)
-
 export const getUserAllDetails = createAsyncThunk<any, {}>(
     "/get-user-details",
     async (payload, thunkApi) => {

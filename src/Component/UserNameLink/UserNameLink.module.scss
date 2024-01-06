@@ -1,0 +1,9 @@
+.mainName {
+    color: rgb(51, 145, 222);
+    transition: color ease 200ms;
+    cursor: pointer;
+
+    &:hover {
+        color: rgb(137, 181, 216);
+    }
+}

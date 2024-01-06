@@ -13,7 +13,7 @@ export const routes = {
   tags: '/tags',
   users: '/users',
   ask: '/questions/ask',
-  account: '/account',
+  account: '/account/:account',
   createAccount: '/account/createAccount'
 };
 

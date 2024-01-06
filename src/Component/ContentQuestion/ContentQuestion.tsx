@@ -8,6 +8,7 @@ import styles from './ContentQuestion.module.scss';
 import ModalComponent from '../Modal/ModalComponent';
 import UpdatePost from '../UpdatePost/UpdatePost';
 import { useAppSelector } from '../../App/hook';
+import UserNameLink from '../UserNameLink/UserNameLink';
 
 
 interface IContentQuestion {
@@ -101,7 +102,7 @@ function ContentQuestion(props: IContentQuestion) {
             <div className={`pt-2 d-flex justify-content-end ${styles.content_footer}`}>
                 <div className={`d-flex align-items-center ${styles.account}`}>
                     <Avatar name='Quang' size='30' src={props.questionDetails.avatarURL}></Avatar>
-                    <div className={styles.account_name}>{props.questionDetails.userId}</div>
+                    <UserNameLink name={props.questionDetails.userId} styleVal='' fontSize='13px'></UserNameLink>
                 </div>
                 <div className={`ms-1 d-flex align-items-center ${styles.time}`}>
                     {formatTimeAgo(new Date(props.questionDetails.updatedAt))}
