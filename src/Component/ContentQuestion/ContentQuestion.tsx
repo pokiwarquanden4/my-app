@@ -10,7 +10,6 @@ import UpdatePost from '../UpdatePost/UpdatePost';
 import { useAppSelector } from '../../App/hook';
 import UserNameLink from '../UserNameLink/UserNameLink';
 
-
 interface IContentQuestion {
     onFollowPost: (follow: boolean) => void
     onUpdatePost: (title?: string, subTitle?: string, content?: string, tags?: string[], show?: Dispatch<SetStateAction<boolean>>) => void
@@ -67,7 +66,7 @@ function ContentQuestion(props: IContentQuestion) {
         `}
         </style>
         <div className={`mb-2 mt-5 ${styles.content_tags}`}>
-            <TagsComponent data={props.questionDetails.tags}></TagsComponent>
+            <TagsComponent type='tags' data={props.questionDetails.tags}></TagsComponent>
         </div>
         <div className={`${styles.content_info} d-flex justify-content-between align-items-center mb-3`}>
             <div className={`${styles.options} d-flex`}>

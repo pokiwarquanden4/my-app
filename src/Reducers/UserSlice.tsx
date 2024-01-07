@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getUserAllDetails, login } from "../pages/LoginPages/LoginAPI";
 import { followPost, followResponse, unFollowPost, unFollowResponse } from "../pages/Questions/QuestionsAPI";
 import { checkNotify, getNotify } from "../Component/Message/MessageContent/NotifyAPI";
+import { updateUserProfile } from "../pages/Account/AccountAPI";
 
 export interface INotify {
     _id: string
@@ -16,7 +17,7 @@ export interface INotify {
     checked: boolean
 }
 
-interface IUserLogin {
+export interface IUserLogin {
     message: string;
     account: string;
     avatarURL: string;
@@ -139,6 +140,14 @@ const UserSlice = createSlice({
             if (action.payload.status !== 200) return
             const index = state.data.followPost.indexOf(action.payload.data.responseId)
             state.data.followResponse.splice(index, 1)
+        })
+        builder.addCase(updateUserProfile.fulfilled, (state, action: any) => {
+            if (action.payload.status !== 200) return
+            state.data = {
+                ...state.data,
+                name: action.payload.data.name,
+                avatarURL: action.payload.data.avatarURL,
+            }
         })
     }
 })

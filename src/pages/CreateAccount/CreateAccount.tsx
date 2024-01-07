@@ -8,6 +8,7 @@ import styles from './CreateAccount.module.scss';
 import { createAccount } from './CreateAccountAPI';
 import { Tag } from 'react-tag-input';
 import ReactTagsComponent from '../../Component/ReactTags/ReactTagsComponent';
+import { validPassword } from '../../Functions/Functions';
 
 export interface ICreateAccount {
     name: string,
@@ -42,11 +43,6 @@ function CreateAccount() {
     const [form, setForm] = useState<ICreateAccount>(defaultVal)
     const [errors, setErrors] = useState<ICreateAccountErrors>({})
     const [passwordHide, setPasswordHide] = useState<boolean>(false)
-
-    const validPassword = useCallback((input: string): boolean => {
-        const regex = /^.{11,}$/;
-        return regex.test(input);
-    }, [])
 
     const isValidEmail = useCallback((email: string) => {
         var emailRegex = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
@@ -101,7 +97,7 @@ function CreateAccount() {
             setValidForm(false)
         }
         return newErrors
-    }, [form.account, form.email, form.name, form.password, isValidEmail, validPassword])
+    }, [form.account, form.email, form.name, form.password, isValidEmail])
 
     const handleSubmit = useCallback((e: any) => {
         e.preventDefault()

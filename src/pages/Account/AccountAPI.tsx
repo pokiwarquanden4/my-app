@@ -7,7 +7,20 @@ export const getUserProfile = createAsyncThunk<any, string>(
         const res = await sendRequest(`users/profile?account=${payload}`, {
             thunkApi,
             method: "GET"
-        }, false)
+        })
+
+        return res
+    }
+)
+
+export const updateUserProfile = createAsyncThunk<any, FormData>(
+    "/update-user-profile",
+    async (payload, thunkApi) => {
+        const res = await sendRequest(`users/profile/update`, {
+            thunkApi,
+            payload: payload,
+            method: "PUT"
+        })
 
         return res
     }

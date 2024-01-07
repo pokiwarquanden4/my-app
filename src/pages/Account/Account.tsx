@@ -1,18 +1,21 @@
 import { faHeart } from '@fortawesome/free-regular-svg-icons'
-import { faPen } from '@fortawesome/free-solid-svg-icons'
+import { faPen, faLock, faSave } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useAppDispatch, useAppSelector } from '../../App/hook'
 import Avatar from '../../Component/Avatar/Avatar'
 import styles from './Account.module.scss'
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { IPost, IResponse } from '../QuestionDetails/QuestionDetailsAPI'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getUserProfile } from './AccountAPI'
+import { getUserProfile, updateUserProfile } from './AccountAPI'
 import TagsComponent from '../../Component/TagsComponent/TagsComponent'
 import OptionsListButton from '../../Component/OptionsListButton/OptionsListButton'
 import { formatTimeAgo } from '../../Functions/Functions'
 import { routes } from '../pages/pages'
 import parse from 'html-react-parser';
+import ModalComponent from '../../Component/Modal/ModalComponent'
+import EditAccount from './EditAccount/EditAccount'
+import { showAlert } from '../../Component/Alert/Alert'
 
 interface IUserProfile {
     account: string;
@@ -61,7 +64,9 @@ function Account() {
         return params.account
     }, [params.account])
     const [currentUserData, setCurrentUserData] = useState<IUserProfile>()
-    const currentName = useAppSelector(store => store.user.data.account)
+    const userData = useAppSelector(store => store.user.data)
+    const [updateForm, setUpdateForm] = useState<boolean>(false)
+    const [changeName, setChangeName] = useState<string | undefined>(undefined)
 
     useEffect(() => {
         const func = async (account: string) => {
@@ -78,7 +83,25 @@ function Account() {
         }
     }, [accountName, dispatch])
 
-    console.log(currentUserData)
+    const handleSubmit = useCallback(async (name: string, value: string) => {
+
+        // Conditional logic:
+        const formData = new FormData();
+        formData.append(name, value);
+
+        const res = await dispatch(updateUserProfile(formData))
+        if (res.payload.status === 200) {
+            setCurrentUserData((preData) => {
+                if (!preData) return
+                return {
+                    ...preData,
+                    name: res.payload.data.name,
+                    avatarURL: res.payload.data.avatarURL
+                }
+            })
+        }
+
+    }, [dispatch])
 
     return <div className={styles.wrapper}>
         {currentUserData
@@ -86,7 +109,7 @@ function Account() {
             <Fragment>
                 <div className={`${styles.header} d-flex justify-content-between`}>
                     <div className={`d-flex align-items-center ${styles.info}`}>
-                        <div className={`${styles.avatar} border rounded-3`}>
+                        <div className={`${styles.avatar} border rounded-3 position-relative`} style={{ cursor: 'pointer' }}>
                             <Avatar
                                 name={currentUserData.account}
                                 src={currentUserData.avatarURL}
@@ -94,8 +117,56 @@ function Account() {
                             ></Avatar>
                         </div>
                         <div className={`ps-3 ${styles.user_info}`}>
-                            <div className={`h2 ${styles.name}`}>
-                                {currentUserData.name}
+                            <div className={`h2 ${styles.name} d-flex align-items-center`}>
+                                {
+                                    userData.account === accountName
+                                        ?
+                                        changeName === undefined
+                                            ?
+                                            <Fragment>
+                                                {currentUserData.name}
+                                                <FontAwesomeIcon
+                                                    className='ps-3 h5'
+                                                    style={{ marginBottom: '0px', cursor: 'pointer' }}
+                                                    onClick={() => {
+                                                        setChangeName(currentUserData.name)
+                                                    }}
+                                                    icon={faPen}
+                                                ></FontAwesomeIcon>
+                                            </Fragment>
+                                            :
+                                            <Fragment>
+                                                <input
+                                                    type='text'
+                                                    value={changeName}
+                                                    onChange={(e) => {
+                                                        setChangeName(e.target.value)
+                                                    }}
+                                                    onBlur={() => {
+                                                        setChangeName(undefined)
+                                                    }}
+                                                ></input>
+                                                <FontAwesomeIcon
+                                                    className='ps-3 h5'
+                                                    style={{ marginBottom: '0px', cursor: 'pointer' }}
+                                                    onClick={(e) => {
+                                                        if (changeName) {
+                                                            setChangeName(undefined)
+                                                            handleSubmit('name', changeName)
+                                                        } else {
+                                                            showAlert('Name can not be blank', 'info')
+                                                        }
+
+                                                    }}
+                                                    icon={faSave}
+                                                ></FontAwesomeIcon>
+                                            </Fragment>
+                                        :
+                                        currentUserData.name
+
+
+                                }
+
                             </div>
                             <div className={`${styles.detail} d-flex align-items-center`}>
                                 <div className={`${styles.heart_number} d-flex align-items-center`}>
@@ -106,12 +177,18 @@ function Account() {
                         </div>
                     </div>
                     {
-                        currentName === accountName
+                        userData.account === accountName
                             ?
                             <div className={styles.edit}>
-                                <button type="button" className={`btn btn-outline-secondary d-flex align-items-center`}>
-                                    <FontAwesomeIcon icon={faPen}></FontAwesomeIcon>
-                                    <div className='ps-2'>Edit Profile</div>
+                                <button
+                                    type="button"
+                                    className={`btn btn-outline-secondary d-flex align-items-center`}
+                                    onClick={() => {
+                                        setUpdateForm(true)
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={faLock}></FontAwesomeIcon>
+                                    <div className='ps-2'>Change Password</div>
                                 </button>
                             </div>
                             :
@@ -134,7 +211,7 @@ function Account() {
                                 </div>
                                 <div className={`${styles.stats_data} mb-2`}>
                                     <div className='mb-2'>Technology:</div>
-                                    <TagsComponent data={currentUserData.techTags}></TagsComponent>
+                                    <TagsComponent type='tags' data={currentUserData.techTags}></TagsComponent>
                                 </div>
                             </div>
                         </div>
@@ -204,6 +281,17 @@ function Account() {
             :
             undefined
         }
+
+        <ModalComponent
+            header='Change Password'
+            visible={updateForm}
+            setShow={setUpdateForm}
+        >
+            <EditAccount
+                setShow={setUpdateForm}
+                userData={userData}
+            ></EditAccount>
+        </ModalComponent>
     </div>
 }
 

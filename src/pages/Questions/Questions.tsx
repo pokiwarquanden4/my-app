@@ -65,7 +65,7 @@ function Questions() {
                         <div className={`${styles.sumary} mb-3`}>{item.subTitle}</div>
                     </div>
                     <div className='d-flex justify-content-between align-items-center'>
-                        <TagsComponent data={item.tags}></TagsComponent>
+                        <TagsComponent type='tags' data={item.tags}></TagsComponent>
                         <div className={`pt-2 d-flex justify-content-end ${styles.content_footer}`}>
                             <div className={`d-flex align-items-center ${styles.account}`}>
                                 <Avatar name='Quang' size='30' src={''}></Avatar>

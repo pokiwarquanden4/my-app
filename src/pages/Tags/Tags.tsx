@@ -58,7 +58,7 @@ function Tags() {
             {tagsShort.map((tag, index) => {
                 return <div key={index} className={`col-6 col-lg-4 ${styles.contents_tag}`}>
                     <div className={`${styles.contents_tag_wrapper} pt-2`}>
-                        <TagsComponent data={[tag.value]}></TagsComponent>
+                        <TagsComponent type='tags' data={[tag.value]}></TagsComponent>
                         <div className={`pt-2 ${styles.content} mb-2`}>{tag.description}</div>
                     </div>
                 </div>

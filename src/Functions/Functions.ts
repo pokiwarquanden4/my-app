@@ -36,3 +36,8 @@ export const toolBarSmallOptions = [
     [{ 'color': [] }],
     [{ 'font': [] }],
 ];
+
+export const validPassword = (input: string): boolean => {
+    const regex = /^.{11,}$/;
+    return regex.test(input);
+}

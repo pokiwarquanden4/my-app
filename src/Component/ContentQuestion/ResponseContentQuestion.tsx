@@ -9,6 +9,7 @@ import ModalComponent from '../Modal/ModalComponent';
 import UpdateResponse from '../UpdateResponse/UpdateResponse';
 import { useAppSelector } from '../../App/hook';
 import UserNameLink from '../UserNameLink/UserNameLink';
+import parse from 'html-react-parser';
 
 interface IContentQuestion {
     onFollowReponse: (responseId: string, follow: boolean) => void
@@ -180,8 +181,8 @@ function ResponseContentQuestion(props: IContentQuestion) {
             <div className={`${styles.answers} mt-3`}>
                 {props.comment.map((answer, index) => {
                     return <div key={index} className={`ps-4 d-flex align-items-center ${styles.answer} py-2`}>
-                        <div className={`${styles.answer_content} pe-2`}>{answer.content}</div>
-                        <TagsComponent data={[answer.userId]}></TagsComponent>
+                        <div className={`${styles.answer_content} pe-2`}>{parse(answer.content)}</div>
+                        <TagsComponent type='user' data={[answer.userId]}></TagsComponent>
                     </div>
                 })}
             </div>
