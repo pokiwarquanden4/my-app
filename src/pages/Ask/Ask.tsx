@@ -7,9 +7,12 @@ import ReactTagsComponent from '../../Component/ReactTags/ReactTagsComponent';
 import { toolbarOptions } from '../../Functions/Functions';
 import { createPosts } from '../Questions/QuestionsAPI';
 import styles from './Ask.module.scss';
+import { useNavigate } from 'react-router-dom';
+import { routes } from '../pages/pages';
 
 function Ask() {
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
     const [content, setContent] = useState<string>('');
     const [title, setTitle] = useState<string>('')
     const [subTitle, setSubTitle] = useState<string>('')
@@ -17,13 +20,19 @@ function Ask() {
     const [contentFocus, setContentFocus] = useState<boolean>(false)
 
     const onSubmit = useCallback(async () => {
-        dispatch(createPosts({
+        const res = await dispatch(createPosts({
             title: title,
             subTitle: subTitle,
             content: content,
             tags: tags.map((tag) => tag.text)
         }))
-    }, [content, dispatch, subTitle, tags, title])
+
+        if (res.payload.status === 200) {
+            navigate(routes.questionDetail.replace(':questionId', res.payload.data.postId));
+        }
+
+
+    }, [content, dispatch, navigate, subTitle, tags, title])
 
     return <div className={`pb-4 ${styles.wrapper}`}>
         <div className={`h4 ${styles.header}`}>

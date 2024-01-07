@@ -62,7 +62,7 @@ function ResponseContentQuestion(props: IContentQuestion) {
         <style>
             {`
             .ql-container {
-                height: 200px;
+                min-height: 200px;
             }
             .ql-container.ql-snow { 
                 border: none !important;
@@ -168,6 +168,7 @@ function ResponseContentQuestion(props: IContentQuestion) {
                         className="btn btn-primary"
                         onClick={() => {
                             props.onCreateComment(props.responseData._id, commentContent as string, setShowComment)
+                            setSmallComment(!smallComment)
                         }}>
                         Submit
                     </button>

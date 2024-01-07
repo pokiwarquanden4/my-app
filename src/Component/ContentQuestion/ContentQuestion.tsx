@@ -58,7 +58,7 @@ function ContentQuestion(props: IContentQuestion) {
         <style>
             {`
             .ql-container {
-                height: 200px;
+                min-height: 200px;
             }
             .ql-container.ql-snow { 
                 border: none !important;
@@ -159,6 +159,7 @@ function ContentQuestion(props: IContentQuestion) {
                             className="btn btn-primary"
                             onClick={() => {
                                 props.onCreateResponse(commentContent as string)
+                                setCommentVisible(!commentVisible)
                             }}>
                             Submit
                         </button>

@@ -7,6 +7,12 @@ import styles from './QuestionDetails.module.scss';
 import { IPost, IResponse, createResponse, getPostById, updatePost, updateReponse } from './QuestionDetailsAPI';
 import { formatTimeAgo } from '../../Functions/Functions';
 import { followPost, followResponse, rateResponse, unFollowPost, unFollowResponse, unRateResponse } from '../Questions/QuestionsAPI';
+import { faEllipsis, faFlag } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
+import ModalComponent from '../../Component/Modal/ModalComponent';
+import QuestionReport from './QuestionReport/QuestionReport';
 
 const sortData = [
     {
@@ -37,6 +43,7 @@ function QuestionDetails() {
     const [questionDetails, setQuestionDetails] = useState<IPost>()
     const [responses, setReponses] = useState<IResponse[]>([])
     const userDetails = useAppSelector(store => store.user.data)
+    const [reportSchow, setReportShow] = useState<boolean>(false)
 
     const onUpdateResponse = useCallback(async (responseId: string, content: string, show: Dispatch<SetStateAction<boolean>>) => {
         const res = await dispatch(updateReponse({
@@ -186,11 +193,32 @@ function QuestionDetails() {
 
     }, [dispatch, questionDetails?._id, userDetails.account])
 
+    const options = useCallback(() => {
+        return <div
+            className={`d-flex align-items-center p-2 ${styles.tippy}`}
+            style={{ cursor: 'pointer' }}>
+            <FontAwesomeIcon icon={faFlag}></FontAwesomeIcon>
+            <div className='ps-2'>Report</div>
+        </div>
+    }, [])
+
     return <div className={`${styles.wrapper} mb-5`}>
         {questionDetails
             ?
             <Fragment>
-                <div className={`${styles.header} h4`}>{questionDetails.title}</div>
+                <div className={`${styles.header} h4 d-flex justify-content-between align-items-center`}>
+                    {questionDetails.title}
+                    <Tippy
+                        content={options()}>
+                        <FontAwesomeIcon
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => {
+                                setReportShow(true)
+                            }}
+                            icon={faEllipsis}
+                        ></FontAwesomeIcon>
+                    </Tippy>
+                </div>
                 <div className={`${styles.subHeader} mb-2`}>{questionDetails.subTitle}</div>
                 <div className={`d-flex ${styles.header_detail} pb-2`}>
                     <div className={`${styles.time_asked}`}>Asked: {formatTimeAgo(new Date(questionDetails.createdAt))}</div>
@@ -227,6 +255,16 @@ function QuestionDetails() {
                         setReponses={setReponses}
                     ></Comment>
                 </div>
+                <ModalComponent
+                    header='Report Form'
+                    visible={reportSchow}
+                    setShow={setReportShow}
+                >
+                    <QuestionReport
+                        setReportShow={setReportShow}
+                        postId={postId}
+                    ></QuestionReport>
+                </ModalComponent>
             </Fragment>
             :
             undefined
