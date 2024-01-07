@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getTags } from "../pages/Questions/QuestionsAPI";
+import { Tag } from "react-tag-input";
 
 export interface ITags {
     value: string,
@@ -10,18 +11,22 @@ export interface ITags {
 interface IDataSlice {
     tags: string[]
     tagsDetails: ITags[]
+    filterTags: Tag[]
 }
 
 const initialState: IDataSlice = {
     tags: [],
-    tagsDetails: []
+    tagsDetails: [],
+    filterTags: []
 }
 
 const DataSlice = createSlice({
     name: 'data',
     initialState,
     reducers: {
-
+        updateFilterTags: (state, action) => {
+            state.filterTags = action.payload
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(getTags.fulfilled, (state, action: any) => {
@@ -31,4 +36,5 @@ const DataSlice = createSlice({
     }
 })
 
+export const { updateFilterTags } = DataSlice.actions
 export default DataSlice.reducer

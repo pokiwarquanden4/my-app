@@ -48,7 +48,6 @@ function Header() {
     }, []);
 
     const logout = useCallback(() => {
-        console.log('in')
         const cookies = new Cookies()
         cookies.remove('token')
         cookies.remove('refresh_token')
@@ -134,7 +133,7 @@ function Header() {
                 <FontAwesomeIcon
                     onClick={() => {
                         if (userName) {
-                            navigate(routes.account)
+                            navigate(routes.account.replace(':account', userName),)
                         } else {
                             setLoginShow(true)
                         }

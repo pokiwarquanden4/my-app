@@ -6,8 +6,9 @@ import ContentQuestion from '../../Component/ContentQuestion/ContentQuestion';
 import styles from './QuestionDetails.module.scss';
 import { IPost, IResponse, createResponse, getPostById, updatePost, updateReponse } from './QuestionDetailsAPI';
 import { formatTimeAgo } from '../../Functions/Functions';
-import { followPost, followResponse, rateResponse, unFollowPost, unFollowResponse, unRateResponse } from '../Questions/QuestionsAPI';
-import { faEllipsis, faFlag } from '@fortawesome/free-solid-svg-icons'
+import { followPost, followResponse, ratePost, rateResponse, unFollowPost, unFollowResponse, unRatePost, unRateResponse } from '../Questions/QuestionsAPI';
+import { faEllipsis, faFlag, faHeart as faHeartFill } from '@fortawesome/free-solid-svg-icons'
+import { faHeart as faHeartNormal } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
@@ -39,6 +40,9 @@ function QuestionDetails() {
     const postId = useMemo(() => {
         return params.questionId
     }, [params.questionId])
+    const responseId = useMemo(() => {
+        return params.responseId
+    }, [params.responseId])
     const [sortBy, setSortBy] = useState<string>('1')
     const [questionDetails, setQuestionDetails] = useState<IPost>()
     const [responses, setReponses] = useState<IResponse[]>([])
@@ -151,6 +155,40 @@ function QuestionDetails() {
 
     }, [dispatch, questionDetails])
 
+    const onRatePost = useCallback(async (follow: boolean) => {
+        if (!postId) return
+        if (follow) {
+            const res = await dispatch(ratePost({
+                postId: postId
+            }))
+
+            if (res.payload.status === 200) {
+                setQuestionDetails((preVal) => {
+                    if (preVal)
+                        return {
+                            ...preVal,
+                            rate: [...preVal.rate, res.payload.data.account]
+                        }
+                })
+            }
+        } else {
+            const res = await dispatch(unRatePost({
+                postId: postId
+            }))
+
+            if (res.payload.status === 200) {
+                setQuestionDetails((preVal) => {
+                    if (preVal) {
+                        return {
+                            ...preVal,
+                            rate: preVal.rate.filter(userName => userName !== res.payload.data.account),
+                        };
+                    }
+                });
+            }
+        }
+    }, [dispatch, postId])
+
     const onRateReponse = useCallback(async (responseId: string, follow: boolean) => {
         if (!questionDetails?._id || !responseId) return
         if (follow) {
@@ -220,9 +258,31 @@ function QuestionDetails() {
                     </Tippy>
                 </div>
                 <div className={`${styles.subHeader} mb-2`}>{questionDetails.subTitle}</div>
-                <div className={`d-flex ${styles.header_detail} pb-2`}>
-                    <div className={`${styles.time_asked}`}>Asked: {formatTimeAgo(new Date(questionDetails.createdAt))}</div>
-                    <div className={`ps-4 ${styles.time_modified}`}>Modified: {formatTimeAgo(new Date(questionDetails.updatedAt))}</div>
+                <div className={`d-flex ${styles.header_detail} pb-2 justify-content-between`}>
+                    <div className='d-flex'>
+                        <div className={`${styles.time_asked}`}>Asked: {formatTimeAgo(new Date(questionDetails.createdAt))}</div>
+                        <div className={`ps-4 ${styles.time_modified}`}>Modified: {formatTimeAgo(new Date(questionDetails.updatedAt))}</div>
+                    </div>
+                    <div style={{ cursor: 'pointer' }}>
+                        {questionDetails.rate.includes(userDetails.account)
+                            ?
+                            <FontAwesomeIcon
+                                onClick={() => {
+                                    onRatePost(false)
+                                }}
+                                className={styles.heart_icon}
+                                icon={faHeartFill}
+                            ></FontAwesomeIcon>
+                            :
+                            <FontAwesomeIcon
+                                onClick={() => {
+                                    onRatePost(true)
+                                }}
+                                className={styles.heart_icon}
+                                icon={faHeartNormal}
+                            ></FontAwesomeIcon>
+                        }
+                    </div>
                 </div>
                 <ContentQuestion
                     onFollowPost={onFollowPost}
@@ -246,6 +306,7 @@ function QuestionDetails() {
                         </div>
                     </div>
                     <Comment
+                        responseId={responseId === ':responseId' ? undefined : responseId}
                         questionOwner={questionDetails.userId}
                         onRateReponse={onRateReponse}
                         onFollowReponse={onFollowReponse}

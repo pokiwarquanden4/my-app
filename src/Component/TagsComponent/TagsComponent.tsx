@@ -2,6 +2,8 @@ import { useCallback } from 'react'
 import styles from './TagsComponent.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { routes } from '../../pages/pages/pages'
+import { useAppDispatch } from '../../App/hook'
+import { updateFilterTags } from '../../Reducers/DataSlice'
 
 type ITagComponent = {
     type: string
@@ -9,6 +11,7 @@ type ITagComponent = {
 }
 
 function TagsComponent(props: ITagComponent) {
+    const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
     const onMovePage = useCallback((input: string) => {
@@ -16,8 +19,15 @@ function TagsComponent(props: ITagComponent) {
             case 'user':
                 navigate(routes.account.replace(':account', input))
                 break
+            case 'tags':
+                navigate(routes.questions)
+                dispatch(updateFilterTags([{
+                    id: '0',
+                    text: input
+                }]))
+                break
         }
-    }, [navigate, props.type])
+    }, [dispatch, navigate, props.type])
 
     return <div className={`d-flex ${styles.tags}`}>
         {props.data.map((item, index) => {

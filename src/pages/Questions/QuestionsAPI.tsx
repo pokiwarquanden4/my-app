@@ -5,6 +5,7 @@ interface IGetPosts {
     number: number,
     type: string
     searchVal: string
+    tags: string[]
 }
 
 export const getTags = createAsyncThunk<any, {}>(
@@ -41,7 +42,7 @@ export interface IPostsResponse {
 export const getPosts = createAsyncThunk<IPostsResponse, IGetPosts>(
     "/get/posts",
     async (payload, thunkApi) => {
-        const res: IPostsResponse = await sendRequest(`posts/posts?number=${payload.number}&type=${payload.type}&searchVal=${payload.searchVal}`, {
+        const res: IPostsResponse = await sendRequest(`posts/posts?number=${payload.number}&type=${payload.type}&searchVal=${payload.searchVal}&tags=${payload.tags}`, {
             thunkApi,
             method: "GET"
         })
@@ -164,6 +165,34 @@ export const vertifyResponse = createAsyncThunk<any, IVertifyResponse>(
             thunkApi,
             payload: payload,
             method: "PUT"
+        })
+        return res
+    }
+)
+
+interface IRatePost {
+    postId: string
+}
+
+export const ratePost = createAsyncThunk<any, IRatePost>(
+    "/rate/post",
+    async (payload, thunkApi) => {
+        const res = await sendRequest(`posts/rate/post`, {
+            thunkApi,
+            payload: payload,
+            method: "POST"
+        })
+        return res
+    }
+)
+
+export const unRatePost = createAsyncThunk<any, IRatePost>(
+    "/rate/unPost",
+    async (payload, thunkApi) => {
+        const res = await sendRequest(`posts/rate/unPost`, {
+            thunkApi,
+            payload: payload,
+            method: "POST"
         })
         return res
     }

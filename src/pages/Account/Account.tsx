@@ -258,7 +258,7 @@ function Account() {
                                             key={index}
                                             className={`${styles.item} border rounded-1 p-2 d-flex align-items-center justify-content-between`}
                                             onClick={() => {
-                                                navigate(routes.questionDetail.replace(':questionId', item.post));
+                                                navigate(routes.questionDetail.replace(':questionId', item.post).replace(':responseId', item._id));
                                             }}
                                         >
                                             <div className='d-flex align-items-center'>

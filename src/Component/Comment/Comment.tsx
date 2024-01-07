@@ -1,7 +1,7 @@
 import { faFlag as faFlagNormal, faHeart as faHeartNormal } from '@fortawesome/free-regular-svg-icons'
 import { faCheck, faFlag as faFlagFill, faHeart as faHeartFill } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../App/hook'
 import { IComment, IResponse, createComment, getCommentInResponse } from '../../pages/QuestionDetails/QuestionDetailsAPI'
 import ResponseContentQuestion from '../ContentQuestion/ResponseContentQuestion'
@@ -9,6 +9,7 @@ import styles from './Comment.module.scss'
 import { vertifyResponse } from '../../pages/Questions/QuestionsAPI'
 
 interface ICommentProps {
+    responseId: string | undefined
     questionOwner: string
     onRateReponse: (responseId: string, follow: boolean) => void
     onFollowReponse: (responseId: string, follow: boolean) => void
@@ -24,6 +25,7 @@ function Comment(props: ICommentProps) {
     const [comment, setComment] = useState<Record<string, IComment[]>>({})
     const [shortResponse, setShortResponse] = useState<IResponse[]>([])
     const userDetails = useAppSelector(store => store.user.data)
+    const scrollRef = useRef<Record<string, HTMLDivElement | null>>({})
 
     const onGetComment = useCallback(async (responseId: string, setShowComment: Dispatch<SetStateAction<boolean>>) => {
         if (responseId && !comment[responseId]) {
@@ -110,9 +112,21 @@ function Comment(props: ICommentProps) {
         }
     }, [dispatch, props, userDetails.account])
 
+    useEffect(() => {
+        setTimeout(() => {
+            if (!props.responseId || !scrollRef.current[props.responseId]) return
+            (scrollRef.current[props.responseId] as HTMLDivElement).scrollIntoView({
+                behavior: "smooth"
+            })
+        }, 1)
+    }, [props.responseId])
+
     return <div className={` ${styles.wrapper}`}>
         {shortResponse.map((response, index) => {
-            return <div className='pt-4 d-flex' key={index}>
+            return <div
+                ref={el => scrollRef.current[response._id] = el}
+                className='pt-4 d-flex'
+                key={index}>
                 <div className={`${styles.options} text-center p-2`}>
                     <div className={styles.heart}>
                         {response.rate.includes(userDetails.account)

@@ -3,8 +3,10 @@ import OptionsListButton from '../../Component/OptionsListButton/OptionsListButt
 import SearchBar from '../../Component/SearchBar/SearchBar'
 import TagsComponent from '../../Component/TagsComponent/TagsComponent'
 import styles from './Tags.module.scss'
-import { useAppSelector } from '../../App/hook'
-import { ITags } from '../../Reducers/DataSlice'
+import { useAppDispatch, useAppSelector } from '../../App/hook'
+import { ITags, updateFilterTags } from '../../Reducers/DataSlice'
+import { useNavigate } from 'react-router-dom'
+import { routes } from '../pages/pages'
 
 const filterLists = [
     {
@@ -19,6 +21,8 @@ const filterLists = [
 
 
 function Tags() {
+    const navigate = useNavigate()
+    const dispatch = useAppDispatch()
     const [focus, setFocus] = useState<number>(0)
     const [searchVal, setSearchVal] = useState<string>('')
     const tagsDetails = useAppSelector(store => store.data.tagsDetails)
@@ -56,7 +60,17 @@ function Tags() {
         </div>
         <div className={`row pt-3 gy-3 ${styles.contents}`}>
             {tagsShort.map((tag, index) => {
-                return <div key={index} className={`col-6 col-lg-4 ${styles.contents_tag}`}>
+                return <div
+                    onClick={() => {
+                        navigate(routes.questions)
+                        dispatch(updateFilterTags([{
+                            id: '0',
+                            text: tag.value
+                        }]))
+                    }}
+                    key={index}
+                    className={`col-6 col-lg-4 ${styles.contents_tag}`}
+                >
                     <div className={`${styles.contents_tag_wrapper} pt-2`}>
                         <TagsComponent type='tags' data={[tag.value]}></TagsComponent>
                         <div className={`pt-2 ${styles.content} mb-2`}>{tag.description}</div>

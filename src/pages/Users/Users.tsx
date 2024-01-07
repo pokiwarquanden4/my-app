@@ -7,6 +7,9 @@ import { useAppDispatch } from '../../App/hook'
 import { getUsersPaging } from './UsersAPI'
 import Paging from '../../Component/Paging/Paging'
 import UserNameLink from '../../Component/UserNameLink/UserNameLink'
+import { useNavigate } from 'react-router-dom'
+import { routes } from '../pages/pages'
+import { updateFilterTags } from '../../Reducers/DataSlice'
 
 interface IUsersSimpleData {
     name: string,
@@ -31,6 +34,7 @@ const filterLists = [
 
 function Users() {
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
     const [focus, setFocus] = useState<number>(0)
     const [searchVal, setSearchVal] = useState<string>('')
     const [usersSimpleData, setUsersSimpleData] = useState<IUsersSimpleData[]>([])
@@ -80,8 +84,20 @@ function Users() {
                     </div>
                     <div>
                         <div className={`${styles.tags} pb-1`}>
-                            {item.techTags.map((tag) => {
-                                return <a className={`${styles.tag}`} href='/'>{tag}</a>
+                            {item.techTags.map((tag, index) => {
+                                // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                                return <a
+                                    key={index}
+                                    style={{ cursor: 'pointer' }}
+                                    className={`${styles.tag}`}
+                                    onClick={() => {
+                                        navigate(routes.questions)
+                                        dispatch(updateFilterTags([{
+                                            id: '0',
+                                            text: tag
+                                        }]))
+                                    }}
+                                >{tag}</a>
                             })}
                         </div>
                         <div className={`${styles.postNumber} pb-1`}>Questions: {item.postNumber}</div>

@@ -9,7 +9,7 @@ import Users from "../Users/Users";
 export const routes = {
   home: '/',
   questions: '/questions',
-  questionDetail: '/questions/:questionId',
+  questionDetail: '/questions/:questionId/:responseId',
   tags: '/tags',
   users: '/users',
   ask: '/questions/ask',

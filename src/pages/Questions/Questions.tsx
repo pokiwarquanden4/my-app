@@ -1,5 +1,5 @@
 import styles from './Questions.module.scss'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import OptionsListButton from '../../Component/OptionsListButton/OptionsListButton';
 import TagsComponent from '../../Component/TagsComponent/TagsComponent';
 import Avatar from '../../Component/Avatar/Avatar';
@@ -12,6 +12,9 @@ import { useNavigate } from 'react-router-dom';
 import { routes } from '../pages/pages';
 import { loginShow } from '../../Reducers/UserSlice';
 import UserNameLink from '../../Component/UserNameLink/UserNameLink';
+import { Tag } from 'react-tag-input';
+import ReactTagsComponent from '../../Component/ReactTags/ReactTagsComponent';
+import { updateFilterTags } from '../../Reducers/DataSlice';
 
 const filterList = [
     {
@@ -42,6 +45,9 @@ function Questions() {
     const [searchVal, setSearchVal] = useState<string>('')
     const searchValDelayRef = useRef<string>('')
     const userName = useAppSelector(store => store.user.data.account)
+    const [showFilterByTags, setShowFilterByTags] = useState<boolean>(false)
+    const filterTags = useAppSelector(store => store.data.filterTags)
+    const [tags, setTags] = useState<Tag[]>(filterTags)
 
     useLayoutEffect(() => {
         const newPageData = data.map((item, index) => {
@@ -89,7 +95,8 @@ function Questions() {
             const res = await dispatch(getPosts({
                 number: currentPage,
                 type: filterList[focus].name,
-                searchVal: searchVal
+                searchVal: searchVal,
+                tags: filterTags.map((tag) => tag.text)
             }))
             const payload = res.payload as IPostsResponse
 
@@ -108,7 +115,19 @@ function Questions() {
                 clearTimeout(timeout)
             }
         }
-    }, [currentPage, dispatch, focus, searchVal])
+    }, [currentPage, dispatch, filterTags, focus, searchVal])
+
+    const onFilterTags = useCallback(() => {
+        dispatch(updateFilterTags(tags))
+        setShowFilterByTags(false)
+    }, [dispatch, tags])
+
+
+    useEffect(() => {
+        return () => {
+            dispatch(updateFilterTags([]))
+        }
+    }, [dispatch])
 
     return <div className={`${styles.content}`}>
         <div className={`d-flex justify-content-between align-items-center ${styles.content_header}`}>
@@ -132,14 +151,39 @@ function Questions() {
                 setSearchVal={setSearchVal}
             ></SearchBar>
         </div>
-        <div className={`d-flex pb-3 align-items-center justify-content-between pt-3 ${styles.content_filter}`}>
-            <div className={`${styles.questions_number}`}>{dataLength} questions</div>
-            <div className={`${styles.questions_filter_items} d-flex flex-wrap`}>
-                <OptionsListButton
-                    focus={focus}
-                    setFocus={setFocus}
-                    data={filterList}
-                ></OptionsListButton>
+        <div className={`pb-3 pt-3 ${styles.content_filter}`}>
+            <div className='d-flex align-items-center justify-content-between'>
+                <div className={`${styles.questions_number}`}>{dataLength} questions</div>
+                <div className={`${styles.questions_filter_items} d-flex flex-wrap`}>
+                    <OptionsListButton
+                        focus={focus}
+                        setFocus={setFocus}
+                        data={filterList}
+                    ></OptionsListButton>
+                    <button
+                        onClick={() => {
+                            if (!showFilterByTags) setTags(filterTags)
+                            setShowFilterByTags(!showFilterByTags)
+                        }}
+                        type="button"
+                        className={`btn btn-outline-secondary ms-1`}>
+                        Filter
+                    </button>
+                </div>
+            </div>
+            <div className={`${styles.filter_tags} ${showFilterByTags ? styles.filter_tags_show : styles.filter_tags_hide}`}>
+                <div className='pt-3'>
+                    <label htmlFor="tagsInput" className="form-label">
+                        <div className={`h6 ${styles.title_header}`}>Filter By Tags</div>
+                    </label>
+                    <ReactTagsComponent
+                        tags={tags}
+                        setTags={setTags}
+                    ></ReactTagsComponent>
+                </div>
+                <div className={`${styles.submit} pt-4`}>
+                    <button type="button" className="btn btn-primary" onClick={onFilterTags}>Apply Filter</button>
+                </div>
             </div>
         </div>
         <div className={`${styles.content_lists}`}>
