@@ -16,13 +16,15 @@ export function useFectStartData() {
 
     const handleGetDefaultData = useCallback(async () => {
         const token = cookies.get('token') || cookies.get('refresh_token')
-        if (!token) return
-
         let allPromises = []
+
         if (!tagsRef.current) {
             allPromises.push(dispatch(getTags({})))
             tagsRef.current = true
         }
+
+        if (!token) return
+
         if (!userDetailsRef.current) {
             allPromises.push(dispatch(getUserAllDetails({})))
             userDetailsRef.current = true

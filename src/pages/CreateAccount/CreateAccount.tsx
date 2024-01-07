@@ -1,14 +1,14 @@
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Tag } from 'react-tag-input';
 import { useAppDispatch } from '../../App/hook';
 import ModalComponent from '../../Component/Modal/ModalComponent';
+import ReactTagsComponent from '../../Component/ReactTags/ReactTagsComponent';
+import { validPassword } from '../../Functions/Functions';
 import LoginPages from '../LoginPages/LoginPages';
 import styles from './CreateAccount.module.scss';
 import { createAccount } from './CreateAccountAPI';
-import { Tag } from 'react-tag-input';
-import ReactTagsComponent from '../../Component/ReactTags/ReactTagsComponent';
-import { validPassword } from '../../Functions/Functions';
 
 export interface ICreateAccount {
     name: string,
@@ -39,7 +39,7 @@ function CreateAccount() {
     const dispatch = useAppDispatch()
     const [tags, setTags] = useState<Tag[]>([])
     const passwordRef = useRef<HTMLInputElement>(null)
-    const [validForm, setValidForm] = useState<boolean>(false)
+    const [loginForm, setLoginForm] = useState<boolean>(false)
     const [form, setForm] = useState<ICreateAccount>(defaultVal)
     const [errors, setErrors] = useState<ICreateAccountErrors>({})
     const [passwordHide, setPasswordHide] = useState<boolean>(false)
@@ -50,19 +50,19 @@ function CreateAccount() {
     }, [])
 
     const setField = useCallback((field: string, value: string | File | string[]) => {
-        setForm({
-            ...form,
+        setForm((prevForm) => ({
+            ...prevForm,
             [field]: value
-        })
-        // Check and see if errors exist, and remove them from the error object:
-        setErrors({
-            ...errors,
-            name: field === "name" && !!(errors.name) ? "" : errors.name,
-            email: field === "email" && !!(errors.email) ? "" : errors.email,
-            account: field === "account" && !!(errors.account) ? "" : errors.account,
-            password: field === "password" && !!(errors.password) ? "" : errors.password
-        })
-    }, [errors, form])
+        }));
+
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            name: field === "name" && !!prevErrors.name ? "" : prevErrors.name,
+            email: field === "email" && !!prevErrors.email ? "" : prevErrors.email,
+            account: field === "account" && !!prevErrors.account ? "" : prevErrors.account,
+            password: field === "password" && !!prevErrors.password ? "" : prevErrors.password
+        }));
+    }, [])
 
     const findFormErrors = useCallback(() => {
         const newErrors: ICreateAccountErrors = {}
@@ -90,16 +90,10 @@ function CreateAccount() {
                 newErrors.password = "Password need at least 10 letter"
             }
         }
-
-        if (Object.keys(newErrors).length === 0) {
-            setValidForm(true)
-        } else {
-            setValidForm(false)
-        }
         return newErrors
     }, [form.account, form.email, form.name, form.password, isValidEmail])
 
-    const handleSubmit = useCallback((e: any) => {
+    const handleSubmit = useCallback(async (e: any) => {
         e.preventDefault()
         const newErrors = findFormErrors()
         // Conditional logic:
@@ -119,7 +113,11 @@ function CreateAccount() {
             }
             form.img && formData.append('img', form.img);
 
-            dispatch(createAccount(formData))
+            const res = await dispatch(createAccount(formData))
+
+            if (res.payload.status === 200) {
+                setLoginForm(true)
+            }
         }
     }, [dispatch, findFormErrors, form])
 
@@ -231,20 +229,14 @@ function CreateAccount() {
                     <button className="btn btn-primary" type="submit" onClick={handleSubmit}>Submit form</button>
                 </div>
             </form>
-            {/* <ModalComponent
-                header='Vertify code'
-                confirm='Confirm'
-                visible={validForm}
-                setLoginShow={setValidForm}
-            > */}
-            {/* <VertifiCode></VertifiCode> */}
-            {/* </ModalComponent> */}
             <ModalComponent
                 header='Login Form'
-                visible={validForm}
-                setShow={setValidForm}
+                visible={loginForm}
+                setShow={setLoginForm}
             >
-                <LoginPages setLoginShow={setValidForm}></LoginPages>
+                <LoginPages
+                    setLoginShow={setLoginForm}
+                ></LoginPages>
             </ModalComponent>
         </div>
     );

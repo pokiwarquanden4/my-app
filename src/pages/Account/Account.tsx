@@ -252,7 +252,7 @@ function Account() {
                             }
                             {focus === 1
                                 ?
-                                currentUserData.userResponse ?
+                                currentUserData.userResponse.length ?
                                     currentUserData.userResponse.map((item, index) => {
                                         return <div
                                             key={index}

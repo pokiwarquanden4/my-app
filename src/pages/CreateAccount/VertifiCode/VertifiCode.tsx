@@ -1,30 +1,39 @@
-import { useCallback, useState } from 'react'
+import { Dispatch, SetStateAction, useCallback, useState } from 'react'
 import styles from './VertifiCode.module.scss'
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
+import { useAppDispatch } from '../../../App/hook';
+import { vertifiOtp } from '../../LoginPages/LoginAPI';
+import { showAlert } from '../../../Component/Alert/Alert';
 
 interface IVertifiCode {
     code?: string
 }
 
-function VertifiCode() {
+interface IVertify {
+    setVertifiForm: Dispatch<SetStateAction<boolean>>
+    accountName: string
+}
+
+function VertifiCode(props: IVertify) {
+    const dispatch = useAppDispatch()
     const [form, setForm] = useState<IVertifiCode>({})
     const [errors, setErrors] = useState<IVertifiCode>({})
 
     const setField = useCallback((field: string, value: string) => {
-        setForm({
-            ...form,
+        setForm((prevForm) => ({
+            ...prevForm,
             [field]: value
-        })
-        // Check and see if errors exist, and remove them from the error object:
-        setErrors({
-            ...errors,
-            code: field === "code" && !!(errors.code) ? "" : errors.code,
-        })
-    }, [errors, form])
+        }));
+
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            code: field === "code" && !!prevErrors.code ? "" : prevErrors.code,
+        }));
+    }, [])
 
     const findFormErrors = useCallback(() => {
         const newErrors: IVertifiCode = {}
@@ -36,15 +45,25 @@ function VertifiCode() {
         return newErrors
     }, [form.code])
 
-    const handleSubmit = useCallback((e: any) => {
+    const handleSubmit = useCallback(async (e: any) => {
         e.preventDefault()
         const newErrors = findFormErrors()
         // Conditional logic:
         if (Object.keys(newErrors).length > 0) {
             // We got errors!
             setErrors(newErrors)
+        } else {
+            const res = await dispatch(vertifiOtp({
+                account: props.accountName,
+                otp: form.code as string
+            }))
+
+            if (res.payload.status === 200) {
+                props.setVertifiForm(false)
+                showAlert("Please check your new password in email")
+            }
         }
-    }, [findFormErrors])
+    }, [dispatch, findFormErrors, form.code, props])
 
     return (
         <Form noValidate onSubmit={handleSubmit}>

@@ -38,17 +38,18 @@ function EditAccount(props: IEditAccountProps) {
     const [oldPasswordHide, setOldPasswordHide] = useState<boolean>(false)
 
     const setField = useCallback((field: string, value: string | File | string[]) => {
-        setForm({
-            ...form,
+        setForm((prevForm) => ({
+            ...prevForm,
             [field]: value
-        })
-        // Check and see if errors exist, and remove them from the error object:
-        setErrors({
-            ...errors,
-            newpassword: field === "password" && !!(errors.newpassword) ? "" : errors.newpassword,
-            oldpassword: field === "password" && !!(errors.oldpassword) ? "" : errors.oldpassword
-        })
-    }, [errors, form])
+        }));
+
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            newpassword: field === "password" && !!prevErrors.newpassword ? "" : prevErrors.newpassword,
+            oldpassword: field === "password" && !!prevErrors.oldpassword ? "" : prevErrors.oldpassword
+        }));
+
+    }, [])
 
     useEffect(() => {
         if (!newPasswordRef.current) return
