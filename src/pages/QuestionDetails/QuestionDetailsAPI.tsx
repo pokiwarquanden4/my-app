@@ -134,3 +134,16 @@ export const updateReponse = createAsyncThunk<any, IUpdateResponse>(
 )
 
 
+export const deletePost = createAsyncThunk<any, { postId: string }>(
+    "/posts/delete-post",
+    async (payload, thunkApi) => {
+        const res: any = await sendRequest(`posts/delete/post`, {
+            thunkApi,
+            payload: payload,
+            method: "POST"
+        })
+        return res
+    }
+)
+
+

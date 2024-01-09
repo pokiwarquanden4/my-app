@@ -9,8 +9,8 @@ interface IAvatar {
 
 function Avatar(props: IAvatar) {
     const avatarStyle = {
-        width: props.size ? `${props.size}px` : undefined,
-        height: props.size ? `${props.size}px` : undefined,
+        width: props.size ? `${props.size}px` : '100%',
+        height: props.size ? `${props.size}px` : '100%',
         minWidth: props.size ? `${props.size}px` : undefined,
         borderRadius: props.noRadius ? '0' : '50%',
     };
@@ -24,7 +24,7 @@ function Avatar(props: IAvatar) {
             <img alt={'avatar'} className={styles.account_img} src={props.src}></img>
             :
             <div className={`${styles.account_img} position-relative`}>
-                <div className={styles.account_img_content}>{props.name.charAt(0)}</div>
+                <div className={styles.account_img_content}>{props.name.charAt(0).toUpperCase()}</div>
             </div>
         }
     </div>

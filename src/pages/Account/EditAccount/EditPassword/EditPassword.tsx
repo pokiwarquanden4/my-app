@@ -1,13 +1,11 @@
-import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
-import ReactTagsComponent from '../../../Component/ReactTags/ReactTagsComponent'
-import styles from './EditAccount.module.scss'
-import { Tag } from 'react-tag-input'
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import { useAppDispatch } from '../../../App/hook'
-import { validPassword } from '../../../Functions/Functions'
-import { updateUserProfile } from '../AccountAPI'
-import { IUserLogin } from '../../../Reducers/UserSlice'
+import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
+import { useAppDispatch } from '../../../../App/hook'
+import { validPassword } from '../../../../Functions/Functions'
+import { IUserLogin } from '../../../../Reducers/UserSlice'
+import { updateUserProfile } from '../../AccountAPI'
+import styles from './EditPassword.module.scss'
 
 interface IEditAccount {
     oldpassword: string
@@ -25,7 +23,7 @@ interface IEditAccountProps {
 }
 
 
-function EditAccount(props: IEditAccountProps) {
+function EditPassword(props: IEditAccountProps) {
     const dispatch = useAppDispatch()
     const newPasswordRef = useRef<HTMLInputElement>(null)
     const oldPasswordRef = useRef<HTMLInputElement>(null)
@@ -168,4 +166,4 @@ function EditAccount(props: IEditAccountProps) {
     </div>
 }
 
-export default EditAccount
+export default EditPassword

@@ -122,7 +122,6 @@ function Questions() {
         setShowFilterByTags(false)
     }, [dispatch, tags])
 
-
     useEffect(() => {
         return () => {
             dispatch(updateFilterTags([]))

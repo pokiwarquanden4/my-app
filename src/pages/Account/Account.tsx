@@ -1,21 +1,23 @@
 import { faHeart } from '@fortawesome/free-regular-svg-icons'
-import { faPen, faLock, faSave } from '@fortawesome/free-solid-svg-icons'
+import { faLock, faPen, faSave } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useAppDispatch, useAppSelector } from '../../App/hook'
-import Avatar from '../../Component/Avatar/Avatar'
-import styles from './Account.module.scss'
+import parse from 'html-react-parser'
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
-import { IPost, IResponse } from '../QuestionDetails/QuestionDetailsAPI'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getUserProfile, updateUserProfile } from './AccountAPI'
-import TagsComponent from '../../Component/TagsComponent/TagsComponent'
-import OptionsListButton from '../../Component/OptionsListButton/OptionsListButton'
-import { formatTimeAgo } from '../../Functions/Functions'
-import { routes } from '../pages/pages'
-import parse from 'html-react-parser';
-import ModalComponent from '../../Component/Modal/ModalComponent'
-import EditAccount from './EditAccount/EditAccount'
+import { useAppDispatch, useAppSelector } from '../../App/hook'
 import { showAlert } from '../../Component/Alert/Alert'
+import Avatar from '../../Component/Avatar/Avatar'
+import ModalComponent from '../../Component/Modal/ModalComponent'
+import OptionsListButton from '../../Component/OptionsListButton/OptionsListButton'
+import TagsComponent from '../../Component/TagsComponent/TagsComponent'
+import { formatTimeAgo } from '../../Functions/Functions'
+import { IPost, IResponse } from '../QuestionDetails/QuestionDetailsAPI'
+import { routes } from '../pages/pages'
+import styles from './Account.module.scss'
+import { getUserProfile, updateUserProfile } from './AccountAPI'
+import EditPassword from './EditAccount/EditPassword/EditPassword'
+import EditTech from './EditAccount/EditTech/EditTech'
+import { Tag } from 'react-tag-input'
 
 interface IUserProfile {
     account: string;
@@ -65,8 +67,15 @@ function Account() {
     }, [params.account])
     const [currentUserData, setCurrentUserData] = useState<IUserProfile>()
     const userData = useAppSelector(store => store.user.data)
-    const [updateForm, setUpdateForm] = useState<boolean>(false)
+    const [updatePasswordForm, setUpdatePasswordForm] = useState<boolean>(false)
+    const [updateTechForm, setUpdateTechForm] = useState<boolean>(false)
     const [changeName, setChangeName] = useState<string | undefined>(undefined)
+    const [tags, setTags] = useState<Tag[]>(userData.techTags.map((tag, index) => {
+        return {
+            id: String(index),
+            text: tag
+        }
+    }))
 
     useEffect(() => {
         const func = async (account: string) => {
@@ -102,6 +111,30 @@ function Account() {
         }
 
     }, [dispatch])
+
+    const onEditTech = useCallback(async (e: any) => {
+        e.preventDefault()
+        const formData = new FormData();
+        if (tags) {
+            tags.forEach((tag) => {
+                formData.append('techTags[]', tag.text);
+            })
+        }
+
+        const res = await dispatch(updateUserProfile(formData))
+
+        if (res.payload.status === 200) {
+            setUpdateTechForm(false)
+            setCurrentUserData((preData) => {
+                if (!preData) return
+                return {
+                    ...preData,
+                    techTags: res.payload.data.techTags
+                }
+            })
+        }
+
+    }, [dispatch, tags])
 
     return <div className={styles.wrapper}>
         {currentUserData
@@ -184,7 +217,7 @@ function Account() {
                                     type="button"
                                     className={`btn btn-outline-secondary d-flex align-items-center`}
                                     onClick={() => {
-                                        setUpdateForm(true)
+                                        setUpdatePasswordForm(true)
                                     }}
                                 >
                                     <FontAwesomeIcon icon={faLock}></FontAwesomeIcon>
@@ -210,7 +243,16 @@ function Account() {
                                     Total heart: <span className={`${styles.stats_value} ms-2`}>{currentUserData.heartNumber}</span>
                                 </div>
                                 <div className={`${styles.stats_data} mb-2`}>
-                                    <div className='mb-2'>Technology:</div>
+                                    <div className='d-flex align-items-center mb-2'>
+                                        <div className='pe-2'>Technology</div>
+                                        <FontAwesomeIcon
+                                            onClick={() => {
+                                                setUpdateTechForm(true)
+                                            }}
+                                            icon={faPen}
+                                            style={{ fontSize: '12px', cursor: 'pointer' }}
+                                        ></FontAwesomeIcon>
+                                    </div>
                                     <TagsComponent type='tags' data={currentUserData.techTags}></TagsComponent>
                                 </div>
                             </div>
@@ -284,13 +326,25 @@ function Account() {
 
         <ModalComponent
             header='Change Password'
-            visible={updateForm}
-            setShow={setUpdateForm}
+            visible={updatePasswordForm}
+            setShow={setUpdatePasswordForm}
         >
-            <EditAccount
-                setShow={setUpdateForm}
+            <EditPassword
+                setShow={setUpdatePasswordForm}
                 userData={userData}
-            ></EditAccount>
+            ></EditPassword>
+        </ModalComponent>
+
+        <ModalComponent
+            header='Update Technology'
+            visible={updateTechForm}
+            setShow={setUpdateTechForm}
+        >
+            <EditTech
+                tags={tags}
+                setTags={setTags}
+                onEditTech={onEditTech}
+            ></EditTech>
         </ModalComponent>
     </div>
 }

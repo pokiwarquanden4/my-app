@@ -7,6 +7,7 @@ import { loginShow } from '../../../Reducers/UserSlice';
 export interface IOptionData {
     icon: JSX.Element
     name: string;
+    role: string
     url: string;
     child: IOptionData[];
     loginRequire?: boolean

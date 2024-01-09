@@ -147,6 +147,7 @@ const UserSlice = createSlice({
                 ...state.data,
                 name: action.payload.data.name,
                 avatarURL: action.payload.data.avatarURL,
+                techTags: action.payload.data.techTags
             }
         })
     }

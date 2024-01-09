@@ -1,19 +1,18 @@
 import { Dispatch, Fragment, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../App/hook';
 import Comment from '../../Component/Comment/Comment';
 import ContentQuestion from '../../Component/ContentQuestion/ContentQuestion';
 import styles from './QuestionDetails.module.scss';
-import { IPost, IResponse, createResponse, getPostById, updatePost, updateReponse } from './QuestionDetailsAPI';
+import { IPost, IResponse, createResponse, deletePost, getPostById, updatePost, updateReponse } from './QuestionDetailsAPI';
 import { formatTimeAgo } from '../../Functions/Functions';
 import { followPost, followResponse, ratePost, rateResponse, unFollowPost, unFollowResponse, unRatePost, unRateResponse } from '../Questions/QuestionsAPI';
-import { faEllipsis, faFlag, faHeart as faHeartFill } from '@fortawesome/free-solid-svg-icons'
+import { faFlag, faTrash, faHeart as faHeartFill } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as faHeartNormal } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
 import ModalComponent from '../../Component/Modal/ModalComponent';
 import QuestionReport from './QuestionReport/QuestionReport';
+import { routes } from '../pages/pages';
 
 const sortData = [
     {
@@ -36,6 +35,7 @@ const sortData = [
 
 function QuestionDetails() {
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
     const params = useParams()
     const postId = useMemo(() => {
         return params.questionId
@@ -76,7 +76,7 @@ function QuestionDetails() {
             if (!postId) return
             const res = await dispatch(getPostById(postId))
 
-            if (res) {
+            if (res.payload.status === 200) {
                 setReponses(
                     res.payload.data.post.responses as IResponse[]
                 )
@@ -231,14 +231,16 @@ function QuestionDetails() {
 
     }, [dispatch, questionDetails?._id, userDetails.account])
 
-    const options = useCallback(() => {
-        return <div
-            className={`d-flex align-items-center p-2 ${styles.tippy}`}
-            style={{ cursor: 'pointer' }}>
-            <FontAwesomeIcon icon={faFlag}></FontAwesomeIcon>
-            <div className='ps-2'>Report</div>
-        </div>
-    }, [])
+    const onDeletePost = useCallback((e: any) => {
+        if (!postId) return
+        e.stopPropagation();
+        if (window.confirm('Are sure want to delete?')) {
+            dispatch(deletePost({
+                postId: postId
+            }))
+            navigate(routes.home)
+        }
+    }, [dispatch, navigate, postId])
 
     return <div className={`${styles.wrapper} mb-5`}>
         {questionDetails
@@ -246,16 +248,26 @@ function QuestionDetails() {
             <Fragment>
                 <div className={`${styles.header} h4 d-flex justify-content-between align-items-center`}>
                     {questionDetails.title}
-                    <Tippy
-                        content={options()}>
-                        <FontAwesomeIcon
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => {
-                                setReportShow(true)
-                            }}
-                            icon={faEllipsis}
-                        ></FontAwesomeIcon>
-                    </Tippy>
+                    {userDetails.account !== questionDetails.userId
+                        ?
+                        <div>
+                            <FontAwesomeIcon
+                                style={{ cursor: 'pointer', fontSize: '15px' }}
+                                onClick={() => {
+                                    setReportShow(true)
+                                }}
+                                icon={faFlag}
+                            ></FontAwesomeIcon>
+                            <FontAwesomeIcon
+                                onClick={onDeletePost}
+                                className='ps-3'
+                                style={{ cursor: 'pointer', fontSize: '15px' }}
+                                icon={faTrash}
+                            ></FontAwesomeIcon>
+                        </div>
+                        :
+                        undefined
+                    }
                 </div>
                 <div className={`${styles.subHeader} mb-2`}>{questionDetails.subTitle}</div>
                 <div className={`d-flex ${styles.header_detail} pb-2 justify-content-between`}>
@@ -328,7 +340,7 @@ function QuestionDetails() {
                 </ModalComponent>
             </Fragment>
             :
-            undefined
+            <div className='h4 text-center pt-4'>Post does not exist</div>
         }
     </div>
 }

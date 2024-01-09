@@ -1,8 +1,10 @@
 import Account from "../Account/Account";
+import Advertisement from "../Advertisement/Advertisement";
 import Ask from "../Ask/Ask";
 import CreateAccount from "../CreateAccount/CreateAccount";
 import QuestionDetails from "../QuestionDetails/QuestionDetails";
 import Questions from "../Questions/Questions";
+import Reports from "../Reports/Reports";
 import Tags from "../Tags/Tags";
 import Users from "../Users/Users";
 
@@ -14,7 +16,9 @@ export const routes = {
   users: '/users',
   ask: '/questions/ask',
   account: '/account/:account',
-  createAccount: '/account/createAccount'
+  createAccount: '/account/createAccount',
+  reports: '/reports',
+  advertisement: '/advertisement'
 };
 
 const publicRoutes = [
@@ -25,6 +29,8 @@ const publicRoutes = [
   { path: routes.account, component: Account },
   { path: routes.createAccount, component: CreateAccount },
   { path: routes.questionDetail, component: QuestionDetails },
+  { path: routes.reports, component: Reports },
+  { path: routes.advertisement, component: Advertisement },
 ]
 
 
