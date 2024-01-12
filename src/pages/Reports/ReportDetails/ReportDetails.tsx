@@ -2,17 +2,16 @@ import { Button } from 'react-bootstrap'
 import { IReportsForm } from '../Reports'
 import styles from './ReportDetails.module.scss'
 import { Dispatch, SetStateAction, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { routes } from '../../pages/pages'
 
 interface IReportDetails {
+    onUpdateStatus: (reportId: string, status: number) => void
     status: Record<number, string>
     setShow: Dispatch<SetStateAction<boolean>>
     data: IReportsForm
 }
 
 function ReportDetails(props: IReportDetails) {
-    const navigate = useNavigate()
     const [status, setStatus] = useState<number>(props.data.status)
 
     return <div>
@@ -61,7 +60,12 @@ function ReportDetails(props: IReportDetails) {
 
             <div>
                 <Button variant="secondary" className={`me-2`} onClick={() => { props.setShow(false) }}>Close</Button>
-                <Button variant="primary" type='submit'>Save</Button>
+                <Button
+                    onClick={() => {
+                        props.onUpdateStatus(props.data._id, status)
+                    }}
+                    variant="primary"
+                    type='submit'>Save</Button>
             </div>
         </div>
     </div>

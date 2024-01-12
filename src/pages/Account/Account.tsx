@@ -245,13 +245,18 @@ function Account() {
                                 <div className={`${styles.stats_data} mb-2`}>
                                     <div className='d-flex align-items-center mb-2'>
                                         <div className='pe-2'>Technology</div>
-                                        <FontAwesomeIcon
-                                            onClick={() => {
-                                                setUpdateTechForm(true)
-                                            }}
-                                            icon={faPen}
-                                            style={{ fontSize: '12px', cursor: 'pointer' }}
-                                        ></FontAwesomeIcon>
+                                        {userData.account === accountName
+                                            ?
+                                            <FontAwesomeIcon
+                                                onClick={() => {
+                                                    setUpdateTechForm(true)
+                                                }}
+                                                icon={faPen}
+                                                style={{ fontSize: '12px', cursor: 'pointer' }}
+                                            ></FontAwesomeIcon>
+                                            :
+                                            undefined
+                                        }
                                     </div>
                                     <TagsComponent type='tags' data={currentUserData.techTags}></TagsComponent>
                                 </div>

@@ -18,11 +18,13 @@ export const handleAxiosResponse = async (response: any) => {
     //if contain jwt then save it in local storage
     if (response.data.accessToken && response.status === 200) {
         cookies.set('token', response.data.accessToken, {
+            sameSite: true,
             expires: new Date(Number(jwtDecode(response.data.accessToken).exp) * 1000),
         });
     }
     if (response.data.refreshToken && response.status === 200) {
         cookies.set('refresh_token', response.data.refreshToken, {
+            sameSite: true,
             expires: new Date(Number(jwtDecode(response.data.refreshToken).exp) * 1000),
         });
     }

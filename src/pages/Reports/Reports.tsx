@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styles from './Reports.module.scss'
 import { useAppDispatch } from '../../App/hook'
-import { getReports } from './ReportsAPI'
+import { getReports, updateReport } from './ReportsAPI'
 import SearchBar from '../../Component/SearchBar/SearchBar'
 import OptionsListButton from '../../Component/OptionsListButton/OptionsListButton'
 import ModalComponent from '../../Component/Modal/ModalComponent'
@@ -75,6 +75,29 @@ function Reports() {
             }
         }
     }, [currentPage, dispatch, focus, searchVal])
+
+    const onUpdateStatus = useCallback(async (reportId: string, status: number) => {
+        const res = await dispatch(updateReport({
+            reportId: reportId,
+            status: status
+        }))
+
+        if (res.payload.status === 200) {
+            setReports((preVal) => {
+                const newData = preVal.map((item) => {
+                    if (item._id === res.payload.data.report._id) {
+                        return {
+                            ...item,
+                            status: res.payload.data.report.status
+                        }
+                    }
+                    return item
+                })
+
+                return newData
+            })
+        }
+    }, [dispatch])
 
     return <div className={`pb-4 ${styles.wrapper}`}>
         <div className={`h4 ${styles.header}`}>
@@ -159,6 +182,7 @@ function Reports() {
                 setShow={setReportDetailsShow}
             >
                 <ReportDetails
+                    onUpdateStatus={onUpdateStatus}
                     status={status}
                     setShow={setReportDetailsShow}
                     data={reportDetails}

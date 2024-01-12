@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getTags } from "../pages/Questions/QuestionsAPI";
 import { Tag } from "react-tag-input";
+import { getSimpleAdvert } from "../pages/Advert/AdvertAPI";
 
 export interface ITags {
     value: string,
@@ -8,16 +9,24 @@ export interface ITags {
     popular: number
 }
 
+export interface ISimpleAdvert {
+    _id: string,
+    url: string,
+    imgURL: string
+}
+
 interface IDataSlice {
     tags: string[]
     tagsDetails: ITags[]
     filterTags: Tag[]
+    adverts: ISimpleAdvert[]
 }
 
 const initialState: IDataSlice = {
     tags: [],
     tagsDetails: [],
-    filterTags: []
+    filterTags: [],
+    adverts: []
 }
 
 const DataSlice = createSlice({
@@ -32,6 +41,9 @@ const DataSlice = createSlice({
         builder.addCase(getTags.fulfilled, (state, action: any) => {
             state.tagsDetails = action.payload.data.tags
             state.tags = action.payload.data.tags.map((item: any) => item.value)
+        })
+        builder.addCase(getSimpleAdvert.fulfilled, (state, action: any) => {
+            state.adverts = action.payload.data.adverts
         })
     }
 })

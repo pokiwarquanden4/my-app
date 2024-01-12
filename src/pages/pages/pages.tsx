@@ -1,5 +1,5 @@
 import Account from "../Account/Account";
-import Advertisement from "../Advertisement/Advertisement";
+import Advert from "../Advert/Advert";
 import Ask from "../Ask/Ask";
 import CreateAccount from "../CreateAccount/CreateAccount";
 import QuestionDetails from "../QuestionDetails/QuestionDetails";
@@ -30,7 +30,7 @@ const publicRoutes = [
   { path: routes.createAccount, component: CreateAccount },
   { path: routes.questionDetail, component: QuestionDetails },
   { path: routes.reports, component: Reports },
-  { path: routes.advertisement, component: Advertisement },
+  { path: routes.advertisement, component: Advert },
 ]
 
 

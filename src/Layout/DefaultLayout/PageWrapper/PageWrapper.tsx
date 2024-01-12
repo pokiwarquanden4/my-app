@@ -1,3 +1,4 @@
+import { useAppSelector } from '../../../App/hook'
 import NavBar from '../../../Component/NavBar/NavBar'
 import styles from './PageWrapper.module.scss'
 import { ReactNode } from 'react'
@@ -7,16 +8,25 @@ type IPageWrapper = {
 }
 
 function PageWrapper(props: IPageWrapper) {
+    const adverts = useAppSelector(store => store.data.adverts)
+
     return (
         <div className={`mt-4 d-flex ${styles.container}`}>
             <NavBar></NavBar>
             <div className={`px-4 ${styles.content}`}>{props.children}</div>
             <div className={`ps-3 ${styles.advertisment}`}>
-                <div className={styles.ad_wrapper}>
-                    <a href='https://stackoverflow.com/'>
-                        <img className={styles.ad} src='https://cf.shopee.vn/file/13d5c3f78afff865c549e337977f89bf' alt='Advertisemnet'></img>
-                    </a>
-                </div>
+                {adverts.length
+                    ?
+                    <div className={styles.ad_wrapper}>
+                        {adverts.map((ad, index) => {
+                            return <a href={ad.url} key={index}>
+                                <img className={styles.ad} src={ad.imgURL} alt='Advertisemnet'></img>
+                            </a>
+                        })}
+                    </div>
+                    :
+                    undefined
+                }
             </div>
         </div>
     )

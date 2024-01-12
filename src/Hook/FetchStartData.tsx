@@ -4,6 +4,7 @@ import { getTags } from "../pages/Questions/QuestionsAPI";
 import { getUserAllDetails } from "../pages/LoginPages/LoginAPI";
 import { getNotify } from "../Component/Message/MessageContent/NotifyAPI";
 import Cookies from "universal-cookie";
+import { getSimpleAdvert } from "../pages/Advert/AdvertAPI";
 
 export function useFectStartData() {
     const dispatch = useAppDispatch()
@@ -13,6 +14,7 @@ export function useFectStartData() {
     const tagsRef = useRef<boolean>(false)
     const userDetailsRef = useRef<boolean>(false)
     const notifyRef = useRef<boolean>(false)
+    const advertRef = useRef<boolean>(false)
 
     const handleGetDefaultData = useCallback(async () => {
         const token = cookies.get('token') || cookies.get('refresh_token')
@@ -20,6 +22,10 @@ export function useFectStartData() {
 
         if (!tagsRef.current) {
             allPromises.push(dispatch(getTags({})))
+            tagsRef.current = true
+        }
+        if (!advertRef.current) {
+            allPromises.push(dispatch(getSimpleAdvert({})))
             tagsRef.current = true
         }
 
