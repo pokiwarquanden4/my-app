@@ -21,16 +21,10 @@ const filterList = [
         name: "Newest"
     },
     {
-        name: "Active"
-    },
-    {
         name: "Unanswered"
     },
     {
         name: "Star"
-    },
-    {
-        name: "Answered"
     },
 ]
 

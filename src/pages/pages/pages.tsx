@@ -2,6 +2,7 @@ import Account from "../Account/Account";
 import Advert from "../Advert/Advert";
 import Ask from "../Ask/Ask";
 import CreateAccount from "../CreateAccount/CreateAccount";
+import HomePage from "../HomePage/HomePage";
 import QuestionDetails from "../QuestionDetails/QuestionDetails";
 import Questions from "../Questions/Questions";
 import Reports from "../Reports/Reports";
@@ -22,6 +23,7 @@ export const routes = {
 };
 
 const publicRoutes = [
+  { path: routes.home, component: HomePage },
   { path: routes.questions, component: Questions },
   { path: routes.tags, component: Tags },
   { path: routes.users, component: Users },

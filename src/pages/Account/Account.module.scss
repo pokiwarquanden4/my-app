@@ -38,6 +38,16 @@ $Sub-font-color: rgb(167, 173, 180);
     }
 
     .content {
+        .text {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            max-width: 300px;
+            text-overflow: ellipsis;
+            word-break: break-all;
+        }
+
         .stats_data {
             font-size: 15px;
         }

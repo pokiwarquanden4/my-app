@@ -28,6 +28,7 @@ function Header() {
     const [postId, setPostId] = useState<string | undefined>()
     const userName = useAppSelector(store => store.user.data.account)
     const loginShowSlice = useAppSelector(store => store.user.loginShow)
+    const notifyData = useAppSelector(store => store.user.notify)
 
     useEffect(() => {
         setLoginShow(loginShowSlice.show)
@@ -109,7 +110,7 @@ function Header() {
                 undefined}
         </SearchBar>
         <div className='px-5 d-flex align-items-cente'>
-            <IconNotification arlert={true} number={0}>
+            <IconNotification arlert={true} number={notifyData ? notifyData.filter(element => !element.checked).length : 0}>
                 <FontAwesomeIcon
                     onClick={() => {
                         if (userName) {
@@ -124,6 +125,7 @@ function Header() {
                 {showMessage
                     ?
                     <Message
+                        notifyData={notifyData}
                         setShowMessage={setShowMessage}
                     ></Message>
                     :

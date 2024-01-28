@@ -1,14 +1,14 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
-import { formatTimeAgo, toolBarSmallOptions, toolbarOptions } from '../../Functions/Functions';
+import { useAppSelector } from '../../App/hook';
+import { formatTimeAgo, toolbarOptions } from '../../Functions/Functions';
 import { IPost } from '../../pages/QuestionDetails/QuestionDetailsAPI';
 import Avatar from '../Avatar/Avatar';
-import TagsComponent from '../TagsComponent/TagsComponent';
-import styles from './ContentQuestion.module.scss';
 import ModalComponent from '../Modal/ModalComponent';
+import TagsComponent from '../TagsComponent/TagsComponent';
 import UpdatePost from '../UpdatePost/UpdatePost';
-import { useAppSelector } from '../../App/hook';
 import UserNameLink from '../UserNameLink/UserNameLink';
+import styles from './ContentQuestion.module.scss';
 
 interface IContentQuestion {
     onFollowPost: (follow: boolean) => void
@@ -112,6 +112,7 @@ function ContentQuestion(props: IContentQuestion) {
             className={`${styles.addComment} ${commentVisible ? styles.addComment_focus : undefined}`}
             onClick={() => {
                 setCommentVisible(!commentVisible)
+                setCommentContent('')
             }
             }
         >

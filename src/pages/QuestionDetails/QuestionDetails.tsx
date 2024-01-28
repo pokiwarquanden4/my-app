@@ -250,23 +250,31 @@ function QuestionDetails() {
                     {questionDetails.title}
                     {userDetails.account !== questionDetails.userId
                         ?
-                        <div>
-                            <FontAwesomeIcon
-                                style={{ cursor: 'pointer', fontSize: '15px' }}
-                                onClick={() => {
-                                    setReportShow(true)
-                                }}
-                                icon={faFlag}
-                            ></FontAwesomeIcon>
+                        userDetails.roleName !== "Admin"
+                            ?
+                            <div>
+                                <FontAwesomeIcon
+                                    style={{ cursor: 'pointer', fontSize: '15px' }}
+                                    onClick={() => {
+                                        setReportShow(true)
+                                    }}
+                                    icon={faFlag}
+                                ></FontAwesomeIcon>
+                            </div>
+                            :
                             <FontAwesomeIcon
                                 onClick={onDeletePost}
                                 className='ps-3'
                                 style={{ cursor: 'pointer', fontSize: '15px' }}
                                 icon={faTrash}
                             ></FontAwesomeIcon>
-                        </div>
                         :
-                        undefined
+                        <FontAwesomeIcon
+                            onClick={onDeletePost}
+                            className='ps-3'
+                            style={{ cursor: 'pointer', fontSize: '15px' }}
+                            icon={faTrash}
+                        ></FontAwesomeIcon>
                     }
                 </div>
                 <div className={`${styles.subHeader} mb-2`}>{questionDetails.subTitle}</div>

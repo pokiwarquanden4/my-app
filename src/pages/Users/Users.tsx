@@ -22,7 +22,7 @@ interface IUsersSimpleData {
 
 const filterLists = [
     {
-        name: "Poppular"
+        name: "Popular"
     },
     {
         name: "A-Z"

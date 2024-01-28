@@ -175,9 +175,6 @@ function Account() {
                                                     onChange={(e) => {
                                                         setChangeName(e.target.value)
                                                     }}
-                                                    onBlur={() => {
-                                                        setChangeName(undefined)
-                                                    }}
                                                 ></input>
                                                 <FontAwesomeIcon
                                                     className='ps-3 h5'
@@ -287,7 +284,7 @@ function Account() {
                                             <div className='d-flex align-items-center'>
                                                 {iconPost()}
                                                 <div className={`border rounded-2 p-1 ms-2 text-center ${styles.number}`}>{item.rate.length}</div>
-                                                <div className='ms-2 text-primary'>{item.title}</div>
+                                                <div className={`${styles.text} ms-2 text-primary`}>{item.title}</div>
                                             </div>
                                             <div><small className='d-flex align-items-center'>{formatTimeAgo(new Date(item.createdAt))}</small></div>
                                         </div>
@@ -311,7 +308,7 @@ function Account() {
                                             <div className='d-flex align-items-center'>
                                                 {iconResponse()}
                                                 <div className={`border rounded-2 p-1 ms-2 text-center ${styles.number}`}>{item.rate.length}</div>
-                                                <div className='ms-2 text-primary'>{parse(item.content)}</div>
+                                                <div className={`${styles.text} ms-2 text-primary`}>{parse(item.content)}</div>
                                             </div>
                                             <div><small className='d-flex align-items-center'>{formatTimeAgo(new Date(item.createdAt))}</small></div>
                                         </div>

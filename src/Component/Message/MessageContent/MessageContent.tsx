@@ -24,7 +24,7 @@ function MessageContent(props: IMessageContent) {
                     id: props.data._id
                 }))
             }
-            navigate(routes.questionDetail.replace(':questionId', props.data.postId));
+            navigate(routes.questionDetail.replace(':questionId', props.data.postId).replace(':responseId', props.data.responseId ? props.data.responseId : ':responseId'));
             props.setShowMessage(false)
         }}
     >

@@ -1,15 +1,15 @@
 import { Dispatch, SetStateAction, useState } from 'react'
+import { INotify } from '../../Reducers/UserSlice'
 import styles from './Message.module.scss'
 import MessageContent from './MessageContent/MessageContent'
-import { useAppSelector } from '../../App/hook'
 
 interface IMessage {
     setShowMessage: Dispatch<SetStateAction<boolean>>
+    notifyData: INotify[] | undefined
 }
 
 function Message(props: IMessage) {
     const [all, setAll] = useState<boolean>(true)
-    const notifyData = useAppSelector(store => store.user.notify)
 
     return <div className={`shadow p-3 mb-5 bg-body rounded ${styles.wrapper}`}>
         <div className={styles.header}>
@@ -33,8 +33,8 @@ function Message(props: IMessage) {
         </div>
         <div className={`${styles.content} pt-3`}>
             {
-                notifyData && notifyData.length
-                    ? notifyData
+                props.notifyData && props.notifyData.length
+                    ? props.notifyData
                         .filter(item => all || !item.checked)
                         .map((item, index) => {
                             return <MessageContent

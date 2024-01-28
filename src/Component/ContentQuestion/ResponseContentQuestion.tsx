@@ -123,6 +123,7 @@ function ResponseContentQuestion(props: IContentQuestion) {
             className={`${styles.addComment} ${smallComment ? styles.addComment_focus : undefined}`}
             onClick={() => {
                 setSmallComment(!smallComment)
+                setCommentContent('')
             }}
         >
             Add a comment

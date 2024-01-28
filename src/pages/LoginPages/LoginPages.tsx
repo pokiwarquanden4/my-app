@@ -90,6 +90,7 @@ function LoginPages(props: ILoginPages) {
                 case 200:
                     showAlert(`Welcome ${res.meta.arg.account}`, 'success')
                     props.setLoginShow(false)
+                    navigate(routes.home)
                     break
                 case 401:
                     showAlert("Please check your account and password", 'info')
@@ -98,7 +99,7 @@ function LoginPages(props: ILoginPages) {
                     break
             }
         }
-    }, [dispatch, findFormErrors, form, props])
+    }, [dispatch, findFormErrors, form, navigate, props])
 
     const sendVertify = useCallback(async () => {
         const newErrors = findFormErrors(['password'])
