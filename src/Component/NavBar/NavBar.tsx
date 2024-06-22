@@ -80,6 +80,7 @@ function NavBar() {
         setCurrentOption(currentOptions)
     }, [getCurrentOptions])
 
+    console.log(currentUser)
     return <div className={`${styles.container}`}>
         <div className={`${styles.items}`}>
             {optionsList.map((option, index) => {

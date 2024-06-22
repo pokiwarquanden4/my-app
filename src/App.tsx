@@ -30,15 +30,15 @@ function App() {
 
   useFectStartData()
 
-  useEffect(() => {
-    socket.on('Notify', (data) => {
-      dispatch(addNotify(data))
-    })
+  // useEffect(() => {
+  //   socket.on('Notify', (data) => {
+  //     dispatch(addNotify(data))
+  //   })
 
-    return () => {
-      socket.off('Notify')
-    }
-  }, [dispatch, socket])
+  //   return () => {
+  //     socket.off('Notify')
+  //   }
+  // }, [dispatch, socket])
 
   return (
     <SocketContext.Provider value={socket}>

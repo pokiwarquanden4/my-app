@@ -16,6 +16,7 @@ const KeyCodes = {
 const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
 function ReactTagsComponent(props: IReactTagsComponent) {
+
     const tagsSlice = useAppSelector(store => store.data.tags)
 
     const suggestions: Tag[] = (tagsSlice || []).map((tag, index) => {

@@ -9,7 +9,7 @@ type IPageWrapper = {
 
 function PageWrapper(props: IPageWrapper) {
     const adverts = useAppSelector(store => store.data.adverts)
-
+    console.log(adverts)
     return (
         <div className={`mt-4 d-flex ${styles.container}`}>
             <NavBar></NavBar>
