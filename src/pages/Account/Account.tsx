@@ -80,9 +80,10 @@ function Account() {
     useEffect(() => {
         const func = async (account: string) => {
             const res = await dispatch(getUserProfile(account))
-
+            console.log(res)
             if (res.payload.status === 200) {
-                const data = res.payload.data.user as IUserProfile
+                console.log(res)
+                const data = res.payload.data as IUserProfile
                 setCurrentUserData(data)
             }
         }
@@ -93,7 +94,6 @@ function Account() {
     }, [accountName, dispatch])
 
     const handleSubmit = useCallback(async (name: string, value: string) => {
-
         // Conditional logic:
         const formData = new FormData();
         formData.append(name, value);

@@ -69,7 +69,7 @@ function Questions() {
                         <div className={`pt-2 d-flex justify-content-end ${styles.content_footer}`}>
                             <div className={`d-flex align-items-center ${styles.account}`}>
                                 <Avatar name='Quang' size='30' src={''}></Avatar>
-                                <UserNameLink name={item.userId} styleVal='' fontSize='13px'></UserNameLink>
+                                <UserNameLink name={item.userId.account} styleVal='' fontSize='13px'></UserNameLink>
                             </div>
                             <div className={`ms-1 d-flex align-items-center ${styles.time}`}>
                                 {formatTimeAgo(new Date(item.updatedAt))}
@@ -159,7 +159,7 @@ function Questions() {
                             setShowFilterByTags(!showFilterByTags)
                         }}
                         type="button"
-                        className={`btn btn-outline-secondary ms-1`}>
+                        className={`btn btn-outline-secondary ms-1 ${filterTags.length ? 'active' : ''}`}>
                         Filter
                     </button>
                 </div>

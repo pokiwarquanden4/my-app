@@ -3,7 +3,10 @@ import { sendRequest } from "../../config/axiosConfig"
 
 export interface IPost {
     _id: string;
-    userId: string;
+    userId: {
+        _id: string,
+        account: string
+    };
     title: string;
     subTitle: string;
     content: string;
@@ -22,7 +25,10 @@ export interface IPost {
 export interface IResponse {
     post: string,
     _id: string
-    userId: string;
+    userId: {
+        _id: string,
+        account: string
+    };
     content: string;
     vertified: boolean
     rate: string[]
@@ -33,7 +39,10 @@ export interface IResponse {
 
 export interface IComment {
     _id: string
-    userId: string;
+    userId: {
+        _id: string,
+        account: string
+    };
     content: string;
     createdAt: string;
     updatedAt: string;

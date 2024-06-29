@@ -71,7 +71,7 @@ function ContentQuestion(props: IContentQuestion) {
         <div className={`${styles.content_info} d-flex justify-content-between align-items-center mb-3`}>
             <div className={`${styles.options} d-flex`}>
                 {
-                    userDetails.account === props.questionDetails.userId
+                    userDetails.account === props.questionDetails.userId.account
                         ?
                         <div
                             className={styles.options_content}
@@ -101,7 +101,7 @@ function ContentQuestion(props: IContentQuestion) {
             <div className={`pt-2 d-flex justify-content-end ${styles.content_footer}`}>
                 <div className={`d-flex align-items-center ${styles.account}`}>
                     <Avatar name='Quang' size='30' src={props.questionDetails.avatarURL}></Avatar>
-                    <UserNameLink name={props.questionDetails.userId} styleVal='' fontSize='13px'></UserNameLink>
+                    <UserNameLink name={props.questionDetails.userId.account} styleVal='' fontSize='13px'></UserNameLink>
                 </div>
                 <div className={`ms-1 d-flex align-items-center ${styles.time}`}>
                     {formatTimeAgo(new Date(props.questionDetails.updatedAt))}

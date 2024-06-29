@@ -19,13 +19,13 @@ function App() {
   const cookies = useMemo(() => {
     return new Cookies()
   }, [])
-  const socket = useMemo(() => {
-    return io(process.env.REACT_APP_BACKEND_URL || '', {
-      auth: {
-        token: cookies.get('token') || cookies.get('refresh_token')
-      }
-    })
-  }, [cookies])
+  // const socket = useMemo(() => {
+  //   return io(process.env.REACT_APP_BACKEND_URL || '', {
+  //     auth: {
+  //       token: cookies.get('token') || cookies.get('refresh_token')
+  //     }
+  //   })
+  // }, [cookies])
   const dispatch = useAppDispatch()
 
   useFectStartData()
@@ -41,32 +41,32 @@ function App() {
   // }, [dispatch, socket])
 
   return (
-    <SocketContext.Provider value={socket}>
-      <Router>
-        <div className="App h-100">
-          <ReactNotifications></ReactNotifications>
-          <Loading></Loading>
-          <HeaderLayout>
-            <PageWrapper>
-              <Routes>
-                {publicRoutes.map((route, index) => {
-                  const Page = route.component;
-                  return (
-                    <Route
-                      key={index}
-                      path={route.path}
-                      element={
-                        <Page></Page>
-                      }
-                    ></Route>
-                  );
-                })}
-              </Routes>
-            </PageWrapper>
-          </HeaderLayout>
-        </div>
-      </Router>
-    </SocketContext.Provider>
+    // <SocketContext.Provider value={socket}>
+    <Router>
+      <div className="App h-100">
+        <ReactNotifications></ReactNotifications>
+        <Loading></Loading>
+        <HeaderLayout>
+          <PageWrapper>
+            <Routes>
+              {publicRoutes.map((route, index) => {
+                const Page = route.component;
+                return (
+                  <Route
+                    key={index}
+                    path={route.path}
+                    element={
+                      <Page></Page>
+                    }
+                  ></Route>
+                );
+              })}
+            </Routes>
+          </PageWrapper>
+        </HeaderLayout>
+      </div>
+    </Router>
+    // </SocketContext.Provider>
   );
 }
 

@@ -9,7 +9,6 @@ type IPageWrapper = {
 
 function PageWrapper(props: IPageWrapper) {
     const adverts = useAppSelector(store => store.data.adverts)
-    console.log(adverts)
     return (
         <div className={`mt-4 d-flex ${styles.container}`}>
             <NavBar></NavBar>
@@ -19,9 +18,12 @@ function PageWrapper(props: IPageWrapper) {
                     ?
                     <div className={styles.ad_wrapper}>
                         {adverts.map((ad, index) => {
-                            return <a href={ad.url} key={index}>
-                                <img className={styles.ad} src={ad.imgURL} alt='Advertisemnet'></img>
-                            </a>
+                            return (
+                                <a href={ad.url} key={index} target="_blank" rel="noopener noreferrer">
+                                    <img className={styles.ad} src={ad.imgURL} alt="Advertisement" />
+                                </a>
+                            );
+
                         })}
                     </div>
                     :

@@ -248,7 +248,7 @@ function QuestionDetails() {
             <Fragment>
                 <div className={`${styles.header} h4 d-flex justify-content-between align-items-center`}>
                     {questionDetails.title}
-                    {userDetails.account !== questionDetails.userId
+                    {userDetails.account !== questionDetails.userId.account
                         ?
                         userDetails.roleName !== "Admin"
                             ?
@@ -327,7 +327,7 @@ function QuestionDetails() {
                     </div>
                     <Comment
                         responseId={responseId === ':responseId' ? undefined : responseId}
-                        questionOwner={questionDetails.userId}
+                        questionOwner={questionDetails.userId.account}
                         onRateReponse={onRateReponse}
                         onFollowReponse={onFollowReponse}
                         onUpdateResponse={onUpdateResponse}

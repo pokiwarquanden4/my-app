@@ -26,7 +26,10 @@ export interface IPosts {
     title: string;
     subTitle: string,
     tags: string[];
-    userId: string;
+    userId: {
+        _id: string,
+        account: string
+    };
     responses: { vertified: boolean }[],
     updatedAt: Date;
 }
