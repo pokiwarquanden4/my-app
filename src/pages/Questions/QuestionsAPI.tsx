@@ -157,6 +157,7 @@ export const unRateResponse = createAsyncThunk<any, IRateReponse>(
 )
 
 interface IVertifyResponse {
+    postId: string;
     responseId: string
     trueOrFalse: boolean
 }

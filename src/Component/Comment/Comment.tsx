@@ -89,6 +89,7 @@ function Comment(props: ICommentProps) {
     const onVertify = useCallback(async (response: IResponse) => {
         if (props.questionOwner === userDetails.account) {
             const res = await dispatch(vertifyResponse({
+                postId: props.postId || '',
                 responseId: response._id,
                 trueOrFalse: !response.vertified
             }))
@@ -129,7 +130,7 @@ function Comment(props: ICommentProps) {
                 key={index}>
                 <div className={`${styles.options} text-center p-2`}>
                     <div className={styles.heart}>
-                        {response.rate.includes(userDetails.account)
+                        {response.rate.includes(userDetails._id)
                             ?
                             <FontAwesomeIcon
                                 onClick={() => {

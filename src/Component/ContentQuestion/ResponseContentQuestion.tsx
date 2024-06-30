@@ -33,6 +33,8 @@ function ResponseContentQuestion(props: IContentQuestion) {
         setContent(props.responseData.content)
     }, [props.responseData.content])
 
+    console.log(userDetails)
+
     return <div className={`${styles.content} ${props.classValue}`}>
         <ReactQuill
             readOnly

@@ -73,6 +73,8 @@ function Account() {
     const [tags, setTags] = useState<Tag[]>([])
 
     useEffect(() => {
+        if (!userData.techTags) return
+
         const tags = userData.techTags.map((tag, index) => {
             return {
                 id: String(index),

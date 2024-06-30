@@ -203,7 +203,7 @@ function QuestionDetails() {
                         if (!item.rate.includes(userDetails.account)) {
                             return {
                                 ...item,
-                                rate: [...item.rate, userDetails.account]
+                                rate: [...item.rate, res.payload.data.account]
                             }
                         }
                     }
@@ -219,8 +219,8 @@ function QuestionDetails() {
             setReponses((preVal) => {
                 return preVal.map((item) => {
                     if (item._id === responseId) {
-                        if (item.rate.includes(userDetails.account)) {
-                            item.rate.splice(item.rate.indexOf(userDetails.account), 1)
+                        if (item.rate.includes(res.payload.data.account)) {
+                            item.rate.splice(item.rate.indexOf(res.payload.data.account), 1)
                             return item
                         }
                     }
