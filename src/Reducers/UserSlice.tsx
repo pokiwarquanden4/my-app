@@ -145,9 +145,9 @@ const UserSlice = createSlice({
             if (action.payload.status !== 200) return
             state.data = {
                 ...state.data,
-                name: action.payload.data.name,
-                avatarURL: action.payload.data.avatarURL,
-                techTags: action.payload.data.techTags
+                name: action.payload.data.user.name,
+                avatarURL: action.payload.data.user.avatarURL,
+                techTags: action.payload.data.user.techTags
             }
         })
     }

@@ -80,9 +80,7 @@ function Account() {
     useEffect(() => {
         const func = async (account: string) => {
             const res = await dispatch(getUserProfile(account))
-            console.log(res)
             if (res.payload.status === 200) {
-                console.log(res)
                 const data = res.payload.data as IUserProfile
                 setCurrentUserData(data)
             }
@@ -104,8 +102,7 @@ function Account() {
                 if (!preData) return
                 return {
                     ...preData,
-                    name: res.payload.data.name,
-                    avatarURL: res.payload.data.avatarURL
+                    name: res.payload.data.user.name,
                 }
             })
         }
@@ -129,7 +126,7 @@ function Account() {
                 if (!preData) return
                 return {
                     ...preData,
-                    techTags: res.payload.data.techTags
+                    techTags: res.payload.data.user.techTags
                 }
             })
         }
