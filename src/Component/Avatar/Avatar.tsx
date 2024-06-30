@@ -5,6 +5,7 @@ interface IAvatar {
     src: string | undefined,
     size?: string
     noRadius?: boolean
+    uploadImg?: (name: string, value: string | File) => void
 }
 
 function Avatar(props: IAvatar) {
@@ -21,7 +22,24 @@ function Avatar(props: IAvatar) {
     >
         {props.src
             ?
-            <img alt={'avatar'} className={styles.account_img} src={props.src}></img>
+            props.uploadImg
+                ?
+                <label className={styles.file_input_label}>
+                    <img className={styles.account_img} src={props.src} alt="avatar" />
+                    <input
+                        type="file"
+                        accept="image/png, image/jpeg"
+                        className={styles.hidden_file_input}
+                        onChange={(e) => {
+                            if (e.target.files && props.uploadImg) {
+                                const file = e.target.files[0]
+                                props.uploadImg('imgURL', file)
+                            }
+                        }}
+                    />
+                </label>
+                :
+                <img className={styles.account_img} src={props.src} alt="avatar" />
             :
             <div className={`${styles.account_img} position-relative`}>
                 <div className={styles.account_img_content}>{props.name.charAt(0).toUpperCase()}</div>

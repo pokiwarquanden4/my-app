@@ -21,7 +21,7 @@ export const getTags = createAsyncThunk<any, {}>(
 
 export interface IPosts {
     _id: string
-    rate: number;
+    rate: string[];
     answer: number;
     title: string;
     subTitle: string,
@@ -48,7 +48,7 @@ export const getPosts = createAsyncThunk<IPostsResponse, IGetPosts>(
         const res: IPostsResponse = await sendRequest(`posts/posts?number=${payload.number}&type=${payload.type}&searchVal=${payload.searchVal}&tags=${payload.tags}`, {
             thunkApi,
             method: "GET"
-        })
+        }, false)
         return res
     }
 )

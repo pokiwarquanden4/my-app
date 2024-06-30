@@ -284,7 +284,7 @@ function QuestionDetails() {
                         <div className={`ps-4 ${styles.time_modified}`}>Modified: {formatTimeAgo(new Date(questionDetails.updatedAt))}</div>
                     </div>
                     <div style={{ cursor: 'pointer' }}>
-                        {questionDetails.rate.includes(userDetails.account)
+                        {questionDetails.rate.includes(userDetails._id)
                             ?
                             <FontAwesomeIcon
                                 onClick={() => {

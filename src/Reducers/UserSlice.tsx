@@ -18,6 +18,7 @@ export interface INotify {
 }
 
 export interface IUserLogin {
+    _id: string;
     message: string;
     account: string;
     avatarURL: string;
@@ -42,6 +43,7 @@ interface IUserLoginData {
 
 const initialState: IUserLoginData = {
     data: {
+        _id: "",
         message: "",
         account: "",
         avatarURL: "",
@@ -74,6 +76,7 @@ const UserSlice = createSlice({
 
         logoutSlice: (state, action) => {
             state.data = {
+                _id: "",
                 message: "",
                 account: "",
                 avatarURL: "",

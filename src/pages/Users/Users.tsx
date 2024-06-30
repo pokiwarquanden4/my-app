@@ -16,8 +16,8 @@ interface IUsersSimpleData {
     account: string,
     avatarURL: string,
     techTags: string[]
-    postNumber: number
-    totalRate: number
+    userPost: string[],
+    heartNumber: number
 }
 
 const filterLists = [
@@ -100,15 +100,15 @@ function Users() {
                                 >{tag}</a>
                             })}
                         </div>
-                        <div className={`${styles.postNumber} pb-1`}>Questions: {item.postNumber}</div>
-                        <div className={styles.rateNumer}>Rate: {item.totalRate}</div>
+                        <div className={`${styles.postNumber} pb-1`}>Questions: {item.userPost.length}</div>
+                        <div className={styles.rateNumer}>Rate: {item.heartNumber}</div>
                     </div>
                 </div>
             </div>
         })
 
         setPageData(newPageData)
-    }, [usersSimpleData])
+    }, [dispatch, navigate, usersSimpleData])
 
     return <div className={`${styles.wrapper}`}>
         <div className={`h3 pb-3 ${styles.header}`}>Users</div>

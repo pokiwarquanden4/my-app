@@ -70,12 +70,17 @@ function Account() {
     const [updatePasswordForm, setUpdatePasswordForm] = useState<boolean>(false)
     const [updateTechForm, setUpdateTechForm] = useState<boolean>(false)
     const [changeName, setChangeName] = useState<string | undefined>(undefined)
-    const [tags, setTags] = useState<Tag[]>(userData.techTags.map((tag, index) => {
-        return {
-            id: String(index),
-            text: tag
-        }
-    }))
+    const [tags, setTags] = useState<Tag[]>([])
+
+    useEffect(() => {
+        const tags = userData.techTags.map((tag, index) => {
+            return {
+                id: String(index),
+                text: tag
+            }
+        })
+        setTags(tags)
+    }, [userData.techTags])
 
     useEffect(() => {
         const func = async (account: string) => {
@@ -91,7 +96,7 @@ function Account() {
         }
     }, [accountName, dispatch])
 
-    const handleSubmit = useCallback(async (name: string, value: string) => {
+    const handleSubmit = useCallback(async (name: string, value: string | File) => {
         // Conditional logic:
         const formData = new FormData();
         formData.append(name, value);
@@ -103,6 +108,7 @@ function Account() {
                 return {
                     ...preData,
                     name: res.payload.data.user.name,
+                    imgURL: res.payload.data.user.imgURL,
                 }
             })
         }
@@ -144,6 +150,7 @@ function Account() {
                                 name={currentUserData.account}
                                 src={currentUserData.avatarURL}
                                 noRadius={true}
+                            // uploadImg={handleSubmit}
                             ></Avatar>
                         </div>
                         <div className={`ps-3 ${styles.user_info}`}>
