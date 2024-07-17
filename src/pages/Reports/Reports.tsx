@@ -9,8 +9,14 @@ import ReportDetails from './ReportDetails/ReportDetails'
 
 export interface IReportsForm {
     _id: string
-    reportAccount: string
-    postOwner: string
+    reportAccount: {
+        _id: string,
+        account: string,
+    },
+    postOwner: {
+        _id: string,
+        account: string,
+    },
     reason: string
     status: number
     reportedPost: string
@@ -96,6 +102,7 @@ function Reports() {
 
                 return newData
             })
+            setReportDetailsShow(false)
         }
     }, [dispatch])
 
@@ -137,8 +144,8 @@ function Reports() {
                         }}
                     >
                         <th scope="row">{report._id}</th>
-                        <td>{report.reportAccount}</td>
-                        <td>{report.postOwner}</td>
+                        <td>{report.reportAccount.account}</td>
+                        <td>{report.postOwner.account}</td>
                         <td>{status[report.status]}</td>
                         <td className={styles.content}>{report.reason}</td>
                     </tr>

@@ -91,7 +91,8 @@ function QuestionDetails() {
         if (!content) return
         const res = await dispatch(createResponse({
             content: content,
-            postId: postId as string
+            postId: postId as string,
+            dispatch: dispatch
         }))
         setReponses((preVal) => {
             return [

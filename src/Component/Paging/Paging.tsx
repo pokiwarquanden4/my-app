@@ -10,20 +10,20 @@ interface IPaging {
 }
 
 function Paging(props: IPaging) {
-    const scrollRef = useRef<HTMLDivElement>(null)
+    // const scrollRef = useRef<HTMLDivElement>(null)
 
     const totalPage = useMemo(() => {
         return Math.ceil(props.dataLength / props.numberPerPage)
     }, [props.dataLength, props.numberPerPage])
 
-    useEffect(() => {
-        if (!scrollRef.current) return
-        scrollRef.current.scrollIntoView({
-            behavior: "smooth"
-        })
-    }, [props.data])
+    // useEffect(() => {
+    //     if (!scrollRef.current) return
+    //     scrollRef.current.scrollIntoView({
+    //         behavior: "smooth"
+    //     })
+    // }, [props.data])
 
-    return <div className={styles.wapper} ref={scrollRef}>
+    return <div className={styles.wapper}>
         {props.data}
         <div className='pt-4 d-flex justify-content-end'>
             {

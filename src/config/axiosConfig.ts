@@ -1,6 +1,7 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { jwtDecode } from "jwt-decode";
 import { trackPromise } from "react-promise-tracker";
+import { useDispatch } from "react-redux";
 import Cookies from "universal-cookie";
 
 
@@ -32,7 +33,7 @@ export const handleAxiosResponse = async (response: any) => {
     return response
 }
 
-export const sendRequest = async (url: string, { thunkApi, payload, method }: { thunkApi: any, payload?: any, method: string }, loading: boolean = true) => {
+export const sendRequest = async (url: string, { thunkApi, payload, method, dispatch }: { thunkApi: any, payload?: any, method: string, dispatch?: any }, loading: boolean = true) => {
     const request = axios({
         method,
         url,
@@ -46,12 +47,10 @@ export const sendRequest = async (url: string, { thunkApi, payload, method }: { 
         if (axios.isAxiosError(error)) {
             const axiosError = error as AxiosError;
             if (axiosError.response) {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                console.log({
-                    status: axiosError.response.status,
-                    data: axiosError.response.data
-                })
+                if (axiosError.response.status === 401 && axiosError.response.data === 'Token is invalid') {
+
+                }
+
                 if (thunkApi) return {
                     status: axiosError.response.status,
                     data: axiosError.response.data

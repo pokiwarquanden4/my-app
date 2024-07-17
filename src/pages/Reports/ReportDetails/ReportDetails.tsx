@@ -21,11 +21,11 @@ function ReportDetails(props: IReportDetails) {
         </div>
         <div className='d-flex align-items-center pt-2'>
             <div className='h6 mb-0 pe-2'>Account:</div>
-            <div>{props.data?.reportAccount}</div>
+            <div>{props.data?.reportAccount.account}</div>
         </div>
         <div className='d-flex align-items-center pt-2'>
             <div className='h6 mb-0 pe-2'>Owner:</div>
-            <div>{props.data?.postOwner}</div>
+            <div>{props.data?.postOwner.account}</div>
         </div>
         <div className='d-flex align-items-center pt-2'>
             <div className='h6 mb-0 pe-2'>Status:</div>

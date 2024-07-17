@@ -72,7 +72,8 @@ export const getCommentInResponse = createAsyncThunk<any, string>(
 
 export interface ICreateRequest {
     content: string,
-    postId: string
+    postId: string,
+    dispatch: any,
 }
 
 export const createResponse = createAsyncThunk<any, ICreateRequest>(
@@ -81,7 +82,8 @@ export const createResponse = createAsyncThunk<any, ICreateRequest>(
         const res: any = await sendRequest(`posts/create/response`, {
             thunkApi,
             payload: payload,
-            method: "POST"
+            method: "POST",
+            dispatch: payload.dispatch
         })
         return res
     }
