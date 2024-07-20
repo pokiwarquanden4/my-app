@@ -12,6 +12,7 @@ import HeaderLayout from './Layout/HeaderLayout/HeaderLayout';
 import { addNotify } from './Reducers/UserSlice';
 import publicRoutes from './pages/pages/pages';
 import { useFectStartData } from './Hook/FetchStartData';
+import { showAlert } from './Component/Alert/Alert';
 
 export const SocketContext = createContext<Socket<any, any> | undefined>(undefined)
 
@@ -35,6 +36,8 @@ function App() {
     }
     socket.on('notification', (data) => {
       dispatch(addNotify(data))
+
+      showAlert("You have a message", 'success')
     })
 
     return () => {

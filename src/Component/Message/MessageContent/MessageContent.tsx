@@ -56,9 +56,18 @@ function MessageContent(props: IMessageContent) {
                     id: props.data._id
                 }))
             }
-            navigate(routes.questionDetail.replace(':questionId', props.data.postId._id).replace(':responseId', props.data.responseId ? props.data.responseId : ':responseId'));
-            props.setShowMessage(false)
+
+            const targetUrl = routes.questionDetail.replace(':questionId', props.data.postId?._id).replace(':responseId', props.data.responseId ? props.data.responseId : ':responseId');
+
+            if (window.location.pathname === targetUrl) {
+                window.location.reload();
+            } else {
+                navigate(targetUrl);
+            }
+
+            props.setShowMessage(false);
         }}
+
     >
         <div className={styles.avatar}>
             <Avatar size='50' name={props.data.senderId.account} src={props.data.senderId.avatarURL}></Avatar>
@@ -67,7 +76,7 @@ function MessageContent(props: IMessageContent) {
             <div className={styles.details}>
                 <strong className={`${styles.user} pe-1`}>{props.data.senderId.account}</strong>
                 {getText()}
-                <strong className={`${styles.post} ps-1`}>{props.data.postId.title}</strong>
+                <strong className={`${styles.post} ps-1`}>{props.data.postId ? props.data.postId.title : ''}</strong>
             </div>
         </div>
         {!props.data.checked ? <div

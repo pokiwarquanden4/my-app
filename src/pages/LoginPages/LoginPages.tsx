@@ -92,7 +92,7 @@ function LoginPages(props: ILoginPages) {
                     props.setLoginShow(false)
                     navigate(routes.home)
                     break
-                case 401:
+                case 404:
                     showAlert("Please check your account and password", 'info')
                     break
                 default:
