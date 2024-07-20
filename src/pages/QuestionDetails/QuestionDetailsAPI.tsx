@@ -5,7 +5,8 @@ export interface IPost {
     _id: string;
     userId: {
         _id: string,
-        account: string
+        account: string,
+        avatarURL: string
     };
     title: string;
     subTitle: string;
@@ -19,15 +20,15 @@ export interface IPost {
     responses: string[];
     createdAt: string;
     updatedAt: string;
-    avatarURL: string
 }
 
 export interface IResponse {
-    post: string,
+    postId: string,
     _id: string
     userId: {
         _id: string,
-        account: string
+        account: string,
+        avatarURL: string
     };
     content: string;
     vertified: boolean
@@ -41,7 +42,7 @@ export interface IComment {
     _id: string
     userId: {
         _id: string,
-        account: string
+        account: string,
     };
     content: string;
     createdAt: string;
@@ -92,7 +93,8 @@ export const createResponse = createAsyncThunk<any, ICreateRequest>(
 interface ICreateComment {
     responseId: string,
     content: string,
-    postId: string
+    postId: string,
+    dispatch: any
 }
 
 export const createComment = createAsyncThunk<any, ICreateComment>(
@@ -101,7 +103,8 @@ export const createComment = createAsyncThunk<any, ICreateComment>(
         const res: any = await sendRequest(`posts/create/comment`, {
             thunkApi,
             payload: payload,
-            method: "POST"
+            method: "POST",
+            dispatch: payload.dispatch
         })
         return res
     }

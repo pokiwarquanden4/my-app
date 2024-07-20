@@ -28,7 +28,8 @@ export interface IPosts {
     tags: string[];
     userId: {
         _id: string,
-        account: string
+        account: string,
+        avatarURL: string
     };
     responses: { vertified: boolean }[],
     updatedAt: Date;
@@ -73,7 +74,8 @@ export const createPosts = createAsyncThunk<any, ICreatePost>(
 )
 
 interface IFollowPost {
-    postId: string
+    postId: string,
+    dispatch: any
 }
 
 export const followPost = createAsyncThunk<any, IFollowPost>(
@@ -82,7 +84,8 @@ export const followPost = createAsyncThunk<any, IFollowPost>(
         const res = await sendRequest(`posts/follow/post`, {
             thunkApi,
             payload: payload,
-            method: "POST"
+            method: "POST",
+            dispatch: payload.dispatch
         })
         return res
     }
@@ -94,14 +97,16 @@ export const unFollowPost = createAsyncThunk<any, IFollowPost>(
         const res = await sendRequest(`posts/follow/unPost`, {
             thunkApi,
             payload: payload,
-            method: "POST"
+            method: "POST",
+            dispatch: payload.dispatch
         })
         return res
     }
 )
 
 interface IFollowResponse {
-    responseId: string
+    responseId: string,
+    dispatch: any
 }
 
 export const followResponse = createAsyncThunk<any, IFollowResponse>(
@@ -110,7 +115,8 @@ export const followResponse = createAsyncThunk<any, IFollowResponse>(
         const res = await sendRequest(`posts/follow/response`, {
             thunkApi,
             payload: payload,
-            method: "POST"
+            method: "POST",
+            dispatch: payload.dispatch
         })
         return res
     }
@@ -122,14 +128,16 @@ export const unFollowResponse = createAsyncThunk<any, IFollowResponse>(
         const res = await sendRequest(`posts/follow/unResponse`, {
             thunkApi,
             payload: payload,
-            method: "POST"
+            method: "POST",
+            dispatch: payload.dispatch
         })
         return res
     }
 )
 
 interface IRateReponse {
-    responseId: string
+    responseId: string,
+    dispatch: any
 }
 
 export const rateResponse = createAsyncThunk<any, IRateReponse>(
@@ -138,7 +146,8 @@ export const rateResponse = createAsyncThunk<any, IRateReponse>(
         const res = await sendRequest(`posts/rate/response`, {
             thunkApi,
             payload: payload,
-            method: "POST"
+            method: "POST",
+            dispatch: payload.dispatch
         })
         return res
     }
@@ -150,7 +159,8 @@ export const unRateResponse = createAsyncThunk<any, IRateReponse>(
         const res = await sendRequest(`posts/rate/unResponse`, {
             thunkApi,
             payload: payload,
-            method: "POST"
+            method: "POST",
+            dispatch: payload.dispatch
         })
         return res
     }
@@ -175,7 +185,8 @@ export const vertifyResponse = createAsyncThunk<any, IVertifyResponse>(
 )
 
 interface IRatePost {
-    postId: string
+    postId: string,
+    dispatch: any
 }
 
 export const ratePost = createAsyncThunk<any, IRatePost>(
@@ -184,7 +195,8 @@ export const ratePost = createAsyncThunk<any, IRatePost>(
         const res = await sendRequest(`posts/rate/post`, {
             thunkApi,
             payload: payload,
-            method: "POST"
+            method: "POST",
+            dispatch: payload.dispatch
         })
         return res
     }
@@ -196,7 +208,8 @@ export const unRatePost = createAsyncThunk<any, IRatePost>(
         const res = await sendRequest(`posts/rate/unPost`, {
             thunkApi,
             payload: payload,
-            method: "POST"
+            method: "POST",
+            dispatch: payload.dispatch
         })
         return res
     }

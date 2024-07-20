@@ -3,7 +3,8 @@ import { sendRequest } from "../../../config/axiosConfig"
 
 interface IReport {
     postId: string,
-    reason: string
+    reason: string,
+    dispatch: any
 }
 
 export const createReport = createAsyncThunk<any, IReport>(
@@ -12,7 +13,8 @@ export const createReport = createAsyncThunk<any, IReport>(
         const res = await sendRequest(`admin/report/create`, {
             thunkApi,
             payload: payload,
-            method: "POST"
+            method: "POST",
+            dispatch: payload.dispatch
         })
 
         return res

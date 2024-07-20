@@ -94,6 +94,9 @@ function QuestionDetails() {
             postId: postId as string,
             dispatch: dispatch
         }))
+
+        if (res.payload.status !== 200) return
+
         setReponses((preVal) => {
             return [
                 ...preVal,
@@ -132,11 +135,13 @@ function QuestionDetails() {
         if (!questionDetails?._id) return
         if (follow) {
             await dispatch(followPost({
-                postId: questionDetails._id
+                postId: questionDetails._id,
+                dispatch: dispatch
             }))
         } else {
             await dispatch(unFollowPost({
-                postId: questionDetails._id
+                postId: questionDetails._id,
+                dispatch: dispatch
             }))
         }
 
@@ -146,11 +151,13 @@ function QuestionDetails() {
         if (!questionDetails?._id || !responseId) return
         if (follow) {
             await dispatch(followResponse({
-                responseId: responseId
+                responseId: responseId,
+                dispatch: dispatch
             }))
         } else {
             await dispatch(unFollowResponse({
-                responseId: responseId
+                responseId: responseId,
+                dispatch: dispatch
             }))
         }
 
@@ -160,7 +167,8 @@ function QuestionDetails() {
         if (!postId) return
         if (follow) {
             const res = await dispatch(ratePost({
-                postId: postId
+                postId: postId,
+                dispatch: dispatch
             }))
 
             if (res.payload.status === 200) {
@@ -174,7 +182,8 @@ function QuestionDetails() {
             }
         } else {
             const res = await dispatch(unRatePost({
-                postId: postId
+                postId: postId,
+                dispatch: dispatch
             }))
 
             if (res.payload.status === 200) {
@@ -194,7 +203,8 @@ function QuestionDetails() {
         if (!questionDetails?._id || !responseId) return
         if (follow) {
             const res = await dispatch(rateResponse({
-                responseId: responseId
+                responseId: responseId,
+                dispatch: dispatch
             }))
 
             if (res.payload.status !== 200) return
@@ -213,7 +223,8 @@ function QuestionDetails() {
             })
         } else {
             const res = await dispatch(unRateResponse({
-                responseId: responseId
+                responseId: responseId,
+                dispatch: dispatch
             }))
 
             if (res.payload.status !== 200) return

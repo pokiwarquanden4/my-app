@@ -16,7 +16,7 @@ function Message(props: IMessage) {
             <div className={`${styles.header_content} h4`}>
                 Notifications
             </div>
-            <div className={`${styles.status} d-flex`}>
+            <div className={`${styles.status} d-flex pb-2`}>
                 <div
                     className={`${styles.status_read} ${all ? styles.focus : undefined}`}
                     onClick={() => {
@@ -31,7 +31,7 @@ function Message(props: IMessage) {
                 >Unread</div>
             </div>
         </div>
-        <div className={`${styles.content} pt-3`}>
+        <div className={`${styles.content} pt-3 overflow-auto`}>
             {
                 props.notifyData && props.notifyData.length
                     ? props.notifyData

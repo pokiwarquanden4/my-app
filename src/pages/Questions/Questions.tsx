@@ -68,7 +68,7 @@ function Questions() {
                         <TagsComponent type='tags' data={item.tags}></TagsComponent>
                         <div className={`pt-2 d-flex justify-content-end ${styles.content_footer}`}>
                             <div className={`d-flex align-items-center ${styles.account}`}>
-                                <Avatar name='Quang' size='30' src={''}></Avatar>
+                                <Avatar name='Quang' size='30' src={item.userId.avatarURL}></Avatar>
                                 <UserNameLink name={item.userId.account} styleVal='' fontSize='13px'></UserNameLink>
                             </div>
                             <div className={`ms-1 d-flex align-items-center ${styles.time}`}>

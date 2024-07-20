@@ -50,7 +50,8 @@ function Comment(props: ICommentProps) {
         const res = await dispatch(createComment({
             responseId: responseId,
             content: content,
-            postId: props.postId as string
+            postId: props.postId as string,
+            dispatch: dispatch
         }))
         if (res.payload.status !== 200) return
         setComment((preVal) => {

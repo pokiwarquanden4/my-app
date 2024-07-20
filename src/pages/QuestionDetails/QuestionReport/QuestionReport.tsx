@@ -17,7 +17,8 @@ function QuestionReport(props: IQuestionReport) {
 
         const res = await dispatch(createReport({
             postId: props.postId,
-            reason: reportReason
+            reason: reportReason,
+            dispatch: dispatch
         }))
 
         if (res.payload.status === 200) {

@@ -6,14 +6,18 @@ import { updateUserProfile } from "../pages/Account/AccountAPI";
 
 export interface INotify {
     _id: string
-    postId: string
+    postId: {
+        _id: string
+        title: string
+    }
     responseId?: string
     commentId?: string
-    details: {
-        sender: string
-        avatar?: string
-        postName?: string
+    senderId: {
+        _id: string,
+        account: string,
+        avatarURL: string
     },
+    action: 'Rate' | 'Vertify' | 'Response' | "Follow",
     checked: boolean
 }
 
@@ -60,7 +64,7 @@ const initialState: IUserLoginData = {
     loginShow: {
         show: false
     },
-    notify: undefined
+    notify: []
 }
 
 const UserSlice = createSlice({

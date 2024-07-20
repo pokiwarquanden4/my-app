@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import { trackPromise } from "react-promise-tracker";
 import { useDispatch } from "react-redux";
 import Cookies from "universal-cookie";
+import { loginShow } from "../Reducers/UserSlice";
 
 
 const cookies = new Cookies();
@@ -47,8 +48,8 @@ export const sendRequest = async (url: string, { thunkApi, payload, method, disp
         if (axios.isAxiosError(error)) {
             const axiosError = error as AxiosError;
             if (axiosError.response) {
-                if (axiosError.response.status === 401 && axiosError.response.data === 'Token is invalid') {
-
+                if (dispatch && axiosError.response.status === 401 && axiosError.response.data === 'Token is invalid') {
+                    dispatch(loginShow(true))
                 }
 
                 if (thunkApi) return {

@@ -100,7 +100,7 @@ function ContentQuestion(props: IContentQuestion) {
             </div>
             <div className={`pt-2 d-flex justify-content-end ${styles.content_footer}`}>
                 <div className={`d-flex align-items-center ${styles.account}`}>
-                    <Avatar name='Quang' size='30' src={props.questionDetails.avatarURL}></Avatar>
+                    <Avatar name='Quang' size='30' src={props.questionDetails.userId.avatarURL}></Avatar>
                     <UserNameLink name={props.questionDetails.userId.account} styleVal='' fontSize='13px'></UserNameLink>
                 </div>
                 <div className={`ms-1 d-flex align-items-center ${styles.time}`}>
