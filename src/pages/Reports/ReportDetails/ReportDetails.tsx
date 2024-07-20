@@ -39,7 +39,7 @@ function ReportDetails(props: IReportDetails) {
                 value={status}
             >
                 {Object.values(props.status).map((item, index) => {
-                    return <option value={index}>{item}</option>
+                    return <option value={index} key={index}>{item}</option>
                 })}
             </select>
         </div>

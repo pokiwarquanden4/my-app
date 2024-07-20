@@ -49,7 +49,6 @@ export const sendRequest = async (url: string, { thunkApi, payload, method, disp
         if (axios.isAxiosError(error)) {
             const axiosError = error as AxiosError;
             if (axiosError.response) {
-                showAlert("Something went wrong", 'info')
                 if (dispatch && axiosError.response.status === 401 && axiosError.response.data === 'Token is invalid') {
                     dispatch(loginShow(true))
                 }
