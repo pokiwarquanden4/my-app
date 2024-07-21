@@ -72,7 +72,7 @@ function Questions() {
                                 <UserNameLink name={item.userId.account} styleVal='' fontSize='13px'></UserNameLink>
                             </div>
                             <div className={`ms-1 d-flex align-items-center ${styles.time}`}>
-                                {formatTimeAgo(new Date(item.updatedAt))}
+                                {formatTimeAgo(new Date(item.createdAt))}
                             </div>
                         </div>
                     </div>

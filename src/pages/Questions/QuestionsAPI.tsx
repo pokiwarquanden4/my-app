@@ -33,6 +33,7 @@ export interface IPosts {
     };
     responses: { vertified: boolean }[],
     updatedAt: Date;
+    createdAt: Date;
 }
 
 export interface IPostsResponse {
